@@ -1,41 +1,27 @@
-#+LATEX_CLASS: report
-#+LATEX_HEADER: \include{settings/preamble}
+#+LaTeX_COMPILER: xelatex
+#+LaTeX_CLASS: report
+#+LaTeX_CLASS_OPTIONS: [a4paper, notitlepage]
+#+LaTeX_HEADER: \include{settings/preamble}
 #+OPTIONS: toc:nil
 # Uncomment this if you want to print DRAFT in big letters on each page
 # \usepackage{draftwatermark}
 
-# Inserts the 'TRINITY COLLEGE' etc. page
 \inserttitlepage
-
 \pagenumbering{roman}
-\setcounter{page}{1}
-
 \declaration
-
 \permissiontolend
-
 \insertabstract
-
-# Need to fiddle with page numbers manually to make them consistent
-\setcounter{page}{4}
 \acknowledgements
-
 \tableofcontents
-
 \newpage
-
 \pagenumbering{arabic}
-\setcounter{page}{1}
 
-* First section
+* First Section
+#+INCLUDE: chapters/chapter1.org
+#+INCLUDE: chapters/chapter2.org
 
-** First chapter
-
-** Second chapter
-* Second
-** Third chap
-Wow cite:syn:rep:sh143-tr
+* Second Section
+#+INCLUDE: chapters/chapter3.org
 
 bibliography:report.bib
-
 \appendix
