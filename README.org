@@ -1,0 +1,8 @@
+* Report
+** Compile
+Export with ~org-mode~ with following settings
+
+#+BEGIN_SRC emacs-lisp
+(setq org-latex-pdf-process
+      '("latexmk -xelatex -bibtex %f"))
+#+END_SRC

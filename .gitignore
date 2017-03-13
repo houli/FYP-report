@@ -1,0 +1,7 @@
+*.aux
+*.log
+*.bbl
+*.nlo
+auto
+report.tex
+report.pdf
