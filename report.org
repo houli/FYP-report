@@ -2,9 +2,12 @@
 #+LaTeX_CLASS: report
 #+LaTeX_CLASS_OPTIONS: [a4paper, notitlepage]
 #+LaTeX_HEADER: \include{settings/preamble}
-#+OPTIONS: toc:nil
+
 # Uncomment this if you want to print DRAFT in big letters on each page
-# \usepackage{draftwatermark}
+#+LaTeX_HEADER: \usepackage{draftwatermark}
+#+LaTeX_HEADER: \SetWatermarkLightness{0.95}
+
+#+OPTIONS: toc:nil
 
 \inserttitlepage
 \pagenumbering{roman}
