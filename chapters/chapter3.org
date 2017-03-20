@@ -1,2 +1,2 @@
-* Third Chapter
-Wow cite:McKinna_2006
+* Project
+Example cite:McKinna_2006

@@ -3,11 +3,11 @@
 #+LaTeX_CLASS_OPTIONS: [a4paper, notitlepage]
 #+LaTeX_HEADER: \include{settings/preamble}
 
-# Uncomment this if you want to print DRAFT in big letters on each page
+# Comment out when it's all over
 #+LaTeX_HEADER: \usepackage{draftwatermark}
 #+LaTeX_HEADER: \SetWatermarkLightness{0.95}
 
-#+OPTIONS: toc:nil
+#+OPTIONS: toc:nil H:4
 
 \inserttitlepage
 \pagenumbering{roman}
@@ -19,12 +19,17 @@
 \newpage
 \pagenumbering{arabic}
 
-* First Section
+* Introduction and Background
 #+INCLUDE: chapters/chapter1.org
 #+INCLUDE: chapters/chapter2.org
 
-* Second Section
+* Implementation and Case Studies
 #+INCLUDE: chapters/chapter3.org
+#+INCLUDE: chapters/chapter4.org
+
+* Assessments and Future Work
+#+INCLUDE: chapters/chapter5.org
+#+INCLUDE: chapters/chapter6.org
 
 bibliography:report.bib
 \appendix
