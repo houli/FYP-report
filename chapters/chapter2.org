@@ -21,8 +21,8 @@ of successive type theories in the 1970s. This intuitionistic type theory (also
 commonly referred to as Martin-Löf type theory) introduces a number of
 interesting concepts. Most notable in terms of their influences on programming
 language design were the concepts of \Pi-types and \Sigma-types. These
-constructs can be seen as analogous to the logical quantifiers "forall" and
-"exists" respectively. These concepts have served as the underpinning of the
+constructs can be seen as analogous to the logical quantifiers ``forall'' and
+``exists'' respectively. These concepts have served as the underpinning of the
 development of dependently-typed programming languages and theorem provers based
 on Martin-Löf type theory.
 
@@ -108,7 +108,7 @@ proofs.
 There are 3 main concepts taken from Martin-Löf type theory and implemented in
 dependently-typed programming languages.
 
-*** \Pi-types
+*** @@latex:\texorpdfstring{$\Pi$}{Pi}-types@@
 \Pi-types are the types of functions whose return types depend on one or more of
 their arguments. In other words these functions map values from some domain to
 some non-fixed codomain that is determined by the input. In this sense the
@@ -121,7 +121,7 @@ natural number $n$ return a tuple of size $n$ of elements of type $A$. That is
 to say that the type of the value returned by these functions is determined by
 the argument to the functions.
 
-*** \Sigma-types
+*** @@latex:\texorpdfstring{$\Sigma$}{Sigma}-types@@
 \Sigma-types, also known as dependent pair types, are a more generalised form of
 Cartesian product that model pairs of values where the type of the second
 element depends on the first element.
@@ -165,7 +165,7 @@ rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
 definition of inductive data types.
 
-For example the inductive data type representing the Peano natural numbers can
+For example, the inductive data type representing the Peano natural numbers can
 be declared as follows in Agda.
 
 #+BEGIN_SRC agda

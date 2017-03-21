@@ -1,2 +1,2 @@
 * Project
-Example cite:McKinna_2006
+Example cite:mckinna_why_2006

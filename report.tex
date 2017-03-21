@@ -1,4 +1,4 @@
-% Created 2017-03-20 Mon 14:32
+% Created 2017-03-21 Tue 10:08
 % Intended LaTeX compiler: xelatex
 \documentclass[a4paper, notitlepage]{report}
 \usepackage{graphicx}
@@ -13,6 +13,7 @@
 \usepackage{capt-of}
 \usepackage{hyperref}
 \include{settings/preamble}
+\addbibresource{report.bib}
 \usepackage{draftwatermark}
 \SetWatermarkLightness{0.95}
 \author{Eoin Houlihan}
@@ -38,11 +39,11 @@
 \pagenumbering{arabic}
 
 \part{Introduction and Background}
-\label{sec:org893bb68}
+\label{sec:org49e09be}
 \chapter{Introduction}
-\label{sec:org996e7bc}
+\label{sec:org9403841}
 \chapter{Background}
-\label{sec:org339e84f}
+\label{sec:orgcbe8ade}
 This chapter aims to give an understanding of the background and necessary
 concepts that will be used throughout the report. A basic understanding of
 functional programming ideas such as algebraic data types, recursion and the
@@ -52,7 +53,7 @@ state of the art dependently-typed programming languages with a more in-depth
 look at Idris in particular.
 
 \section{Intuitionistic Type Theory}
-\label{sec:org7763afc}
+\label{sec:org37bf19d}
 Intuitionistic type theory is a type theory based on mathematical
 constructivism. Constructive mathematics is an alternative foundational theory
 of mathematics that argues that construction of a mathematical object is
@@ -66,13 +67,13 @@ of successive type theories in the 1970s. This intuitionistic type theory (also
 commonly referred to as Martin-Löf type theory) introduces a number of
 interesting concepts. Most notable in terms of their influences on programming
 language design were the concepts of \(\Pi\)-types and \(\Sigma\)-types. These
-constructs can be seen as analogous to the logical quantifiers "forall" and
-"exists" respectively. These concepts have served as the underpinning of the
+constructs can be seen as analogous to the logical quantifiers ``forall'' and
+``exists'' respectively. These concepts have served as the underpinning of the
 development of dependently-typed programming languages and theorem provers based
 on Martin-Löf type theory.
 
 \section{Curry-Howard Isomorphism}
-\label{sec:orgb9f2ab4}
+\label{sec:org0bce4ad}
 From a modern computer science perspective it's almost taken for granted that
 computability theory and mathematical proofs are inherently linked. For example,
 many parallels can be drawn between the proof of Turing's Halting Problem and
@@ -106,7 +107,7 @@ program correctness by translating a mathematical proof of an algorithm to a
 computer program and having the machine type-check (proof-check) it.
 
 \section{Traditional Hindley-Milner Type Systems}
-\label{sec:org34808c1}
+\label{sec:orga1322c8}
 Standard Hindley-Milner-esque type systems such as the one found in Haskell
 allow us to express some different dependencies between the types of terms and
 terms themselves. For example, terms can depend on other terms such as in this
@@ -136,7 +137,7 @@ id x = x
 \end{minted}
 
 \section{Dependent Type Systems}
-\label{sec:org8042975}
+\label{sec:org7cb0472}
 Dependent type systems extend this system of dependencies by allowing types to
 depend on terms. This leads to much greater expressivity power in the type
 system. For example, in a dependently typed system we can express types such as
@@ -156,8 +157,8 @@ proofs.
 There are 3 main concepts taken from Martin-Löf type theory and implemented in
 dependently-typed programming languages.
 
-\subsection{\(\Pi\)-types}
-\label{sec:org6e4d25e}
+\subsection{\texorpdfstring{$\Pi$}{Pi}-types}
+\label{sec:org1edc908}
 \(\Pi\)-types are the types of functions whose return types depend on one or more of
 their arguments. In other words these functions map values from some domain to
 some non-fixed codomain that is determined by the input. In this sense the
@@ -170,8 +171,8 @@ natural number \(n\) return a tuple of size \(n\) of elements of type \(A\). Tha
 to say that the type of the value returned by these functions is determined by
 the argument to the functions.
 
-\subsection{\(\Sigma\)-types}
-\label{sec:org691b2bb}
+\subsection{\texorpdfstring{$\Sigma$}{Sigma}-types}
+\label{sec:org6207a54}
 \(\Sigma\)-types, also known as dependent pair types, are a more generalised form of
 Cartesian product that model pairs of values where the type of the second
 element depends on the first element.
@@ -193,7 +194,7 @@ the distinction between types and terms. Types and terms are unified as
 equivalent constructs.
 
 \subsection{The Equality Type}
-\label{sec:orgad89623}
+\label{sec:org8fee333}
 The equality type \(=\) is a special type used to denote proofs of equality
 between two values. If there is an inhabitant of the type \(a \mathrel{=} b\) then
 \(a\) and \(b\) are considered to be equal. This proof allows \(b\) to be used
@@ -210,15 +211,15 @@ constructions of basic proofs and axioms such as \(n \mathbin{:} {\mathbb N}, n
 \mathbin{-} n \mathrel{=} 0\).
 
 \section{State of The Art Dependently-Typed Programming Languages}
-\label{sec:org8de6d94}
+\label{sec:orgfb5096f}
 \subsection{Agda}
-\label{sec:orgf9b88c2}
+\label{sec:org20f6ebe}
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
 definition of inductive data types.
 
-For example the inductive data type representing the Peano natural numbers can
+For example, the inductive data type representing the Peano natural numbers can
 be declared as follows in Agda.
 
 \begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{agda}
@@ -233,7 +234,7 @@ represents a natural number plus 1. We will see more definitions of inductive
 types similar to this one throughout the later chapters.
 
 \subsection{Coq}
-\label{sec:org2ac3edb}
+\label{sec:orgf1346b9}
 Developed initially in the late 1980s at INRIA in France, Coq approaches
 dependently-typed programming more from the mathematical side as an interactive
 theorem prover. Coq is based on the Calculus of Constructions, a type theory
@@ -246,37 +247,38 @@ CompCert \cite{compcert}, as well as a formally verified proof of the Four-Colou
 Theorem \cite{gonthier_formal_2008} for graph colouring.
 
 \subsection{Idris}
-\label{sec:orgd183a89}
+\label{sec:org586a41a}
 Idris is the work primarily of Edwin Brady and others at the University of St.
 Andrews in Scotland.
 
 \section{The Idris Programming Language}
-\label{sec:org99f1579}
+\label{sec:org54d067b}
 \subsection{Similarities to Haskell}
-\label{sec:org3f42584}
+\label{sec:org30912cb}
 
 \subsection{Total Functional Programming}
-\label{sec:orga668b3e}
+\label{sec:org60a9b46}
 \begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{haskell}
 head :: [a] -> a
 head (x:_) = x
 \end{minted}
 
 \part{Implementation and Case Studies}
-\label{sec:org33fa0d2}
+\label{sec:orgc8d5bc0}
 \chapter{Project}
-\label{sec:org212db82}
-Example \cite{McKinna_2006}
+\label{sec:org9fae07d}
+Example \cite{mckinna_why_2006}
 \chapter{Case Studies}
-\label{sec:org1e065f4}
+\label{sec:org8cda9d9}
 
 \part{Assessments and Future Work}
-\label{sec:orgec4544b}
+\label{sec:org31baf5b}
 \chapter{Assessments and Conclusions}
-\label{sec:org7aff037}
+\label{sec:org712bd49}
 \chapter{Future Work}
-\label{sec:orgc1524de}
+\label{sec:org81fbbbf}
 
-\bibliography{report}
+\emergencystretch=1em
+\printbibliography
 \appendix
 \end{document}
