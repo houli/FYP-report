@@ -28,5 +28,5 @@
 #+INCLUDE: chapter6.org
 
 \emergencystretch=1em
-\printbibliography
+\printbibliography[heading=bibintoc, title=References]
 \appendix
