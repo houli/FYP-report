@@ -1,0 +1,14 @@
+* My Project
+
+** Objectives
+# TODO: Fill out this section
+
+** Approach
+# TODO: Outline case studies and approaches
+
+** Type-Driven-Development
+# TODO: Fill out section
+# TODO: Include image from presentation/poster
+
+** Interactive Editing Modes for Idris
+# TODO: Fill out this section, reference previous and how it helps

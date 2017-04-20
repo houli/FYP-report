@@ -9,11 +9,14 @@
 % Lets you pick fonts. Only works if you compile with xelatex or luatex
 \usepackage[no-math]{fontspec}
 
+\usepackage{unicode-math}
+
 % Used to make the captions on figures sans serif
 \usepackage{caption}
 
 % For including images
 \usepackage{graphicx}
+\usepackage{float}
 
 % For fancy code listings
 \usepackage{minted}
@@ -33,6 +36,7 @@
 \setmainfont[Mapping=tex-text]{Times New Roman}
 \setsansfont{Helvetica}
 \setmonofont{Monaco}
+\setmathfont{TeX Gyre Termes Math}
 
 \pagestyle{headings}
 

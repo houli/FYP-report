@@ -13,7 +13,7 @@
 }
 
 @online{compcert,
-  author =       {{Leroy}, Xavier},
+  author =       {Leroy, Xavier},
   title =        {{CompCert} - Main page},
   date =         {2017-02-14},
   url =          {http://compcert.inria.fr/},
@@ -29,4 +29,185 @@
   url =          {http://www.ams.org/journals/notices/200811/tx081101382p.pdf},
   date =         {2008},
   journaltitle = {Notices of the {AMS}},
+}
+
+@article{mcbride_faking_2002,
+  author =       {{McBride}, Conor},
+  title =        {Faking It Simulating Dependent Types in Haskell},
+  volume =       {12},
+  number =       {4},
+  doi =          {10.1017/S0956796802004355},
+  url =          {https://doi.org/10.1017/S0956796802004355},
+  date =         {2002-07},
+  issn =         {0956-7968, 1469-7653},
+  journaltitle = {Journal of Functional Programming},
+}
+
+@inproceedings{lindley_hasochism_2013,
+  author =       {Lindley, Sam and {McBride}, Conor},
+  title =        {Hasochism: The Pleasure and Pain of Dependently Typed Haskell
+                  Programming},
+  booktitle =    {Proceedings of the 2013 {ACM} {SIGPLAN} Symposium on Haskell},
+  pages =        {81--92},
+  doi =          {10.1145/2503778.2503786},
+  url =          {https://doi.org/10.1145/2503778.2503786},
+  abstract =     {Haskell's type system has outgrown its Hindley-Milner roots to
+                  the extent that it now stretches to the basics of dependently
+                  typed programming. In this paper, we collate and classify
+                  techniques for programming with dependent types in Haskell,
+                  and contribute some new ones. In particular, through extended
+                  examples---merge-sort and rectangular tilings---we show how to
+                  exploit Haskell's constraint solver as a theorem prover,
+                  delivering code which, as Agda programmers, we envy. We
+                  explore the compromises involved in simulating variations on
+                  the theme of the dependent function space in an attempt to
+                  help programmers put dependent types to work, and to inform
+                  the evolving language design both of Haskell and of
+                  dependently typed languages more broadly.},
+  date =         {2013-09-23},
+  isbn =         {978-1-4503-2383-3},
+  keywords =     {data type promotion, dependent types, invariants, proof
+                  search, singletons},
+  location =     {New York, {NY}, {USA}},
+  publisher =    {{ACM}},
+  series =       {Haskell '13},
+  shorttitle =   {Hasochism},
+}
+
+@article{mcadams_tutor_2013,
+  author =       {{McAdams}, Darryl},
+  title =        {A Tutorial on the {Curry-Howard} Correspondence},
+  url =          {http://wellnowwhat.net/papers/ATCHC.pdf},
+  date =         {2013-04-09},
+}
+
+@video{strange_loop_2015,
+  author =       {{Strange Loop}},
+  title =        {{``Propositions As Types''} by {Philip Wadler}},
+  url =          {https://www.youtube.com/watch?v=IOiZatlZtGU},
+  date =         {2015-09-25},
+  keywords =     {Computer Science (Field Of Study), Philip Wadler},
+  urldate =      {2017-03-24},
+}
+
+@article{wadler_propos_2015,
+  author =       {Wadler, Philip},
+  title =        {Propositions As Types},
+  volume =       {58},
+  number =       {12},
+  pages =        {75--84},
+  doi =          {10.1145/2699407},
+  url =          {https://doi.org/10.1145/2699407},
+  date =         {2015-11-23},
+  issn =         {00010782},
+  journaltitle = {Communications of the {ACM}},
+  langid =       {english},
+}
+
+@article{weirich_specif_2017,
+  author =       {Weirich, Stephanie and Voizard, Antoine and De Amorim, Pedro
+                  Henrique Azevedo and Eisenberg, Richard A.},
+  title =        {A Specification for Dependently-Typed Haskell (extended
+                  Version)},
+  url =          {https://pdfs.semanticscholar.org/bf22/efbefc2d9d89c392a2d7870c0d484ead482d.pdf},
+}
+
+@thesis{eisenberg_dependent_2016,
+  author =       {Eisenberg, Richard A.},
+  title =        {Dependent Types in Haskell: Theory and Practice},
+  journal =      {CoRR},
+  url =          {http://search.proquest.com/docview/1859594290/abstract/C7BB1C32480F4934PQ/1},
+  abstract =     {Haskell, as implemented in the Glasgow Haskell Compiler
+                  ({GHC}), has been adding new type-level programming features
+                  for some time. Many of these features-generalized algebraic
+                  datatypes ({GADTs}), type families, kind polymorphism, and
+                  promoted datatypes-have brought Haskell to the doorstep of
+                  dependent types. Many dependently typed programs can even
+                  currently be encoded, but often the constructions are painful.
+                  In this dissertation, I describe Dependent Haskell, which
+                  supports full dependent types via a backward-compatible
+                  extension to today's Haskell. An important contribution of
+                  this work is an implementation, in {GHC}, of a portion of
+                  Dependent Haskell, with the rest to follow. The features I
+                  have implemented are already released, in {GHC} 8.0. This
+                  dissertation contains several practical examples of Dependent
+                  Haskell code, a full description of the differences between
+                  Dependent Haskell and today's Haskell, a novel dependently
+                  typed lambda-calculus (called {PICO}) suitable for use as an
+                  intermediate language for compiling Dependent Haskell, and a
+                  type inference and elaboration algorithm, {BAKE}, that
+                  translates Dependent Haskell to type-correct {PICO}. Full
+                  proofs of type safety of {PICO} and the soundness of {BAKE}
+                  are included in the appendix.},
+  date =         {2016-10-26},
+  institution =  {University of Pennsylvania},
+  keywords =     {Applied sciences, dependent types, Functional programming,
+                  Haskell, Type theory},
+  location =     {United States -- Pennsylvania},
+  pagetotal =    {351},
+  rights =       {Database copyright {ProQuest} {LLC}; {ProQuest} does not claim
+                  copyright in the individual underlying works.},
+  shorttitle =   {Dependent types in Haskell},
+  type =         {phdthesis},
+}
+
+@book{martin-lof_intuitionistic_1984,
+  author =       {Martin-L{\"o}f, Per and Sambin, Giovanni},
+  title =        {Intuitionistic type theory},
+  publisher =    {Bibliopolis Napoli},
+  url =          {http://people.csail.mit.edu/jgross/personal-website/papers/academic-papers-local/Martin-Lof80.pdf},
+  date =         {1984},
+  volume =       {9},
+}
+
+@inproceedings{vazou_refinement_2014,
+  author =       {Vazou, Niki and Seidel, Eric L. and Jhala, Ranjit and
+                  Vytiniotis, Dimitrios and Peyton-Jones, Simon},
+  title =        {Refinement Types for Haskell},
+  booktitle =    {Proceedings of the 19th {ACM} {SIGPLAN} International
+                  Conference on Functional Programming},
+  pages =        {269--282},
+  doi =          {10.1145/2628136.2628161},
+  url =          {https://doi.org/10.1145/2628136.2628161},
+  abstract =     {{SMT}-based checking of refinement types for call-by-value
+                  languages is a well-studied subject. Unfortunately, the
+                  classical translation of refinement types to verification
+                  conditions is unsound under lazy evaluation. When checking an
+                  expression, such systems implicitly assume that all the free
+                  variables in the expression are bound to values. This property
+                  is trivially guaranteed by eager, but does not hold under
+                  lazy, evaluation. Thus, to be sound and precise, a refinement
+                  type system for Haskell and the corresponding verification
+                  conditions must take into account which subset of binders
+                  actually reduces to values. We present a stratified type
+                  system that labels binders as potentially diverging or not,
+                  and that (circularly) uses refinement types to verify the
+                  labeling. We have implemented our system in {LIQUIDHASKELL}
+                  and present an experimental evaluation of our approach on more
+                  than 10,000 lines of widely used Haskell libraries. We show
+                  that {LIQUIDHASKELL} is able to prove 96\ \% of all recursive
+                  functions terminating, while requiring a modest 1.7 lines of
+                  termination-annotations per 100 lines of code.},
+  date =         {2014-09},
+  isbn =         {978-1-4503-2873-9},
+  location =     {New York, {NY}, {USA}},
+  publisher =    {{ACM}},
+  series =       {{ICFP} '14},
+}
+
+@online{proof_general,
+  author =       {team, The {PG} dev},
+  title =        {Proof General},
+  url =          {https://proofgeneral.github.io/},
+  abstract =     {A generic Emacs interface for proof assistants.},
+  date =         {2016},
+  urldate =      {2017-04-02},
+}
+
+@video{scala_world_2015,
+  author =       {{Scala World}},
+  title =        {Type-Driven Development in Idris - {Edwin Brady}},
+  url =          {https://www.youtube.com/watch?v=X36ye-1x_HQ},
+  date =         {2015-09-20},
+  urldate =      {2017-04-02},
 }

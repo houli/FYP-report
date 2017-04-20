@@ -17,14 +17,14 @@ logic systems in that proof by contradiction is not used and the law of the
 excluded middle is not assumed as an axiom of the logic in general.
 
 Drawing upon these ideas, Per Martin-Löf, a Swedish logician, developed a number
-of successive type theories in the 1970s. This intuitionistic type theory (also
-commonly referred to as Martin-Löf type theory) introduces a number of
-interesting concepts. Most notable in terms of their influences on programming
-language design were the concepts of \Pi-types and \Sigma-types. These
-constructs can be seen as analogous to the logical quantifiers ``forall'' and
-``exists'' respectively. These concepts have served as the underpinning of the
-development of dependently-typed programming languages and theorem provers based
-on Martin-Löf type theory.
+of successive type theories in the 1970s cite:martin-lof_intuitionistic_1984.
+This intuitionistic type theory (also commonly referred to as Martin-Löf type
+theory) introduces a number of interesting concepts. Most notable in terms of
+their influences on programming language design were the concepts of \Pi-types
+and \Sigma-types. These constructs can be seen as analogous to the logical
+quantifiers ``forall'' and ``exists'' respectively. These concepts have served
+as the underpinning of the development of dependently-typed programming
+languages and theorem provers based on Martin-Löf type theory.
 
 ** Curry-Howard Isomorphism
 From a modern computer science perspective it's almost taken for granted that
@@ -32,7 +32,14 @@ computability theory and mathematical proofs are inherently linked. For example,
 many parallels can be drawn between the proof of Turing's Halting Problem and
 Gödel's incompleteness theorems. Between the 1930s and the 1960s Haskell Curry
 and William Alvin Howard began to formalise this direct link between computer
-programs and mathematical proofs which is known as the Curry-Howard isomorphism.
+programs and mathematical proofs which is known as the Curry-Howard isomorphism
+cite:mcadams_tutor_2013. As Philip Wadler, one of the original authors of the
+Haskell report, put it cite:strange_loop_2015,wadler_propos_2015
+
+#+BEGIN_QUOTE
+``Every good idea will be discovered twice. Once by a logician and once by a
+computer scientist'' -- Philip Wadler
+#+END_QUOTE
 
 According to the Curry-Howard isomorphism the type of an expression is
 equivalent to a proposition of a logical formula. A term inhabiting that type is
@@ -134,7 +141,7 @@ of length $n$ of values of type $A$.
 This representation is similar to the Haskell =List= type however there is extra
 information in that the type of the \Sigma-type $\operatorname{Vect}$ also
 carries around a witness to its length expressed as a natural number. We say
-that $\operatorname{Vect}$ is "indexed" by the type $A$ as well as the value
+that $\operatorname{Vect}$ is ``indexed'' by the type $A$ as well as the value
 $n$.
 
 Being able to index types by both types and terms in the language is a key
@@ -160,6 +167,7 @@ constructions of basic proofs and axioms such as $n \mathbin{:} {\mathbb N}, n
 
 ** State of The Art Dependently-Typed Programming Languages
 *** Agda
+    # TODO: this section isn't very good
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
@@ -169,15 +177,21 @@ For example, the inductive data type representing the Peano natural numbers can
 be declared as follows in Agda.
 
 #+BEGIN_SRC agda
-data #$\mathbb{N}$# : Set where
-  zero : #$\mathbb{N}$#
-  suc : #$\mathbb{N}$# → #$\mathbb{N}$#
+data #$ℕ$# : Set where
+  zero : #$ℕ$#
+  suc : #$ℕ$# → #$ℕ$#
 #+END_SRC
 
 There are two cases to consider here. =zero= is the base case. =suc= (standing
 for successor) takes a natural number and returns a new natural number. It
 represents a natural number plus 1. We will see more definitions of inductive
 types similar to this one throughout the later chapters.
+
+Agda has the capability of producing executable code however it is mostly used
+for the purpose of automated theorem proving. Agda does however provide a
+foreign function interface to import arbitrary Haskell types and functions.
+These go unused for the purpose of Agda type-checking but do have runtime
+effects in the output compiled code.
 
 *** Coq
 Developed initially in the late 1980s at INRIA in France, Coq approaches
@@ -191,15 +205,182 @@ Notable work created using Coq includes the formally verified C compiler
 CompCert cite:compcert, as well as a formally verified proof of the Four-Colour
 Theorem cite:gonthier_formal_2008 for graph colouring.
 
+Development in Coq and using dependent types in general can become quite
+complex. To support the powerful type system a number of featureful interactive
+environments such as CoqIDE and Proof General cite:proof_general exist. These
+environments provide semantic information about your code. This includes the
+current environment of defined values as well as their types and the type of the
+current goal that you are attempting to prove.
+
+#+CAPTION: An in-progress Proof General session
+#+ATTR_LATEX: :width 0.85\linewidth :placement [H]
+[[./fig/proof_general.png]]
+
+Coq's primary mechanism for producing executable code is via program extraction.
+This is the process by which correct Coq code can be transformed into an
+equivalent Haskell or OCaml module which provides the user with the ability to
+run the extracted code. This extraction process has benefits in that it allows
+for the expression and type-checking of interesting correctness properties in a
+dependently-typed language while also giving us a way to compile it to native
+code using compilers with state-of-the-art code optimisation techniques. This
+allows the production of a fast native binary from a correct and type-checked
+Coq program.
+
+*** Haskell
+GHC Haskell has slowly been implementing many of the capabilities of dependent
+types via extensions to the language such as =GADTs=, =DataKinds=, and
+=TypeFamilies=. Through particular use of the Haskell type system many of the
+features of dependently typed languages can be simulated in roundabout ways
+cite:mcbride_faking_2002,lindley_hasochism_2013.
+
+A full dependent type system is currently being implemented for future releases
+of GHC 8 cite:eisenberg_dependent_2016,weirich_specif_2017. Existing
+extensions and offshoots of GHC such as Liquid Haskell implement refinement
+types which allows for the expression of a limited set of propositions at the
+type level in existing Haskell code cite:vazou_refinement_2014.
+
 *** Idris
-Idris is the work primarily of Edwin Brady and others at the University of St.
-Andrews in Scotland.
+Idris is primarily the work of Edwin Brady and others at the University of St.
+Andrews in Scotland. It has positioned itself as a more practical take on
+dependently-typed programming and as such is more aimed at being a language that
+you can write programs leveraging dependent types while also performing
+interesting effectful actions such as file I/O and drawing graphics to the
+screen.
+
+Edwin Brady, the author of Idris has said before that Idris has the interesting
+property of being ``Pac-Man Complete'' cite:scala_world_2015. Rather than just
+being a Turing complete language, if you wanted to, you could write a version of
+a simple 2D game such as Pac-Man in the language.
+
+This report focuses on using Idris in a practical manner while aiming to take
+advantage of dependent types to ensure that our code is more correct.
 
 ** The Idris Programming Language
 *** Similarities to Haskell
+Idris has inherited much of the surface syntax of Haskell and will be quite
+familiar to anyone who has worked in Haskell or a similar ML-like language
+before. For example, the function that calculates the length of the list would
+look as follows in Haskell.
+
+#+BEGIN_SRC haskell
+length :: [a] -> Integer
+length [] = 0
+length (_:xs) = 1 + length xs
+#+END_SRC
+
+An equivalent Idris function bears some resemblance with notable exceptions
+being the explicit name =List= as the list type constructor and the swapping of
+the type operator (=::=) and the cons operator (=:=).
+
+#+BEGIN_SRC idris
+length : List a -> Integer
+length [] = 0
+length (_::xs) = 1 + length xs
+#+END_SRC
+
+Data-type declarations also follow a similar syntax with Idris code favouring
+the explicit type signature style seen in Haskell GADTs. As an example we could
+have a simple data type such as a list implemented in Haskell.
+
+#+BEGIN_SRC haskell
+data List a = Nil
+            | Cons a (List a)
+#+END_SRC
+
+In Idris we could define it the same way however the idiom is to use the
+explicit type signatures as it becomes the only way to implement more powerful
+dependently-typed data types later on.
+
+#+BEGIN_SRC idris
+data List : Type -> Type where
+  Nil : List a
+  Cons : a -> List a -> List a
+#+END_SRC
+
+# TODO: this needs some work
+
+*** Typed Holes
+
+*** Implicit Arguments
 
 *** Total Functional Programming
-#+BEGIN_SRC haskell
-head :: [a] -> a
-head (x:_) = x
+One of the key concepts advocated by the language designers of Idris is the
+concept of ``total'' functional programming. From languages such as Haskell you
+may be familiar with functions such as =head= and =tail= on lists which have the
+possibility of crashing at runtime.
+
+#+BEGIN_SRC idris
+head : List a -> a
+head (x::_) = x
+
+tail : List a -> List a
+tail (_::xs) = xs
 #+END_SRC
+
+Both of these functions will crash our programs at runtime if we call them with
+the empty list but will still pass Idris' type checker. The reason for this is
+that the functions are partial. Both functions fail to provide a function clause
+that will match the empty list as an input resulting in a runtime error but not
+a type error. The simple solution to this is define some safe versions of these
+functions using the =Maybe= type.
+
+#+BEGIN_SRC idris
+head : List a -> Maybe a
+head [] = Nothing
+head (x::_) = Just x
+
+tail : List a -> Maybe (List a)
+tail [] = Nothing
+tail (_::xs) = Just xs
+#+END_SRC
+
+We now have total versions of these functions in so far as they guarantee to
+always return a result for any well-typed input. This style of ``total''
+functional programming is heavily recommended in Idris. In fact, any function
+that we use to compute a type must pass the compiler's built-in totality
+checker. If the function is not total it leaves us with the possibility of a
+runtime error in the type checker when computing the value of the function.
+
+Functions that do not terminate are also partial functions in that they can
+never produce a result. If these functions were total we could have a type that
+could never be computed to some normal form and cause the Idris type checker to
+run forever.
+
+#+BEGIN_SRC idris
+loop : a -> b
+loop x = loop x
+#+END_SRC
+
+To think about functions in terms of proofs leaves us with some interesting
+implications for totality. A partial function can only guarantee us that when it
+is provided inputs of the correct type it will produce a proof if it terminates.
+A total function on the other hand gives us a much stronger guarantee that if
+the function is provided inputs of the correct type it will terminate and it
+will produce the proof (the value). When dealing with functions that compute
+proofs it is quite important that we ensure that our definitions are total to be
+confident that our proof holds in all cases. A partial program that just
+infinitely loops will satisfy any type that we give it.
+
+Idris provides some mechanisms to help prevent us from writing partial code. The
+first of which is the =total= annotation. We can add this to any function
+definition and the effect is that the compiler enforces that the function is
+indeed total. Failure to pass the Idris totality checker results in a message
+from the compiler. Trying out the bad =loop= code from above with the =total=
+annotation added results in the Idris compiler informing us that our definition
+is not total due to the recursion in our function clause.
+
+#+BEGIN_SRC idris
+total
+loop : a -> b
+loop x = loop x
+-- When loaded: Main.loop is possibly not total due to recursive path Main.loop --> Main.loop
+#+END_SRC
+
+The second mechanism is mainly a convenience for the first. If we include the
+compiler pragma =%default total= at the top of our Idris module, all definitions
+after it will be checked for totality. The =partial= annotation can then be used
+as an escape hatch from the totality checker. When working on code we would like
+to prove not only for correctness but for totality it makes sense to begin all
+of our modules with this compiler pragma and use the =partial= annotation where
+necessary. This pragma is used throughout the code outlined in the case studies
+in the later chapters.

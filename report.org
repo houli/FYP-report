@@ -20,17 +20,12 @@
 \newpage
 \pagenumbering{arabic}
 
-* Introduction and Background
-#+INCLUDE: chapters/chapter1.org
-#+INCLUDE: chapters/chapter2.org
-
-* Implementation and Case Studies
-#+INCLUDE: chapters/chapter3.org
-#+INCLUDE: chapters/chapter4.org
-
-* Assessments and Future Work
-#+INCLUDE: chapters/chapter5.org
-#+INCLUDE: chapters/chapter6.org
+#+INCLUDE: chapter1.org
+#+INCLUDE: chapter2.org
+#+INCLUDE: chapter3.org
+#+INCLUDE: chapter4.org
+#+INCLUDE: chapter5.org
+#+INCLUDE: chapter6.org
 
 \emergencystretch=1em
 \printbibliography
