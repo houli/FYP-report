@@ -8,7 +8,7 @@ Export with ~org-mode~ with following settings:
 (setq org-latex-listings 'minted)
 (setq org-latex-minted-options
       '(("frame" "single")
-        ("fontsize" "\\scriptsize")
+        ("fontsize" "\\normalsize")
         ("linenos" "")
         ("escapeinside" "\\#\\#")))
 (add-to-list 'org-latex-classes

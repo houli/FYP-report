@@ -1,4 +1,4 @@
-% Created 2017-04-20 Thu 14:53
+% Created 2017-04-22 Sat 16:21
 % Intended LaTeX compiler: xelatex
 \documentclass[a4paper, notitlepage]{report}
 \usepackage{graphicx}
@@ -39,9 +39,9 @@
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-\label{sec:orgbdced8f}
+\label{sec:orgff023a9}
 \chapter{Background}
-\label{sec:org963233c}
+\label{sec:org7cfb42a}
 This chapter aims to give an understanding of the background and necessary
 concepts that will be used throughout the report. A basic understanding of
 functional programming ideas such as algebraic data types, recursion and the
@@ -51,7 +51,7 @@ state of the art dependently-typed programming languages with a more in-depth
 look at Idris in particular.
 
 \section{Intuitionistic Type Theory}
-\label{sec:org0d08171}
+\label{sec:org14b2bae}
 Intuitionistic type theory is a type theory based on mathematical
 constructivism. Constructive mathematics is an alternative foundational theory
 of mathematics that argues that construction of a mathematical object is
@@ -71,7 +71,7 @@ as the underpinning of the development of dependently-typed programming
 languages and theorem provers based on Martin-Löf type theory.
 
 \section{Curry-Howard Isomorphism}
-\label{sec:org55204bf}
+\label{sec:org01c576f}
 From a modern computer science perspective it's almost taken for granted that
 computability theory and mathematical proofs are inherently linked. For example,
 many parallels can be drawn between the proof of Turing's Halting Problem and
@@ -112,13 +112,13 @@ program correctness by translating a mathematical proof of an algorithm to a
 computer program and having the machine type-check (proof-check) it.
 
 \section{Traditional Hindley-Milner Type Systems}
-\label{sec:org9b3a341}
+\label{sec:orgb0e2428}
 Standard Hindley-Milner-esque type systems such as the one found in Haskell
 allow us to express some different dependencies between the types of terms and
 terms themselves. For example, terms can depend on other terms such as in this
 Haskell function definition.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{haskell}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{haskell}
 plusOne x = x + 1
 \end{minted}
 
@@ -126,7 +126,7 @@ Here we can see that the term \texttt{plusOne} has been defined with respect to 
 terms \texttt{x}, which is its argument and \texttt{1}, an integer. Types can also depend on
 other types as shown here.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{haskell}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{haskell}
 data List a = Nil
             | Cons a (List a)
 \end{minted}
@@ -136,13 +136,13 @@ type \texttt{a} provided to it. This allows polymorphism and lists of any type.
 Finally, in the world of Haskell, terms can depend on types. This is apparent in
 polymorphic functions such as the identity function.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{haskell}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{haskell}
 id :: a -> a
 id x = x
 \end{minted}
 
 \section{Dependent Type Systems}
-\label{sec:org45240ce}
+\label{sec:org08301d6}
 Dependent type systems extend this system of dependencies by allowing types to
 depend on terms. This leads to much greater expressivity power in the type
 system. For example, in a dependently typed system we can express types such as
@@ -163,7 +163,7 @@ There are 3 main concepts taken from Martin-Löf type theory and implemented in
 dependently-typed programming languages.
 
 \subsection{\texorpdfstring{$\Pi$}{Pi}-types}
-\label{sec:orgedbd633}
+\label{sec:org4784ef8}
 \(\Pi\)-types are the types of functions whose return types depend on one or more of
 their arguments. In other words these functions map values from some domain to
 some non-fixed codomain that is determined by the input. In this sense the
@@ -177,7 +177,7 @@ to say that the type of the value returned by these functions is determined by
 the argument to the functions.
 
 \subsection{\texorpdfstring{$\Sigma$}{Sigma}-types}
-\label{sec:orgfc9ecca}
+\label{sec:orgaa70f08}
 \(\Sigma\)-types, also known as dependent pair types, are a more generalised form of
 Cartesian product that model pairs of values where the type of the second
 element depends on the first element.
@@ -199,7 +199,7 @@ the distinction between types and terms. Types and terms are unified as
 equivalent constructs.
 
 \subsection{The Equality Type}
-\label{sec:org37eca17}
+\label{sec:orgd0a0dd8}
 The equality type \(=\) is a special type used to denote proofs of equality
 between two values. If there is an inhabitant of the type \(a \mathrel{=} b\) then
 \(a\) and \(b\) are considered to be equal. This proof allows \(b\) to be used
@@ -216,9 +216,9 @@ constructions of basic proofs and axioms such as \(n \mathbin{:} {\mathbb N}, n
 \mathbin{-} n \mathrel{=} 0\).
 
 \section{State of The Art Dependently-Typed Programming Languages}
-\label{sec:org53eaf72}
+\label{sec:org2392db7}
 \subsection{Agda}
-\label{sec:orgf46d71c}
+\label{sec:orgae805f3}
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
@@ -227,7 +227,7 @@ definition of inductive data types.
 For example, the inductive data type representing the Peano natural numbers can
 be declared as follows in Agda.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{agda}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{agda}
 data #$ℕ$# : Set where
   zero : #$ℕ$#
   suc : #$ℕ$# → #$ℕ$#
@@ -245,7 +245,7 @@ These go unused for the purpose of Agda type-checking but do have runtime
 effects in the output compiled code.
 
 \subsection{Coq}
-\label{sec:orgcb46e55}
+\label{sec:org05dbfa9}
 Developed initially in the late 1980s at INRIA in France, Coq approaches
 dependently-typed programming more from the mathematical side as an interactive
 theorem prover. Coq is based on the Calculus of Constructions, a type theory
@@ -281,7 +281,7 @@ allows the production of a fast native binary from a correct and type-checked
 Coq program.
 
 \subsection{Haskell}
-\label{sec:orgd3474a5}
+\label{sec:orge740893}
 GHC Haskell has slowly been implementing many of the capabilities of dependent
 types via extensions to the language such as \texttt{GADTs}, \texttt{DataKinds}, and
 \texttt{TypeFamilies}. Through particular use of the Haskell type system many of the
@@ -295,7 +295,7 @@ types which allows for the expression of a limited set of propositions at the
 type level in existing Haskell code \cite{vazou_refinement_2014}.
 
 \subsection{Idris}
-\label{sec:org9ab10f9}
+\label{sec:org1ab6c86}
 Idris is primarily the work of Edwin Brady and others at the University of St.
 Andrews in Scotland. It has positioned itself as a more practical take on
 dependently-typed programming and as such is more aimed at being a language that
@@ -308,19 +308,36 @@ property of being ``Pac-Man Complete'' \cite{scala_world_2015}. Rather than just
 being a Turing complete language, if you wanted to, you could write a version of
 a simple 2D game such as Pac-Man in the language.
 
+Idris provides multiple code generation backends to its compiler to produce
+executable code. The primary mechanism by which code is generated is by using
+the default C backend. This backend produces C code which is in turn compiled to
+native code by a C compiler toolchain such as GCC or Microsoft Visual C++. Other
+more experimental backends are provided such as JavaScript/Node.js as well as
+community provided backends of the compiler such as the Erlang
+\cite{elliott_erlang_2015} and Java \cite{idris_java} backends.
+
 This report focuses on using Idris in a practical manner while aiming to take
 advantage of dependent types to ensure that our code is more correct.
 
 \section{The Idris Programming Language}
-\label{sec:org9a3f44e}
+\label{sec:org640a8b4}
+In order to follow along with some of the code examples it is worth gaining an
+understanding of some of the basic principles of the Idris language. This
+section is by no means comprehensive both in terms of the contents of this
+report as well as the language as a whole but will make it easier to understand
+the code fragments in later sections. More advanced concepts will be covered as
+we encounter them throughout the report. A more thorough reference and tutorial
+can be found on the Idris website \cite{idris_tutorial_2017} as well as in Edwin
+Brady's ``Type-Driven Development with Idris'' \cite{brady_book_2017} book.
+
 \subsection{Similarities to Haskell}
-\label{sec:orgace958a}
+\label{sec:org7041cea}
 Idris has inherited much of the surface syntax of Haskell and will be quite
 familiar to anyone who has worked in Haskell or a similar ML-like language
 before. For example, the function that calculates the length of the list would
 look as follows in Haskell.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{haskell}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{haskell}
 length :: [a] -> Integer
 length [] = 0
 length (_:xs) = 1 + length xs
@@ -330,7 +347,7 @@ An equivalent Idris function bears some resemblance with notable exceptions
 being the explicit name \texttt{List} as the list type constructor and the swapping of
 the type operator (\texttt{::}) and the cons operator (\texttt{:}).
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{idris}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
 length : List a -> Integer
 length [] = 0
 length (_::xs) = 1 + length xs
@@ -340,7 +357,7 @@ Data-type declarations also follow a similar syntax with Idris code favouring
 the explicit type signature style seen in Haskell GADTs. As an example we could
 have a simple data type such as a list implemented in Haskell.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{haskell}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{haskell}
 data List a = Nil
             | Cons a (List a)
 \end{minted}
@@ -349,26 +366,102 @@ In Idris we could define it the same way however the idiom is to use the
 explicit type signatures as it becomes the only way to implement more powerful
 dependently-typed data types later on.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{idris}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
 data List : Type -> Type where
   Nil : List a
   Cons : a -> List a -> List a
 \end{minted}
 
 \subsection{Typed Holes}
-\label{sec:org5107f3c}
+\label{sec:orgcd74186}
+Often when writing code with heavily polymorphic and dependent types it can
+become difficult to see how exactly the types should line up. Idris has a
+built-in syntax for declaring typed holes which are a useful tool to help
+dealing with the way these types line up.
+
+Typed holes act as placeholders for a value of any type. At any point in the
+program a typed hole can be introduced instead of a value. When we go to type
+check our code the compiler will tell us the type of the value that the hole
+needs to be replaced by. This allows the user to incrementally fill in values of
+the correct type or defer writing the value that fits the type until later.
+
+All Idris typed holes are identifiers that begin with a ``?'' such as
+\texttt{?length\_rhs\_1}. In the following example, the compiler informs us when we load
+the module that the type of both \texttt{?length\_rhs\_1} and \texttt{?length\_rhs\_2} is \texttt{Integer}.
+
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
+length : List a -> Integer
+length [] = ?length_rhs_1
+length (x :: xs) = 1 + ?length_rhs_2
+\end{minted}
+
+As seen here, typed holes can appear anywhere in an expression such as the
+right-hand-side of the \texttt{+} operator. Using type holes to defer writing the
+expression of the correct type allows us to more clearly see what types are
+creating the full expression needed to compile the program. It also allows us to
+quickly see types of complicated expressions that we may want to extract as top
+level definitions or ``where'' clauses to improve code clarity and readability.
+
+Typed holes also allow for a powerful interactive development style based around
+creating holes and eventually filling in the values (providing proofs) using the
+information available to us in our current environment. This approach will be
+explained and demonstrated later.
 
 \subsection{Implicit Arguments}
-\label{sec:org3a63da2}
+\label{sec:orgf15a05d}
+If we consider the type of length-indexed lists (Vect) as defined in the Idris
+standard library we may notice something peculiar about the variables in the
+definition.
+
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
+data Vect : Nat -> Type -> Type where
+  Nil : Vect 0 ty
+  (::) : ty -> Vect n ty -> Vect (S n) ty
+\end{minted}
+
+The variables in the type signature, \texttt{ty} and \texttt{n} have not been explicitly declared
+but have in fact been implicitly declared and the types have been inferred. The
+type of \texttt{ty} is \texttt{Type} whereas the type of \texttt{n} is \texttt{Nat}.
+
+Idris for most cases is able to automatically infer these types for our implicit
+arguments. Other languages such as Agda and Coq will require that implicit
+arguments be explicitly listed in the definition but will not require them to be
+supplied as they can be automatically inferred when the function or data type is
+used. Coq does provide a switch however that allows for the omission of implicit
+arguments.
+
+In some cases we may need to or may want to explicitly list the implicit
+arguments in our data type or function declarations. Idris provides syntax for
+this particular case. We can use it to expand out the above definition and list
+the types involved out fully.
+
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
+data Vect : Nat -> Type -> Type where
+  Nil : {ty : Type} -> Vect 0 ty
+  (::) : {ty : Type} -> {n : Nat} -> ty -> Vect n ty -> Vect (S n) ty
+\end{minted}
+
+Implicit arguments can also be accessed in the body of a function by enclosing
+the argument in a pair of curly braces. Using the \texttt{Vect} type above we can define
+functions that make use of the implicit \texttt{Nat} argument in our type such as a
+function that computes the combined length of two vectors without having to rely
+on recursion of the list structure. In fact, the list structure can be
+completely ignored as we carry around all of the information we need as implicit
+arguments in the type.
+
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
+appendLength : Vect n ty -> Vect m ty -> Nat
+appendLength {n} {m} _ _ = n + m
+\end{minted}
 
 \subsection{Total Functional Programming}
-\label{sec:org6f3b2a7}
+\label{sec:orga1fb68a}
 One of the key concepts advocated by the language designers of Idris is the
 concept of ``total'' functional programming. From languages such as Haskell you
 may be familiar with functions such as \texttt{head} and \texttt{tail} on lists which have the
 possibility of crashing at runtime.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{idris}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
 head : List a -> a
 head (x::_) = x
 
@@ -383,7 +476,7 @@ that will match the empty list as an input resulting in a runtime error but not
 a type error. The simple solution to this is define some safe versions of these
 functions using the \texttt{Maybe} type.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{idris}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
 head : List a -> Maybe a
 head [] = Nothing
 head (x::_) = Just x
@@ -405,7 +498,7 @@ never produce a result. If these functions were total we could have a type that
 could never be computed to some normal form and cause the Idris type checker to
 run forever.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{idris}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
 loop : a -> b
 loop x = loop x
 \end{minted}
@@ -428,7 +521,7 @@ from the compiler. Trying out the bad \texttt{loop} code from above with the \te
 annotation added results in the Idris compiler informing us that our definition
 is not total due to the recursion in our function clause.
 
-\begin{minted}[frame=single,fontsize=\scriptsize,linenos,escapeinside=\#\#]{idris}
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,escapeinside=\#\#]{idris}
 total
 loop : a -> b
 loop x = loop x
@@ -444,25 +537,25 @@ of our modules with this compiler pragma and use the \texttt{partial} annotation
 necessary. This pragma is used throughout the code outlined in the case studies
 in the later chapters.
 \chapter{My Project}
-\label{sec:org2f1c773}
+\label{sec:orga821104}
 
 \section{Objectives}
-\label{sec:orgd4112e3}
+\label{sec:orgde431c2}
 
 \section{Approach}
-\label{sec:org5e857f0}
+\label{sec:org67f34dc}
 
 \section{Type-Driven-Development}
-\label{sec:org85e0b33}
+\label{sec:org6ba7c27}
 
 \section{Interactive Editing Modes for Idris}
-\label{sec:org27eae2a}
+\label{sec:org809b56f}
 \chapter{Case Studies}
-\label{sec:orgaa19de9}
+\label{sec:org2bae138}
 \chapter{Assessments and Conclusions}
-\label{sec:org0e6f1e0}
+\label{sec:org20b9978}
 \chapter{Future Work}
-\label{sec:org8833aa4}
+\label{sec:org79d2dfc}
 
 \emergencystretch=1em
 \printbibliography[heading=bibintoc, title=References]
