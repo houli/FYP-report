@@ -72,6 +72,7 @@ allow us to express some different dependencies between the types of terms and
 terms themselves. For example, terms can depend on other terms such as in this
 Haskell function definition.
 
+#+CAPTION: A simple Haskell function definition (terms depending on terms)
 #+BEGIN_SRC haskell
 plusOne x = x + 1
 #+END_SRC
@@ -80,6 +81,7 @@ Here we can see that the term =plusOne= has been defined with respect to the
 terms =x=, which is its argument and =1=, an integer. Types can also depend on
 other types as shown here.
 
+#+CAPTION: A Haskell data type definition with a type parameter (types depending on types)
 #+BEGIN_SRC haskell
 data List a = Nil
             | Cons a (List a)
@@ -90,6 +92,7 @@ type =a= provided to it. This allows polymorphism and lists of any type.
 Finally, in the world of Haskell, terms can depend on types. This is apparent in
 polymorphic functions such as the identity function.
 
+#+CAPTION: A polymorphic Haskell function definition (terms depending on types)
 #+BEGIN_SRC haskell
 id :: a -> a
 id x = x
@@ -178,6 +181,7 @@ definition of inductive data types.
 For example, the inductive data type representing the Peano natural numbers can
 be declared as follows in Agda.
 
+#+CAPTION: Agda definition of a natural number type
 #+BEGIN_SRC agda
 data #$ℕ$# : Set where
   zero : #$ℕ$#
@@ -215,7 +219,7 @@ current environment of defined values as well as their types and the type of the
 current goal that you are attempting to prove.
 
 #+CAPTION: An in-progress Proof General session
-#+ATTR_LATEX: :width 0.85\linewidth :placement [H]
+#+ATTR_LATEX: :width 0.85\linewidth
 [[./fig/proof_general.png]]
 
 Coq's primary mechanism for producing executable code is via program extraction.
@@ -281,6 +285,7 @@ familiar to anyone who has worked in Haskell or a similar ML-like language
 before. For example, the function that calculates the length of the list would
 look as follows in Haskell.
 
+#+CAPTION: Basic Haskell function definition syntax label:length-haskell
 #+BEGIN_SRC haskell
 length :: [a] -> Integer
 length [] = 0
@@ -291,6 +296,7 @@ An equivalent Idris function bears some resemblance with notable exceptions
 being the explicit name =List= as the list type constructor and the swapping of
 the type operator (=::=) and the cons operator (=:=).
 
+#+CAPTION: Translation of Listing ref:length-haskell into Idris
 #+BEGIN_SRC idris
 length : List a -> Integer
 length [] = 0
@@ -301,6 +307,7 @@ Data-type declarations also follow a similar syntax with Idris code favouring
 the explicit type signature style seen in Haskell GADTs. As an example we could
 have a simple data type such as a list implemented in Haskell.
 
+#+CAPTION: Definition of a simple Haskell data type label:list-haskell
 #+BEGIN_SRC haskell
 data List a = Nil
             | Cons a (List a)
@@ -310,6 +317,7 @@ In Idris we could define it the same way however the idiom is to use the
 explicit type signatures as it becomes the only way to implement more powerful
 dependently-typed data types later on.
 
+#+CAPTION: Translation of Listing ref:list-haskell into idiomatic Idris
 #+BEGIN_SRC idris
 data List : Type -> Type where
   Nil : List a
@@ -334,6 +342,7 @@ All Idris typed holes are identifiers that begin with a ``?'' such as
 =?length_rhs_1=. In the following example, the compiler informs us when we load
 the module that the type of both =?length_rhs_1= and =?length_rhs_2= is =Integer=.
 
+#+CAPTION: Typed holes can stand in as expressions of any type in our definitions
 #+BEGIN_SRC idris
 length : List a -> Integer
 length [] = ?length_rhs_1
@@ -357,6 +366,7 @@ If we consider the type of length-indexed lists (Vect) as defined in the Idris
 standard library we may notice something peculiar about the variables in the
 definition.
 
+#+CAPTION: An Idris data type definition making use of implicit arguments =ty= and =n= label:vect-implicit
 #+BEGIN_SRC idris
 data Vect : Nat -> Type -> Type where
   Nil : Vect 0 ty
@@ -379,6 +389,7 @@ arguments in our data type or function declarations. Idris provides syntax for
 this particular case. We can use it to expand out the above definition and list
 the types involved out fully.
 
+#+CAPTION: Expansion of the implicit arguments in Listing ref:vect-implicit
 #+BEGIN_SRC idris
 data Vect : Nat -> Type -> Type where
   Nil : {ty : Type} -> Vect 0 ty
@@ -393,6 +404,7 @@ on recursion of the list structure. In fact, the list structure can be
 completely ignored as we carry around all of the information we need as implicit
 arguments in the type.
 
+#+CAPTION: Implicit arguments can be used in the function body by wrapping them in curly braces
 #+BEGIN_SRC idris
 appendLength : Vect n ty -> Vect m ty -> Nat
 appendLength {n} {m} _ _ = n + m
@@ -404,6 +416,7 @@ concept of ``total'' functional programming. From languages such as Haskell you
 may be familiar with functions such as =head= and =tail= on lists which have the
 possibility of crashing at runtime.
 
+#+CAPTION: The =head= and =tail= functions are often partial functions in languages such as Haskell
 #+BEGIN_SRC idris
 head : List a -> a
 head (x::_) = x
@@ -419,6 +432,7 @@ that will match the empty list as an input resulting in a runtime error but not
 a type error. The simple solution to this is define some safe versions of these
 functions using the =Maybe= type.
 
+#+CAPTION: Safe, total versions of =head= and =tail= using =Maybe=
 #+BEGIN_SRC idris
 head : List a -> Maybe a
 head [] = Nothing
@@ -441,6 +455,7 @@ never produce a result. If these functions were total we could have a type that
 could never be computed to some normal form and cause the Idris type checker to
 run forever.
 
+#+CAPTION: A partial function that will never terminate
 #+BEGIN_SRC idris
 loop : a -> b
 loop x = loop x
@@ -464,11 +479,12 @@ from the compiler. Trying out the bad =loop= code from above with the =total=
 annotation added results in the Idris compiler informing us that our definition
 is not total due to the recursion in our function clause.
 
+#+CAPTION: Idris' totality checker catches this non-total function mislabeled as total
 #+BEGIN_SRC idris
 total
 loop : a -> b
 loop x = loop x
--- When loaded: Main.loop is possibly not total due to recursive path Main.loop --> Main.loop
+-- Main.loop is possibly not total due to recursive path Main.loop --> Main.loop
 #+END_SRC
 
 The second mechanism is mainly a convenience for the first. If we include the

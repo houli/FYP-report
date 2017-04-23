@@ -10,7 +10,9 @@ Export with ~org-mode~ with following settings:
       '(("frame" "single")
         ("fontsize" "\\normalsize")
         ("linenos" "")
+        ("breaklines" "")
         ("escapeinside" "\\#\\#")))
+(setq org-latex-default-figure-position "H")
 (add-to-list 'org-latex-classes
              '("report"
                "\\documentclass[11pt]{report}"
