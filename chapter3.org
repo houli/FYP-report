@@ -6,9 +6,95 @@
 ** Approach
 # TODO: Outline case studies and approaches
 
-** Type-Driven-Development
-# TODO: Fill out section
-# TODO: Include image from presentation/poster
-
 ** Interactive Editing Modes for Idris
-# TODO: Fill out this section, reference previous and how it helps
+A feature of Idris used heavily throughout the implementation of the project was
+the interactive editing environment available to text editors such as Emacs, Vim
+and Atom. This interactive environment works in a similar way to tools such as
+Coq's Proof General cite:proof_general mode and Agda's interactive mode for
+Emacs.
+
+The main difference in Idris' editor support is that it is compatible with
+multiple text editors by providing a client-server model where the editor plugin
+is a client to an instance of the Idris compiler that acts as a server. This
+compiler server responds to commands with information about where to insert some
+string of characters or documentation such as the type of a function or a
+documentation string. It is also responsible for reporting back information
+about type errors, environments of definitions and typed holes.
+
+*** Insert Definition
+One of the most useful commands is the definition command. If we have some
+initial definition of a type signature we can issue a keyboard shortcut to have
+the interactive environment create an initial definition of the function with
+variables inserted and an initial typed hole as the right-hand-side of the
+definition.
+
+The default names for our arguments will be non-descriptive in that they will
+have single-letter names such as =x=, =y=, =z=. We can guide the compiler with the
+=%name= directive to generate more specific or domain relevant names for a given
+type. The list type in the standard library uses this facility to generate more
+appropriate names using =%name List xs, ys, zs, ws=. These new names are used when
+we generate initial definitions with arguments of type =List=.
+
+*** Case Split
+Another command that is regularly used is the case split command. The command
+will create separate clauses in a function definition to cover each different
+case of a data type definition. This is quite useful after creating an initial
+definition and we want to do case analysis on one of our arguments.
+
+This command also helps achieve a definition which will pass the Idris totality
+checker. If we have gotten the compiler to generate the cases for us we can be
+sure that we haven't caused an error by failing to remember to insert a case for
+one of our data constructors. In the following example we create a data type
+representing colours and ask the compiler to provide definitions for each of the
+different cases.
+
+#+CAPTION: Generated function clauses by case splitting
+#+BEGIN_SRC idris
+data Colour : Type where
+  Red : Colour
+  Green : Colour
+  Blue : Colour
+
+colourToString : Colour -> String
+colourToString Red = ?colourToString_rhs_1
+colourToString Green = ?colourToString_rhs_2
+colourToString Blue = ?colourToString_rhs_3
+#+END_SRC
+
+If we were to instead try and manually create these definitions we may forget to
+insert the case for the =Green= constructor. If we don't check this definition for
+totality and try to call it with the value =Green= then it will result in a
+runtime error causing our program to crash despite our =colourToString= function
+type-checking. Automatic case splits driven by the compiler's semantic
+information help us achieve the total functional programming style that Idris
+advocates.
+
+#+CAPTION: Buggy code with incomplete manual case splitting
+#+BEGIN_SRC idris
+colourToString : Colour -> String
+colourToString Blue = "blue"
+colourToString Red = "red"
+#+END_SRC
+
+*** Proof Search
+Often, the value that needs to go in place of a type hole can be automatically
+derived from the values in our environment. By successive case splitting and
+refinement of the goal of our typed holes and from our type signature we often
+arrive at a point where there is only one sensible definition that fits the type
+of the hole. The interactive editing mode offers a proof search command that
+will find the value that fits in the typed hole at the current cursor position
+and replace the hole with the correct well-typed value.
+
+Automating the definition of our function based on the information the compiler
+knows to be true allows for a rapid development cycle in the small scale
+problems in our program. With a stringent enough dependent type for our function
+we can be fairly sure that the definition found is the ``correct'' one in terms
+of the intended semantics of the function. This definition can also be manually
+verified for having the intended semantics by inspection or by testing. It is
+often worth attempting a proof search on a typed hole initially to see what the
+compiler is able to infer for us automatically. In certain situations we do not
+have to write any code ourselves.
+
+** Type-Driven-Development
+# TODO: Fill out section referencing interactive editing
+# TODO: Include image from presentation/poster
