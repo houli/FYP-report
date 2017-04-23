@@ -1,3 +1,7 @@
+#+TITLE: Dependent Types in Practice
+#+AUTHOR: Eoin Houlihan
+#+LANGUAGE: en
+
 #+LaTeX_COMPILER: xelatex
 #+LaTeX_CLASS: report
 #+LaTeX_CLASS_OPTIONS: [a4paper, notitlepage]
@@ -8,7 +12,7 @@
 #+LaTeX_HEADER: \usepackage{draftwatermark}
 #+LaTeX_HEADER: \SetWatermarkLightness{0.95}
 
-#+OPTIONS: toc:nil H:4
+#+OPTIONS: title:nil toc:nil H:4
 
 \inserttitlepage
 \pagenumbering{roman}
