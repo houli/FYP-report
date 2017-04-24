@@ -208,8 +208,8 @@ inductive data types and includes a tactics language for doing interactive
 proofs.
 
 Notable work created using Coq includes the formally verified C compiler
-CompCert cite:compcert, as well as a formally verified proof of the Four-Colour
-Theorem cite:gonthier_formal_2008 for graph colouring.
+CompCert cite:leroy_compiler_2009, as well as a formally verified proof of the
+Four-Colour Theorem cite:gonthier_formal_2008 for graph colouring.
 
 Development in Coq and using dependent types in general can become quite
 complex. To support the powerful type system a number of featureful interactive
@@ -236,7 +236,7 @@ Coq program.
 GHC Haskell has slowly been implementing many of the capabilities of dependent
 types via extensions to the language such as =GADTs=, =DataKinds=, and
 =TypeFamilies=. Through particular use of the Haskell type system many of the
-features of dependently typed languages can be simulated in roundabout ways
+features of dependently-typed languages can be simulated in roundabout ways
 cite:mcbride_faking_2002,lindley_hasochism_2013.
 
 A full dependent type system is currently being implemented for future releases
@@ -350,7 +350,7 @@ length (x :: xs) = 1 + ?length_rhs_2
 #+END_SRC
 
 As seen here, typed holes can appear anywhere in an expression such as the
-right-hand-side of the =+= operator. Using type holes to defer writing the
+right-hand-side of the =+= operator. Using typed holes to defer writing the
 expression of the correct type allows us to more clearly see what types are
 creating the full expression needed to compile the program. It also allows us to
 quickly see types of complicated expressions that we may want to extract as top

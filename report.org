@@ -8,10 +8,6 @@
 #+LaTeX_HEADER: \include{settings/preamble}
 #+LaTeX_HEADER: \addbibresource{report.bib}
 
-# Comment out when it's all over
-#+LaTeX_HEADER: \usepackage{draftwatermark}
-#+LaTeX_HEADER: \SetWatermarkLightness{0.95}
-
 #+OPTIONS: title:nil toc:nil H:4
 
 \inserttitlepage
@@ -22,6 +18,7 @@
 \acknowledgements
 \tableofcontents
 \newpage
+\pagestyle{headings}
 \pagenumbering{arabic}
 
 #+INCLUDE: chapter1.org

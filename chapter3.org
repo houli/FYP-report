@@ -1,10 +1,94 @@
-* My Project
+* Project Objectives and Approach
 
 ** Objectives
-# TODO: Fill out this section
+The objectives of this project are the following:
+- Evaluate the practicality of dependently-typed programming languages
+- Evaluate Idris in particular in this regard
+- Understand what kinds of correctness properties can be expressed
+- Understand the scale at which formal verification with dependent types can be
+  applied in a software project
+- Explore and evaluate multiple approaches to building software with dependent
+  types
+- Discover the main pain points of approaching this style of development as
+  someone with functional programming experience in some ML family language
+
+*** Practicality of Dependently-Typed Programming Languages
+Much of the literature about dependent types has been focused on advancing
+research in the study of the theory of the field. This has manifested itself by
+way of new or novel approaches to building dependently-typed systems. Despite
+the push to advance the underlying theory and concepts not much research has
+emerged in the area of evaluating these languages' applicability to software
+engineering as practised by programmers in general.
+
+Some research exists such as Wouter Swierstra's 2012 evaluation
+cite:swierstra_xmonad_2012 of program extraction from Coq to Haskell of a
+drop-in replacement for one of the modules of the xmonad window manager. This
+projects aim to further supplement this area of study with more data taking into
+account the state-of-the-art at the time of writing.
+
+*** Expression of Correctness Properties
+Many of the current teaching examples involving dependent types present fairly
+simple examples of correctness properties. In order to provide a cohesive
+example that illustrates one or two points this is understandable.
+
+This project aims to outline some more in-depth example of expressing
+complicated correctness properties. By doing this we to understand what some of
+the limitations are in terms of the expressivity of specification of a dependent
+type as well as the feasibility of implementing a program to that specification.
+
+*** Scale of Applicability of Dependent Types
+In real-world settings in a software engineering project we are often faced with
+certain time, performance and other delivery constraints. Projects do not have
+unlimited time to work with crafting and deploying a perfectly verified piece of
+software. While dependent types can give us more guarantees about the
+correctness of our programs that doesn't mean that we will be able to deliver a
+fully verified system within real-world constraints such as deadlines.
+
+This project aims to understand where dependent types are most suited to being
+applied both in terms of problem domains as well as scale. The aim is to see if
+the biggest return on investment will be in verifying critical algorithms and
+processes within a system, verifying a system at the boundaries between
+subsystems or by applying formal verification using dependent types across an
+entire system.
+
+*** Development Approaches when using Dependent Types
+A number of development approaches exist when using dependent types. One could
+take a bottom-up approach in that existing code that has no existing correctness
+properties is given some and then the proof obligations are discharged from the
+implementation out to the type signature. Another approach that is seeing more
+traction is the top-down type-driven or proof-driven development style. This
+approach starts by deciding on a specification in a type and driving the
+implementation based on that specification. This approach is outlined fully in
+its own section of the report.
+
+Among the project's aims is to see how these approaches can be applied to the
+case studies and to determine where one might favour one approach over the other
+for a particular problem.
+
+*** Pain Points when using Dependent Types
+Current dependently-typed languages such as Agda and Idris bear much surface
+syntax similarity to ML family languages such as Haskell. However, past these
+surface details the underlying type frameworks differ quite a bit. Even with
+experience and a good knowledge of a language like Haskell there will be many
+pain points when learning how to use dependent types. This project aims to
+detail some of these hurdles that will be common when beginning to use these
+type systems.
 
 ** Approach
-# TODO: Outline case studies and approaches
+The approach by which the evaluation of the above objectives took place is by
+implementing a number of case studies. In order for these case studies to have
+significant meaning they were focused on implementing real world algorithms that
+have interesting correctness properties that can be expressed about them.
+
+In the implementation of these case studies multiple software engineering tools
+and approaches were used. This included trying to implement the case studies
+using different levels of correctness guarantees. It also meant that the case
+studies should be implemented with different engineering approaches such as the
+top-down type-driven approach and the bottom-up approach where correctness
+properties are validated after the program has been implemented. The case
+studies also made use of different tooling such as working with standard tools
+like text editors as well as more semantically rich interactive editing
+environments.
 
 ** Interactive Editing Modes for Idris
 A feature of Idris used heavily throughout the implementation of the project was
@@ -77,7 +161,7 @@ colourToString Red = "red"
 #+END_SRC
 
 *** Proof Search
-Often, the value that needs to go in place of a type hole can be automatically
+Often, the value that needs to go in place of a typed hole can be automatically
 derived from the values in our environment. By successive case splitting and
 refinement of the goal of our typed holes and from our type signature we often
 arrive at a point where there is only one sensible definition that fits the type
@@ -94,6 +178,10 @@ verified for having the intended semantics by inspection or by testing. It is
 often worth attempting a proof search on a typed hole initially to see what the
 compiler is able to infer for us automatically. In certain situations we do not
 have to write any code ourselves.
+
+#+CAPTION: An in-progress editing session using the interactive Idris mode
+#+ATTR_LATEX: :width 0.85\linewidth
+[[./fig/interactive_idris.png]]
 
 ** Type-Driven-Development
 # TODO: Fill out section referencing interactive editing

@@ -12,12 +12,33 @@
   series =       {{POPL} '06},
 }
 
-@online{compcert,
+@article{leroy_compiler_2009,
   author =       {Leroy, Xavier},
-  title =        {{CompCert} - Main page},
-  date =         {2017-02-14},
-  url =          {http://compcert.inria.fr/},
-  urldate =      {2017-03-20},
+  title =        {Formal Verification of a Realistic Compiler},
+  volume =       {52},
+  number =       {7},
+  pages =        {107--115},
+  doi =          {10.1145/1538788.1538814},
+  url =          {https://doi.org/10.1145/1538788.1538814},
+  abstract =     {This paper reports on the development and formal verification
+                  (proof of semantic preservation) of Comp Cert, a compiler from
+                  Clight (a large subset of the C programming language) to
+                  {PowerPC} assembly code, using the Coq proof assistant both
+                  for programming the compiler and for proving its correctness.
+                  Such a verified compiler is useful in the context of critical
+                  software and its formal verification: the verification of the
+                  compiler guarantees that the safety properties proved on the
+                  source code hold for the executable compiled code as well.},
+  date =         {2009-07},
+  issn =         {00010782},
+  journaltitle = {Communications of the {ACM}},
+  keywords =     {Assembly languages (Electronic computers), C (Computer program
+                  language), Compilers (Computer programs), Computer
+                  programmers, Computer software, Debugging in computer science,
+                  Electronic data processing, Embedded computer systems --
+                  Programming, {PowerPC} microprocessors, Source code (Computer
+                  science), Systems software},
+  shortjournal = {Communications of the {ACM}},
 }
 
 @article{gonthier_formal_2008,
@@ -249,4 +270,17 @@
   titleaddon =   {{GitHub}},
   url =          {https://github.com/idris-hackers/idris-java},
   urldate =      {2017-04-15},
+}
+
+@article{swierstra_xmonad_2012,
+  author =       {Swierstra, Wouter},
+  title =        {Xmonad in Coq(experience Report): Programming a Window
+                  Mangager in a Proof Assistant},
+  journal =      {Proceedings of the 2012 symposium on Haskell - Haskell '12},
+  pages =        {131--136},
+  year =         2012,
+  doi =          {10.1145/2364506.2364523},
+  url =          {https://doi.org/10.1145/2364506.2364523},
+  isbn =         {http://id.crossref.org/isbn/9781450315746},
+  publisher =    {ACM Press},
 }
