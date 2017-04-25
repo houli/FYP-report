@@ -1,1 +1,375 @@
-* Case Studies
+* Idris and Type-Driven Development
+In order to follow along with some of the code examples it is worth gaining an
+understanding of some of the basic principles of the Idris language. This
+section is by no means comprehensive both in terms of the contents of this
+report as well as the language as a whole but will make it easier to understand
+the code fragments in later sections. More advanced concepts will be covered as
+we encounter them throughout the report. A more thorough reference and tutorial
+can be found on the Idris website cite:idris_tutorial_2017 as well as in Edwin
+Brady's ``Type-Driven Development with Idris'' cite:brady_book_2017 book.
+
+** Similarities to Haskell
+Idris has inherited much of the surface syntax of Haskell and will be quite
+familiar to anyone who has worked in Haskell or a similar ML-like language
+before. For example, the function that calculates the length of the list would
+look as follows in Haskell.
+
+#+CAPTION: Basic Haskell function definition syntax label:length-haskell
+#+BEGIN_SRC haskell
+length :: [a] -> Integer
+length [] = 0
+length (_:xs) = 1 + length xs
+#+END_SRC
+
+An equivalent Idris function bears some resemblance with notable exceptions
+being the explicit name =List= as the list type constructor and the swapping of
+the type operator (=::=) and the cons operator (=:=).
+
+#+CAPTION: Translation of Listing ref:length-haskell into Idris
+#+BEGIN_SRC idris
+length : List a -> Integer
+length [] = 0
+length (_::xs) = 1 + length xs
+#+END_SRC
+
+Data-type declarations also follow a similar syntax with Idris code favouring
+the explicit type signature style seen in Haskell GADTs. As an example we could
+have a simple data type such as a list implemented in Haskell.
+
+#+CAPTION: Definition of a simple Haskell data type label:list-haskell
+#+BEGIN_SRC haskell
+data List a = Nil
+            | Cons a (List a)
+#+END_SRC
+
+In Idris we could define it the same way however the idiom is to use the
+explicit type signatures as it becomes the only way to implement more powerful
+dependently-typed data types later on.
+
+#+CAPTION: Translation of Listing ref:list-haskell into idiomatic Idris
+#+BEGIN_SRC idris
+data List : Type -> Type where
+  Nil : List a
+  Cons : a -> List a -> List a
+#+END_SRC
+
+# TODO: this needs some work
+
+** Typed Holes
+Often when writing code with heavily polymorphic and dependent types it can
+become difficult to see how exactly the types should line up. Idris has a
+built-in syntax for declaring typed holes which are a useful tool to help
+dealing with the way these types line up.
+
+Typed holes act as placeholders for a value of any type. At any point in the
+program a typed hole can be introduced instead of a value. When we go to type
+check our code the compiler will tell us the type of the value that the hole
+needs to be replaced by. This allows the user to incrementally fill in values of
+the correct type or defer writing the value that fits the type until later.
+
+All Idris typed holes are identifiers that begin with a ``?'' such as
+=?length_rhs_1=. In the following example, the compiler informs us when we load
+the module that the type of both =?length_rhs_1= and =?length_rhs_2= is =Integer=.
+
+#+CAPTION: Typed holes can stand in as expressions of any type in our definitions
+#+BEGIN_SRC idris
+length : List a -> Integer
+length [] = ?length_rhs_1
+length (x :: xs) = 1 + ?length_rhs_2
+#+END_SRC
+
+As seen here, typed holes can appear anywhere in an expression such as the
+right-hand-side of the =+= operator. Using typed holes to defer writing the
+expression of the correct type allows us to more clearly see what types are
+creating the full expression needed to compile the program. It also allows us to
+quickly see types of complicated expressions that we may want to extract as top
+level definitions or ``where'' clauses to improve code clarity and readability.
+
+Typed holes also allow for a powerful interactive development style based around
+creating holes and eventually filling in the values (providing proofs) using the
+information available to us in our current environment. This approach will be
+explained and demonstrated later.
+
+** Implicit Arguments
+If we consider the type of length-indexed lists (Vect) as defined in the Idris
+standard library we may notice something peculiar about the variables in the
+definition.
+
+#+CAPTION: An Idris data type definition making use of implicit arguments =ty= and =n= label:vect-implicit
+#+BEGIN_SRC idris
+data Vect : Nat -> Type -> Type where
+  Nil : Vect 0 ty
+  (::) : ty -> Vect n ty -> Vect (S n) ty
+#+END_SRC
+
+The variables in the type signature, =ty= and =n= have not been explicitly declared
+but have in fact been implicitly declared and the types have been inferred. The
+type of =ty= is =Type= whereas the type of =n= is =Nat=.
+
+Idris for most cases is able to automatically infer these types for our implicit
+arguments. Other languages such as Agda and Coq will require that implicit
+arguments be explicitly listed in the definition but will not require them to be
+supplied as they can be automatically inferred when the function or data type is
+used. Coq does provide a switch however that allows for the omission of implicit
+arguments.
+
+In some cases we may need to or may want to explicitly list the implicit
+arguments in our data type or function declarations. Idris provides syntax for
+this particular case. We can use it to expand out the above definition and list
+the types involved out fully.
+
+#+CAPTION: Expansion of the implicit arguments in Listing ref:vect-implicit
+#+BEGIN_SRC idris
+data Vect : Nat -> Type -> Type where
+  Nil : {ty : Type} -> Vect 0 ty
+  (::) : {ty : Type} -> {n : Nat} -> ty -> Vect n ty -> Vect (S n) ty
+#+END_SRC
+
+Implicit arguments can also be accessed in the body of a function by enclosing
+the argument in a pair of curly braces. Using the =Vect= type above we can define
+functions that make use of the implicit =Nat= argument in our type such as a
+function that computes the combined length of two vectors without having to rely
+on recursion of the list structure. In fact, the list structure can be
+completely ignored as we carry around all of the information we need as implicit
+arguments in the type.
+
+#+CAPTION: Implicit arguments can be used in the function body by wrapping them in curly braces
+#+BEGIN_SRC idris
+appendLength : Vect n ty -> Vect m ty -> Nat
+appendLength {n} {m} _ _ = n + m
+#+END_SRC
+
+** Total Functional Programming
+One of the key concepts advocated by the language designers of Idris is the
+concept of ``total'' functional programming. From languages such as Haskell you
+may be familiar with functions such as =head= and =tail= on lists which have the
+possibility of crashing at runtime.
+
+#+CAPTION: The =head= and =tail= functions are often partial functions in languages such as Haskell
+#+BEGIN_SRC idris
+head : List a -> a
+head (x::_) = x
+
+tail : List a -> List a
+tail (_::xs) = xs
+#+END_SRC
+
+Both of these functions will crash our programs at runtime if we call them with
+the empty list but will still pass Idris' type checker. The reason for this is
+that the functions are partial. Both functions fail to provide a function clause
+that will match the empty list as an input resulting in a runtime error but not
+a type error. The simple solution to this is define some safe versions of these
+functions using the =Maybe= type.
+
+#+CAPTION: Safe, total versions of =head= and =tail= using =Maybe=
+#+BEGIN_SRC idris
+head : List a -> Maybe a
+head [] = Nothing
+head (x::_) = Just x
+
+tail : List a -> Maybe (List a)
+tail [] = Nothing
+tail (_::xs) = Just xs
+#+END_SRC
+
+We now have total versions of these functions in so far as they guarantee to
+always return a result for any well-typed input. This style of ``total''
+functional programming is heavily recommended in Idris. In fact, any function
+that we use to compute a type must pass the compiler's built-in totality
+checker. If the function is not total it leaves us with the possibility of a
+runtime error in the type checker when computing the value of the function.
+
+Functions that do not terminate are also partial functions in that they can
+never produce a result. If these functions were total we could have a type that
+could never be computed to some normal form and cause the Idris type checker to
+run forever.
+
+#+CAPTION: A partial function that will never terminate
+#+BEGIN_SRC idris
+loop : a -> b
+loop x = loop x
+#+END_SRC
+
+To think about functions in terms of proofs leaves us with some interesting
+implications for totality. A partial function can only guarantee us that when it
+is provided inputs of the correct type it will produce a proof if it terminates.
+A total function on the other hand gives us a much stronger guarantee that if
+the function is provided inputs of the correct type it will terminate and it
+will produce the proof (the value). When dealing with functions that compute
+proofs it is quite important that we ensure that our definitions are total to be
+confident that our proof holds in all cases. A partial program that just
+infinitely loops will satisfy any type that we give it.
+
+Idris provides some mechanisms to help prevent us from writing partial code. The
+first of which is the =total= annotation. We can add this to any function
+definition and the effect is that the compiler enforces that the function is
+indeed total. Failure to pass the Idris totality checker results in a message
+from the compiler. Trying out the bad =loop= code from above with the =total=
+annotation added results in the Idris compiler informing us that our definition
+is not total due to the recursion in our function clause.
+
+#+CAPTION: Idris' totality checker catches this non-total function mislabeled as total
+#+BEGIN_SRC idris
+total
+loop : a -> b
+loop x = loop x
+-- Main.loop is possibly not total due to recursive path Main.loop --> Main.loop
+#+END_SRC
+
+The second mechanism is mainly a convenience for the first. If we include the
+compiler pragma =%default total= at the top of our Idris module, all definitions
+after it will be checked for totality. The =partial= annotation can then be used
+as an escape hatch from the totality checker. When working on code we would like
+to prove not only for correctness but for totality it makes sense to begin all
+of our modules with this compiler pragma and use the =partial= annotation where
+necessary. This pragma is used throughout the code outlined in the case studies
+in the next chapter.
+
+** Interactive Editing Modes for Idris
+A feature of Idris used heavily throughout the implementation of the project was
+the interactive editing environment available to text editors such as Emacs, Vim
+and Atom. This interactive environment works in a similar way to tools such as
+Coq's Proof General cite:proof_general mode and Agda's interactive mode for
+Emacs.
+
+The main difference in Idris' editor support is that it is compatible with
+multiple text editors by providing a client-server model where the editor plugin
+is a client to an instance of the Idris compiler that acts as a server. This
+compiler server responds to commands with information about where to insert some
+string of characters or documentation such as the type of a function or a
+documentation string. It is also responsible for reporting back information
+about type errors, environments of definitions and typed holes.
+
+*** Insert Definition
+One of the most useful commands is the definition command. If we have some
+initial definition of a type signature we can issue a keyboard shortcut to have
+the interactive environment create an initial definition of the function with
+variables inserted and an initial typed hole as the right-hand-side of the
+definition.
+
+The default names for our arguments will be non-descriptive in that they will
+have single-letter names such as =x=, =y=, =z=. We can guide the compiler with the
+=%name= directive to generate more specific or domain relevant names for a given
+type. The list type in the standard library uses this facility to generate more
+appropriate names using =%name List xs, ys, zs, ws=. These new names are used when
+we generate initial definitions with arguments of type =List=.
+
+*** Case Split
+Another command that is regularly used is the case split command. The command
+will create separate clauses in a function definition to cover each different
+case of a data type definition. This is quite useful after creating an initial
+definition and we want to do case analysis on one of our arguments.
+
+This command also helps achieve a definition which will pass the Idris totality
+checker. If we have gotten the compiler to generate the cases for us we can be
+sure that we haven't caused an error by failing to remember to insert a case for
+one of our data constructors. In the following example we create a data type
+representing colours and ask the compiler to provide definitions for each of the
+different cases.
+
+#+CAPTION: Generated function clauses by case splitting
+#+BEGIN_SRC idris
+data Colour : Type where
+  Red : Colour
+  Green : Colour
+  Blue : Colour
+
+colourToString : Colour -> String
+colourToString Red = ?colourToString_rhs_1
+colourToString Green = ?colourToString_rhs_2
+colourToString Blue = ?colourToString_rhs_3
+#+END_SRC
+
+If we were to instead try and manually create these definitions we may forget to
+insert the case for the =Green= constructor. If we don't check this definition for
+totality and try to call it with the value =Green= then it will result in a
+runtime error causing our program to crash despite our =colourToString= function
+type-checking. Automatic case splits driven by the compiler's semantic
+information help us achieve the total functional programming style that Idris
+advocates.
+
+#+CAPTION: Buggy code with incomplete manual case splitting
+#+BEGIN_SRC idris
+colourToString : Colour -> String
+colourToString Blue = "blue"
+colourToString Red = "red"
+#+END_SRC
+
+*** Proof Search
+Often, the value that needs to go in place of a typed hole can be automatically
+derived from the values in our environment. By successive case splitting and
+refinement of the goal of our typed holes and from our type signature we often
+arrive at a point where there is only one sensible definition that fits the type
+of the hole. The interactive editing mode offers a proof search command that
+will find the value that fits in the typed hole at the current cursor position
+and replace the hole with the correct well-typed value.
+
+Automating the definition of our function based on the information the compiler
+knows to be true allows for a rapid development cycle in the small scale
+problems in our program. With a stringent enough dependent type for our function
+we can be fairly sure that the definition found is the ``correct'' one in terms
+of the intended semantics of the function. This definition can also be manually
+verified for having the intended semantics by inspection or by testing. It is
+often worth attempting a proof search on a typed hole initially to see what the
+compiler is able to infer for us automatically. In certain situations we do not
+have to write any code ourselves.
+
+#+CAPTION: An in-progress editing session using the interactive Idris mode
+#+ATTR_LATEX: :width 0.85\linewidth
+[[./fig/interactive_idris.png]]
+
+** Type-Driven Development
+The type-driven development approach is an iterative system for building up a
+definition of a function or a set of functions using dependent types. The
+approach is outlined, advocated and used throughout Edwin Brady's book
+cite:brady_book_2017 on Idris and this style of development. The approach
+consists of three main steps:
+1. Type
+2. Define
+3. Refine
+
+The first step, ``Type'', tells us to create an initial specification of what
+the function should do by writing down the type we want it to have. The approach
+is top-down from the type through to the function clauses in the definition. The
+type serves as a specification that will help guide us towards a correct
+implementation.
+
+In the second step, ``Define'', we create an initial definition for the
+function, possibly leaving in some typed holes. We do not yet know exactly how
+to make our definition line up with the specification in the type so we use
+holes to defer the actual implementation of the function. At this point we
+should make use of as much knowledge as we know to the point where we can't
+continue to implement the function. We can gain more information by making use
+of features such as case splitting. We may also refer back to step one and
+modify the type to continue with the process.
+
+The third step, ``Refine'', is where we complete the function definition,
+possibly modifying the type. This is the point where we use the other
+definitions and functions available in our environment to complete our
+type-checked definition according to our specification. We may at this point
+realise also that our initial specification was incorrect or missing some piece
+of information so that can lead us back to our first step in the cycle and we
+can continue from there with a more rigorous type specification to drive our
+implementation from.
+
+#+CAPTION: An illustration of the main workflow of the type-driven development approach
+#+ATTR_LATEX: :width 0.8\linewidth
+[[./fig/tdd_cycle.png]]
+
+This style of development is greatly helped by the use of one of Idris'
+interactive editing modes described earlier. In some cases the only manual
+typing we might have to do is just writing our initial type specification. The
+definition step in particular is aided. Using interactive editing modes we can
+introduce an initial definition, case split on arguments and even try an initial
+proof search on the typed holes we introduce. It may work out that the compiler
+has everything it needs to create a correct type-checked definition without any
+manual input from the user beyond the type of the function.
+
+If we do need to provide more information, again, interactive editing helps get
+us there. We can continue to inspect our environment to see the types of the
+holes we need to define and also the environment of information available to us.
+Reloading our modules and inspecting our current goals is one of the main
+activities when programming in this type-driven fashion. As we continue to
+refine our definition this type information also becomes refined and we can
+continue to iterate over refining and modifying our types to reach a complete
+definition.

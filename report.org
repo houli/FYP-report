@@ -27,6 +27,7 @@
 #+INCLUDE: chapter4.org
 #+INCLUDE: chapter5.org
 #+INCLUDE: chapter6.org
+#+INCLUDE: chapter7.org
 
 \emergencystretch=1em
 \printbibliography[heading=bibintoc, title=References]
