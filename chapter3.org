@@ -183,6 +183,58 @@ have to write any code ourselves.
 #+ATTR_LATEX: :width 0.85\linewidth
 [[./fig/interactive_idris.png]]
 
-** Type-Driven-Development
-# TODO: Fill out section referencing interactive editing
-# TODO: Include image from presentation/poster
+** Type-Driven Development
+The type-driven development approach is an iterative system for building up a
+definition of a function or a set of functions using dependent types. The
+approach is outlined, advocated and used throughout Edwin Brady's book
+cite:brady_book_2017 on Idris and this style of development. The approach
+consists of three main steps:
+1. Type
+2. Define
+3. Refine
+
+The first step, ``Type'', tells us to create an initial specification of what
+the function should do by writing down the type we want it to have. The approach
+is top-down from the type through to the function clauses in the definition. The
+type serves as a specification that will help guide us towards a correct
+implementation.
+
+In the second step, ``Define'', we create an initial definition for the
+function, possibly leaving in some typed holes. We do not yet know exactly how
+to make our definition line up with the specification in the type so we use
+holes to defer the actual implementation of the function. At this point we
+should make use of as much knowledge as we know to the point where we can't
+continue to implement the function. We can gain more information by making use
+of features such as case splitting. We may also refer back to step one and
+modify the type to continue with the process.
+
+The third step, ``Refine'', is where we complete the function definition,
+possibly modifying the type. This is the point where we use the other
+definitions and functions available in our environment to complete our
+type-checked definition according to our specification. We may at this point
+realise also that our initial specification was incorrect or missing some piece
+of information so that can lead us back to our first step in the cycle and we
+can continue from there with a more rigorous type specification to drive our
+implementation from.
+
+#+CAPTION: An illustration of the main workflow of the type-driven development approach
+#+ATTR_LATEX: :width 0.8\linewidth
+[[./fig/tdd_cycle.png]]
+
+This style of development is greatly helped by the use of one of Idris'
+interactive editing modes described earlier. In some cases the only manual
+typing we might have to do is just writing our initial type specification. The
+definition step in particular is aided. Using interactive editing modes we can
+introduce an initial definition, case split on arguments and even try an initial
+proof search on the typed holes we introduce. It may work out that the compiler
+has everything it needs to create a correct type-checked definition without any
+manual input from the user beyond the type of the function.
+
+If we do need to provide more information, again, interactive editing helps get
+us there. We can continue to inspect our environment to see the types of the
+holes we need to define and also the environment of information available to us.
+Reloading our modules and inspecting our current goals is one of the main
+activities when programming in this type-driven fashion. As we continue to
+refine our definition this type information also becomes refined and we can
+continue to iterate over refining and modifying our types to reach a complete
+definition.

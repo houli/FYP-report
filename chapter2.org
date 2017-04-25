@@ -253,10 +253,12 @@ you can write programs leveraging dependent types while also performing
 interesting effectful actions such as file I/O and drawing graphics to the
 screen.
 
-Edwin Brady, the author of Idris has said before that Idris has the interesting
-property of being ``Pac-Man Complete'' cite:scala_world_2015. Rather than just
-being a Turing complete language, if you wanted to, you could write a version of
-a simple 2D game such as Pac-Man in the language.
+Edwin Brady, the author of Idris has jokingly put it before that Idris has the
+interesting property of being ``Pac-Man Complete'' cite:scala_world_2015. Idris
+is not just a Turing complete language as everything from the x86 MOV
+instruction to C++ templates turn out to be. Rather, if you wanted to, you could
+write a version of a simple 2D game such as Pac-Man in the language with bitmap
+graphics, animations, and sounds.
 
 Idris provides multiple code generation backends to its compiler to produce
 executable code. The primary mechanism by which code is generated is by using
