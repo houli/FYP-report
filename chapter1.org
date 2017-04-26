@@ -1,1 +1,46 @@
 * Introduction
+#+BEGIN_QUOTE
+``Program testing can be used to show the presence of bugs, but never to show
+their absence!''
+
+-- Edsger W. Dijkstra
+#+END_QUOTE
+
+Software now more than ever plays an important role in the management of
+critical infrastructure such as our railways, hospitals and the internet.
+Critical software vulnerabilities such as the Heartbleed cite:heartbleed_2014
+bug in OpenSSL expose us to the perils of poorly specified and incorrect
+software. In the case of Heartbleed this meant that important cryptographic keys
+and secrets were leaked over the internet due to a memory access bug.
+
+Formal verification of software has seen an increase in interest in recent years
+due to bugs such as this. Dependent types offer us a way to formally verify code
+by stating correctness properties in the types of our functions and data types.
+Any type-checked implementation of these functions serves as a proof that these
+properties hold in our code.
+
+#+ATTR_LATEX: :width 0.35\linewidth
+[[./fig/heartbleed.png]]
+
+The aim of this project is to evaluate the practical usage of state-of-the-art
+dependently-typed programming languages. We will choose to use Idris in
+particular as the tool to work with. The evaluation of a key set of objectives
+will take place following the implementation of case studies of real-world
+programs. These programs have been written while taking advantage of correctness
+properties and dependent types to ensure a more rigorous and correct program
+than one written using a conventional programming language.
+
+
+The remainder of this report is structured as follows:
+- /Chapter 2/ provides the necessary background information about the theory and
+  logic behind dependent types as well as a look at the landscape of current
+  state-of-the-art dependently-typed programming languages.
+- /Chapter 3/ explains in more detail the project objectives and the approach
+  taken to complete these objectives.
+- /Chapter 4/ gives a detailed look into Idris both in terms of the syntax and
+  language features as well as the tooling and development methods used.
+- /Chapter 5/ is an examination of the implementation of the case studies carried
+  out in this project.
+- /Chapter 6/ details our conclusions and assessments having carried out the case
+  studies and evaluated the current landscape of dependent types.
+- /Chapter 7/ lists some possible areas of future work.

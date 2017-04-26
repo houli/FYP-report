@@ -38,7 +38,9 @@ Haskell report, put it cite:strange_loop_2015,wadler_propos_2015
 
 #+BEGIN_QUOTE
 ``Every good idea will be discovered twice. Once by a logician and once by a
-computer scientist'' -- Philip Wadler
+computer scientist.''
+
+-- Philip Wadler
 #+END_QUOTE
 
 According to the Curry-Howard isomorphism the type of an expression is

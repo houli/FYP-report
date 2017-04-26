@@ -1,4 +1,4 @@
-% Created 2017-04-25 Tue 14:06
+% Created 2017-04-26 Wed 17:19
 % Intended LaTeX compiler: xelatex
 \documentclass[a4paper, notitlepage]{report}
 \usepackage{graphicx}
@@ -38,9 +38,57 @@
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-\label{sec:org3d8a24c}
+\label{sec:orgd1824ac}
+\begin{quote}
+``Program testing can be used to show the presence of bugs, but never to show
+their absence!''
+
+-- Edsger W. Dijkstra
+\end{quote}
+
+Software now more than ever plays an important role in the management of
+critical infrastructure such as our railways, hospitals and the internet.
+Critical software vulnerabilities such as the Heartbleed \cite{heartbleed_2014}
+bug in OpenSSL expose us to the perils of poorly specified and incorrect
+software. In the case of Heartbleed this meant that important cryptographic keys
+and secrets were leaked over the internet due to a memory access bug.
+
+Formal verification of software has seen an increase in interest in recent years
+due to bugs such as this. Dependent types offer us a way to formally verify code
+by stating correctness properties in the types of our functions and data types.
+Any type-checked implementation of these functions serves as a proof that these
+properties hold in our code.
+
+\begin{center}
+\includegraphics[width=0.35\linewidth]{./fig/heartbleed.png}
+\end{center}
+
+The aim of this project is to evaluate the practical usage of state-of-the-art
+dependently-typed programming languages. We will choose to use Idris in
+particular as the tool to work with. The evaluation of a key set of objectives
+will take place following the implementation of case studies of real-world
+programs. These programs have been written while taking advantage of correctness
+properties and dependent types to ensure a more rigorous and correct program
+than one written using a conventional programming language.
+
+
+The remainder of this report is structured as follows:
+\begin{itemize}
+\item \emph{Chapter 2} provides the necessary background information about the theory and
+logic behind dependent types as well as a look at the landscape of current
+state-of-the-art dependently-typed programming languages.
+\item \emph{Chapter 3} explains in more detail the project objectives and the approach
+taken to complete these objectives.
+\item \emph{Chapter 4} gives a detailed look into Idris both in terms of the syntax and
+language features as well as the tooling and development methods used.
+\item \emph{Chapter 5} is an examination of the implementation of the case studies carried
+out in this project.
+\item \emph{Chapter 6} details our conclusions and assessments having carried out the case
+studies and evaluated the current landscape of dependent types.
+\item \emph{Chapter 7} lists some possible areas of future work.
+\end{itemize}
 \chapter{Background}
-\label{sec:orgd9fb8aa}
+\label{sec:orgc98f3e1}
 This chapter aims to give an understanding of the background and necessary
 concepts that will be used throughout the report. A basic understanding of
 functional programming ideas such as algebraic data types, recursion and the
@@ -50,7 +98,7 @@ state of the art dependently-typed programming languages with a more in-depth
 look at Idris in particular.
 
 \section{Intuitionistic Type Theory}
-\label{sec:orge35e0cc}
+\label{sec:orgb72d040}
 Intuitionistic type theory is a type theory based on mathematical
 constructivism. Constructive mathematics is an alternative foundational theory
 of mathematics that argues that construction of a mathematical object is
@@ -70,7 +118,7 @@ as the underpinning of the development of dependently-typed programming
 languages and theorem provers based on Martin-Löf type theory.
 
 \section{Curry-Howard Isomorphism}
-\label{sec:orgb6da51e}
+\label{sec:org1974f3a}
 From a modern computer science perspective it's almost taken for granted that
 computability theory and mathematical proofs are inherently linked. For example,
 many parallels can be drawn between the proof of Turing's Halting Problem and
@@ -82,7 +130,9 @@ Haskell report, put it \cite{strange_loop_2015,wadler_propos_2015}
 
 \begin{quote}
 ``Every good idea will be discovered twice. Once by a logician and once by a
-computer scientist'' -- Philip Wadler
+computer scientist.''
+
+-- Philip Wadler
 \end{quote}
 
 According to the Curry-Howard isomorphism the type of an expression is
@@ -111,7 +161,7 @@ program correctness by translating a mathematical proof of an algorithm to a
 computer program and having the machine type-check (proof-check) it.
 
 \section{Traditional Hindley-Milner Type Systems}
-\label{sec:orgcbb824c}
+\label{sec:orgf1574a7}
 Standard Hindley-Milner-esque type systems such as the one found in Haskell
 allow us to express some different dependencies between the types of terms and
 terms themselves. For example, terms can depend on other terms such as in this
@@ -150,7 +200,7 @@ id x = x
 \end{listing}
 
 \section{Dependent Type Systems}
-\label{sec:org9084189}
+\label{sec:org04629f6}
 Dependent type systems extend this system of dependencies by allowing types to
 depend on terms. This leads to much greater expressivity power in the type
 system. For example, in a dependently typed system we can express types such as
@@ -171,7 +221,7 @@ There are 3 main concepts taken from Martin-Löf type theory and implemented in
 dependently-typed programming languages.
 
 \subsection{\texorpdfstring{$\Pi$}{Pi}-types}
-\label{sec:orgafe9307}
+\label{sec:org3998e0b}
 \(\Pi\)-types are the types of functions whose return types depend on one or more of
 their arguments. In other words these functions map values from some domain to
 some non-fixed codomain that is determined by the input. In this sense the
@@ -185,7 +235,7 @@ to say that the type of the value returned by these functions is determined by
 the argument to the functions.
 
 \subsection{\texorpdfstring{$\Sigma$}{Sigma}-types}
-\label{sec:org7ca43af}
+\label{sec:org9bfb74b}
 \(\Sigma\)-types, also known as dependent pair types, are a more generalised form of
 Cartesian product that model pairs of values where the type of the second
 element depends on the first element.
@@ -207,7 +257,7 @@ the distinction between types and terms. Types and terms are unified as
 equivalent constructs.
 
 \subsection{The Equality Type}
-\label{sec:org345c71c}
+\label{sec:orga123c44}
 The equality type \(=\) is a special type used to denote proofs of equality
 between two values. If there is an inhabitant of the type \(a \mathrel{=} b\) then
 \(a\) and \(b\) are considered to be equal. This proof allows \(b\) to be used
@@ -224,9 +274,9 @@ constructions of basic proofs and axioms such as \(n \mathbin{:} {\mathbb N}, n
 \mathbin{-} n \mathrel{=} 0\).
 
 \section{State of The Art Dependently-Typed Programming Languages}
-\label{sec:org721c0c0}
+\label{sec:org5457e2e}
 \subsection{Agda}
-\label{sec:org53bcde7}
+\label{sec:org47db3ab}
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
@@ -256,7 +306,7 @@ These go unused for the purpose of Agda type-checking but do have runtime
 effects in the output compiled code.
 
 \subsection{Coq}
-\label{sec:org4d7175a}
+\label{sec:orgd5010ba}
 Developed initially in the late 1980s at INRIA in France, Coq approaches
 dependently-typed programming more from the mathematical side as an interactive
 theorem prover. Coq is based on the Calculus of Constructions, a type theory
@@ -292,7 +342,7 @@ allows the production of a fast native binary from a correct and type-checked
 Coq program.
 
 \subsection{Haskell}
-\label{sec:org9a8b6a4}
+\label{sec:orga7709cf}
 GHC Haskell has slowly been implementing many of the capabilities of dependent
 types via extensions to the language such as \texttt{GADTs}, \texttt{DataKinds}, and
 \texttt{TypeFamilies}. Through particular use of the Haskell type system many of the
@@ -306,7 +356,7 @@ types which allows for the expression of a limited set of propositions at the
 type level in existing Haskell code \cite{vazou_refinement_2014}.
 
 \subsection{Idris}
-\label{sec:org26c9f07}
+\label{sec:orgb2c0082}
 Idris is primarily the work of Edwin Brady and others at the University of St
 Andrews in Scotland. It has positioned itself as a more practical take on
 dependently-typed programming and as such is more aimed at being a language that
@@ -332,10 +382,10 @@ community provided backends of the compiler such as the Erlang
 This report focuses on using Idris in a practical manner while aiming to take
 advantage of dependent types to ensure that our code is more correct.
 \chapter{Project Objectives and Approach}
-\label{sec:orgc954dfd}
+\label{sec:orgf58c48b}
 
 \section{Objectives}
-\label{sec:org3a80f88}
+\label{sec:org6a4cc4d}
 The objectives of this project are the following:
 \begin{itemize}
 \item Evaluate the practicality of dependently-typed programming languages
@@ -350,7 +400,7 @@ someone with functional programming experience in some ML family language
 \end{itemize}
 
 \subsection{Practicality of Dependently-Typed Programming Languages}
-\label{sec:org22cd608}
+\label{sec:org1451d3f}
 Much of the literature about dependent types has been focused on advancing
 research in the study of the theory of the field. This has manifested itself by
 way of new or novel approaches to building dependently-typed systems. Despite
@@ -365,7 +415,7 @@ projects aim to further supplement this area of study with more data taking into
 account the state-of-the-art at the time of writing.
 
 \subsection{Expression of Correctness Properties}
-\label{sec:orge87d51d}
+\label{sec:org57f469f}
 Many of the current teaching examples involving dependent types present fairly
 simple examples of correctness properties. In order to provide a cohesive
 example that illustrates one or two points this is understandable.
@@ -376,7 +426,7 @@ the limitations are in terms of the expressivity of specification of a dependent
 type as well as the feasibility of implementing a program to that specification.
 
 \subsection{Scale of Applicability of Dependent Types}
-\label{sec:orgdbf5c20}
+\label{sec:org4bd9b7b}
 In real-world settings in a software engineering project we are often faced with
 certain time, performance and other delivery constraints. Projects do not have
 unlimited time to work with crafting and deploying a perfectly verified piece of
@@ -392,7 +442,7 @@ subsystems or by applying formal verification using dependent types across an
 entire system.
 
 \subsection{Development Approaches when using Dependent Types}
-\label{sec:orgd4bbac2}
+\label{sec:org4118706}
 A number of development approaches exist when using dependent types. One could
 take a bottom-up approach in that existing code that has no existing correctness
 properties is given some and then the proof obligations are discharged from the
@@ -407,7 +457,7 @@ case studies and to determine where one might favour one approach over the other
 for a particular problem.
 
 \subsection{Pain Points when using Dependent Types}
-\label{sec:org839efbc}
+\label{sec:orgf84bab4}
 Current dependently-typed languages such as Agda and Idris bear much surface
 syntax similarity to ML family languages such as Haskell. However, past these
 surface details the underlying type frameworks differ quite a bit. Even with
@@ -417,7 +467,7 @@ detail some of these hurdles that will be common when beginning to use these
 type systems.
 
 \section{Approach}
-\label{sec:orge5178f6}
+\label{sec:orgb58936c}
 The approach by which the evaluation of the above objectives took place is by
 implementing a number of case studies. In order for these case studies to have
 significant meaning they were focused on implementing real world algorithms that
@@ -433,7 +483,7 @@ studies also made use of different tooling such as working with standard tools
 like text editors as well as more semantically rich interactive editing
 environments.
 \chapter{Idris and Type-Driven Development}
-\label{sec:orgd58849e}
+\label{sec:orgcf653fe}
 In order to follow along with some of the code examples it is worth gaining an
 understanding of some of the basic principles of the Idris language. This
 section is by no means comprehensive both in terms of the contents of this
@@ -444,7 +494,7 @@ can be found on the Idris website \cite{idris_tutorial_2017} as well as in Edwin
 Brady's ``Type-Driven Development with Idris'' \cite{brady_book_2017} book.
 
 \section{Similarities to Haskell}
-\label{sec:org9089225}
+\label{sec:orgec89beb}
 Idris has inherited much of the surface syntax of Haskell and will be quite
 familiar to anyone who has worked in Haskell or a similar ML-like language
 before. For example, the function that calculates the length of the list would
@@ -498,7 +548,7 @@ data List : Type -> Type where
 \end{listing}
 
 \section{Typed Holes}
-\label{sec:orgfb979fd}
+\label{sec:org3016e7a}
 Often when writing code with heavily polymorphic and dependent types it can
 become difficult to see how exactly the types should line up. Idris has a
 built-in syntax for declaring typed holes which are a useful tool to help
@@ -536,7 +586,7 @@ information available to us in our current environment. This approach will be
 explained and demonstrated later.
 
 \section{Implicit Arguments}
-\label{sec:org23a3320}
+\label{sec:org181ed2e}
 If we consider the type of length-indexed lists (Vect) as defined in the Idris
 standard library we may notice something peculiar about the variables in the
 definition.
@@ -592,7 +642,7 @@ appendLength {n} {m} _ _ = n + m
 \end{listing}
 
 \section{Total Functional Programming}
-\label{sec:org75dfa6d}
+\label{sec:orga4530e9}
 One of the key concepts advocated by the language designers of Idris is the
 concept of ``total'' functional programming. From languages such as Haskell you
 may be familiar with functions such as \texttt{head} and \texttt{tail} on lists which have the
@@ -687,7 +737,7 @@ necessary. This pragma is used throughout the code outlined in the case studies
 in the next chapter.
 
 \section{Interactive Editing Modes for Idris}
-\label{sec:org53ef477}
+\label{sec:orga5de02c}
 A feature of Idris used heavily throughout the implementation of the project was
 the interactive editing environment available to text editors such as Emacs, Vim
 and Atom. This interactive environment works in a similar way to tools such as
@@ -703,7 +753,7 @@ documentation string. It is also responsible for reporting back information
 about type errors, environments of definitions and typed holes.
 
 \subsection{Insert Definition}
-\label{sec:orgf2cf7ec}
+\label{sec:orgaea1512}
 One of the most useful commands is the definition command. If we have some
 initial definition of a type signature we can issue a keyboard shortcut to have
 the interactive environment create an initial definition of the function with
@@ -718,7 +768,7 @@ appropriate names using \texttt{\%name List xs, ys, zs, ws}. These new names are
 we generate initial definitions with arguments of type \texttt{List}.
 
 \subsection{Case Split}
-\label{sec:orgf78ee2e}
+\label{sec:orge651699}
 Another command that is regularly used is the case split command. The command
 will create separate clauses in a function definition to cover each different
 case of a data type definition. This is quite useful after creating an initial
@@ -764,7 +814,7 @@ colourToString Red = "red"
 \end{listing}
 
 \subsection{Proof Search}
-\label{sec:orga59cfc9}
+\label{sec:orgedccec9}
 Often, the value that needs to go in place of a typed hole can be automatically
 derived from the values in our environment. By successive case splitting and
 refinement of the goal of our typed holes and from our type signature we often
@@ -790,7 +840,7 @@ have to write any code ourselves.
 \end{figure}
 
 \section{Type-Driven Development}
-\label{sec:orgee4028d}
+\label{sec:orgd9ef4cf}
 The type-driven development approach is an iterative system for building up a
 definition of a function or a set of functions using dependent types. The
 approach is outlined, advocated and used throughout Edwin Brady's book
@@ -850,11 +900,11 @@ refine our definition this type information also becomes refined and we can
 continue to iterate over refining and modifying our types to reach a complete
 definition.
 \chapter{Case Studies}
-\label{sec:org63969c1}
+\label{sec:orgbd24baf}
 \chapter{Assessments and Conclusions}
-\label{sec:org8f5cf4e}
+\label{sec:org57d2fbd}
 \chapter{Future Work}
-\label{sec:org8b77ee7}
+\label{sec:org9058143}
 
 \emergencystretch=1em
 \printbibliography[heading=bibintoc, title=References]
