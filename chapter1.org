@@ -30,7 +30,7 @@ programs. These programs have been written while taking advantage of correctness
 properties and dependent types to ensure a more rigorous and correct program
 than one written using a conventional programming language.
 
-
+** Report Structure
 The remainder of this report is structured as follows:
 - /Chapter 2/ provides the necessary background information about the theory and
   logic behind dependent types as well as a look at the landscape of current

@@ -1,1 +1,248 @@
 * Case Studies
+** The Assignment Problem
+The next case study we'll examine is an implementation of a solution to the
+assignment problem based off the Hungarian algorithm with correctness guarantees
+maintained throughout the steps of the algorithm.
+
+*** Problem Definition
+The assignment problem is a classic example of a combinatorial optimisation
+problem. The problem involves assigning a number of /agents/ to /tasks/. An agent
+can be assigned to any task however there is a cost to assigning a particular
+agent to a particular task. The assignment problem is the problem of assigning
+exactly one task to each agent so that the total cost of doing this assignment
+is minimal.
+
+To think of the problem in a concrete setting we might imagine a clinical
+practice with patients that need treatments as our tasks. The agents in this
+scenario are the doctors that will be assigned to treat patients. Doctors can
+perform the treatment for any of the patients but a doctor may be suited more
+towards a specific kind of treatment. The assignment problem in this setting is
+finding a way to assign the doctors to treat the patients in a way that
+optimally assigns the doctors based on their ability to perform specific
+treatments.
+
+*** Existing Algorithms
+It may seem that the time complexity of an algorithm to solve such a problem
+would require time in the order $O(n!)$ time with respect to the number of
+agents/tasks. Optimisation strategies exist however that produce polynomial time
+algorithms. The most famous example is the Hungarian algorithm which runs in
+$O(n^4)$ time. Further algorithmic optimisations have been applied such as James
+Munkres' proven algorithm cite:munkres_assignment_1957 that demonstrates
+$O(n^3)$ time complexity.
+
+*** Hungarian Algorithm
+Our Idris implementation focuses on implementing the Hungarian algorithm due to
+its straight forward specification. There are also a number of correctness
+properties that jump off the page when reading the specification that we can
+attempt to write proofs for and in turn create a verified implementation that
+follows the steps properly. The Hungarian algorithm frames the problem in terms
+of a matrix that represents the tasks, agents and the weighting between them.
+
+The steps of the algorithm are as follows:
+1. Find the minimum value in each row and subtract it from all other values in
+   its row.
+2. Find the minimum value in each column and subtract it from all other values
+   in its column.
+3. Cover each 0 in the matrix with a line such that the minimal number of lines
+   is used.
+4. Find the smallest value in the cost matrix not covered by a line. Subtract it
+   from each uncovered row. Add it to each covered column. Return to step 3.
+
+We determine if we have completed an assignment following each step. For step 1
+this means checking if there is a 0 in each column. For the steps after step 1
+we check if we have created a minimal covering. If the minimum number of
+covering lines required is equal to the size of our square matrix then a minimal
+assignment has been found and the algorithm has been completed.
+
+The approach taken in this case study was to provide three different versions of
+the algorithm, each one providing more correctness guarantees than the previous.
+In order to accomplish this within the time constraints of the project only the
+first two steps of the algorithm are being considered. However there are
+interesting correctness properties that we can discuss and also some interesting
+design decisions made in terms of approach and design of our API.
+
+*** Demonstration
+First let us assume that we have some initial matrix that describes our tasks
+and our agents that we would like to create an assignment for.
+
+\[ \begin{bmatrix}
+8 & 20 & 12 \\
+3 & 2 & 14 \\
+9 & 8 & 4
+\end{bmatrix} \]
+
+When applying step 1 we choose 8 in the first row, 2 in the second row and 4 in
+the last row. We then subtract these values across their respective rows. This
+results in the transformed matrix below.
+
+\[ \begin{bmatrix}
+\textcolor{red}{8} & 20 & 12 \\
+\textcolor{red}{2} & 3 & 14 \\
+9 & 8 & \textcolor{red}{4}
+\end{bmatrix} \rightarrow
+\begin{bmatrix}
+0 & 12 & 4 \\
+0 & 1 & 12 \\
+5 & 4 & 0
+\end{bmatrix} \]
+
+As we can see, there are zeroes in both the first and third columns but there is
+not a zero in the second column. We have yet to create a minimal assignment so
+we proceed to apply step 2 to the transformed matrix that resulted from applying
+the first step.
+
+\[ \begin{bmatrix}
+\textcolor{red}{0} & 12 & 4 \\
+0 & \textcolor{red}{1} & 12 \\
+5 & 4 & \textcolor{red}{0}
+\end{bmatrix} \rightarrow
+\begin{bmatrix}
+0 & 11 & 4 \\
+0 & 0 & 12 \\
+5 & 3 & 0
+\end{bmatrix} \]
+
+When we have completed step 2 we now create a set of lines that will cover all
+of the zeroes in the matrix. As we can see we have had to draw a minimum of 3
+lines to cover the zeroes in the matrix at this point.
+
+\[
+\stackinset{c}{}{c}{1.0\baselineskip}{\rule{2.8\baselineskip}{.5pt}}{%
+\stackinset{c}{}{c}{0.01\baselineskip}{\rule{2.8\baselineskip}{.5pt}}{%
+\stackinset{c}{1.05\baselineskip}{c}{}{\rule{.5pt}{2.7\baselineskip}}{%
+\begin{bmatrix}
+  0 & 11 & 4 \\
+  0 & 0 & 12 \\
+  5 & 3 & 0
+\end{bmatrix}}}}
+\]
+
+We have created a minimal covering with the number of lines equal to the size of
+our matrix. The algorithm tells us that we have found a minimal assignment at
+this point and we can stop. In this case, the first agent is assigned task 1,
+the second agent is assigned task 2 and the third agent is assigned task 3.
+
+*** Invariants
+There are some interesting invariants we notice when performing these steps.
+After performing the first step we can be certain that at least one of the
+values in each row will be a zero. The minimum value that we find must be an
+element of the row. At some point when subtracting it across the row we will
+subtract it from itself. This will result in at least one zero.
+
+*Step 1*:
+- Precondition - A non-empty matrix
+- Postcondition - A non-empty matrix where all rows contain at least one zero
+
+Similarly we can say that after completing the second step there will be at
+least one zero in each row and at least one zero in each column. This follows
+from the same reasoning as before because the element we subtract from the
+column will be an element of that column.
+
+*Step 2*:
+- Precondition - A non-empty matrix where all rows contain at least one zero
+- Postcondition - A non-empty matrix where all rows contain at least one zero
+  and all columns contain at least one zero
+
+These invariants will be studied in more detail as we outline the development of
+the different Idris implementations of the algorithm.
+
+*** First Implementation - Lists
+The first implementation uses the standard list type. As we will see, this
+implementation demonstrates the fewest number of correctness guarantees with no
+proofs of the invariants outlined given and introduces partiality and the risk
+of runtime errors that come with partial functions. This implementation is quite
+similar to how you might approach the problem in a language such as Haskell with
+limited information at the type level.
+
+In order to implement the algorithm we first need to decide how the data is
+modelled. In this list implementation our matrix will be defined as a list of
+lists of ints. We can use Idris' ability to calculate types as the results of
+functions to create some type aliases that allow us to write more specific types
+that relate to the domain of the algorithm. In this case, =HungarianMatrix= as
+opposed to =List (List Int))=.
+
+#+CAPTION: Type aliases to represent our cost matrix
+#+BEGIN_SRC idris
+Matrix : Type -> Type
+Matrix a = List (List a)
+
+HungarianMatrix : Type
+HungarianMatrix = Matrix Int
+#+END_SRC
+
+As both the first step and the second step of the algorithm require that we find
+the minimum of rows and columns respectively we will need to define a function
+that finds the minimum of a list that contains elements with some notion of ordering.
+
+#+CAPTION: The =minimum= function defined over lists
+#+BEGIN_SRC idris
+listMin' : Ord a => a -> List a -> a
+listMin' x [] = x
+listMin' x (y :: ys) with (compare x y)
+  listMin' x (y :: ys) | GT = listMin' y ys
+  listMin' x (y :: ys) | EQ = listMin' y ys
+  listMin' x (y :: ys) | LT = listMin' x ys
+
+partial
+listMin : Ord a => List a -> a
+listMin (x :: xs) = listMin' x xs
+#+END_SRC
+
+In this function we've made use of the interface mechanism of Idris. This system
+is analogous to the type class system in Haskell. We can define the =listMin=
+function using ad-hoc polymorphism over any type that provides an implementation
+of the =Ord= interface.
+
+Despite this function working as intended and type-checking, a problem is
+starting to emerge. The =listMin= function is a partial function. There is no
+minimum value that we can get from an empty list. If the provided matrix is
+empty then we will receive an error at runtime and crash. The compiler has been
+able to catch this function if we had left out the =partial= annotation due to the
+use of the =%default total= compiler pragma in our implementations.
+
+One way we might solve this problem is by taking a default value as an extra
+argument. This however does not make sense semantically as it is not the minimum
+value of the passed list. We will have to accept when using lists that we may
+have an empty case and as such our =listMin= function is partial.
+
+The effect of this partial function at the centre of this implementation of the
+algorithm is that it has a chain reaction on the totality of the rest of the
+functions required to implement the algorithm. We now consider the effect of
+this partiality on our =subSmallest= function that performs the step of
+subtracting our minimum values across all rows/columns in our matrix.
+
+#+CAPTION: Subtracting the minimum values across the matrix
+#+BEGIN_SRC idris
+partial
+subSmallest : HungarianMatrix -> HungarianMatrix
+subSmallest [] = []
+subSmallest (x :: xs) = map (flip (-) $ (listMin x)) x :: subSmallest xs
+#+END_SRC
+
+As defined, =subSmallest= matches both cases, the empty list case and the
+non-empty case. Then we might ask why does this function have an annotation that
+it is partial? The reason is that in the second function clause we make a call
+to the =listMin= function. As this function is partial this has the knock-on
+effect of introducing partiality into the =subSmallest= function which is used
+throughout the algorithm. If we were to remove this partiality annotation the
+compiler will correctly inform us that the function has failed to satisfy the
+totality checker.
+
+#+BEGIN_EXAMPLE
+idris> :total subSmallest
+HungarianList.subSmallest is possibly not total due to:
+    HungarianList.listMin, which is not total as there are missing cases
+#+END_EXAMPLE
+
+This partiality bubbles up to the top level of the algorithm at the point where
+we export the function that end users will use. Any consumer of this algorithm
+should be prepared to either ensure that they never provide an empty matrix to
+the =hungarianMethod= function or they risk that their program crashes due to an
+unmatched pattern in the =listMin= function.
+
+Obviously we would like to do better than that and not introduce ways to crash
+code calling into our algorithm. These kinds of errors should be caught
+statically at compile time. Fortunately Idris provides the tools to ensure that
+these kinds of errors are made impossible through sufficiently descriptive
+types. This is the avenue we will explore and demonstrate with the next
+implementation.
