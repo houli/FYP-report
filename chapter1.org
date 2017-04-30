@@ -1,9 +1,9 @@
 * Introduction
 #+BEGIN_QUOTE
-``Program testing can be used to show the presence of bugs, but never to show
-their absence!''
+``Beware of bugs in the above code; I have only proved it correct, not tried
+it.''
 
--- Edsger W. Dijkstra
+-- Donald Knuth
 #+END_QUOTE
 
 Software now more than ever plays an important role in the management of
