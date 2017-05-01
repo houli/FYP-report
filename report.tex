@@ -1,4 +1,4 @@
-% Created 2017-05-01 Mon 17:21
+% Created 2017-05-02 Tue 00:25
 % Intended LaTeX compiler: xelatex
 \documentclass[a4paper, notitlepage]{report}
 \usepackage{graphicx}
@@ -38,7 +38,7 @@
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-\label{sec:orgea63c30}
+\label{sec:org0fffd94}
 \begin{quote}
 ``Beware of bugs in the above code; I have only proved it correct, not tried
 it.''
@@ -72,7 +72,7 @@ properties and dependent types to ensure a more rigorous and correct program
 than one written using a conventional programming language.
 
 \section{Report Structure}
-\label{sec:org11f8eea}
+\label{sec:org232eb67}
 The remainder of this report is structured as follows:
 \begin{itemize}
 \item \emph{Chapter 2} provides the necessary background information about the theory and
@@ -89,7 +89,7 @@ studies and evaluated the current landscape of dependent types.
 \item \emph{Chapter 7} lists some possible areas of future work.
 \end{itemize}
 \chapter{Background}
-\label{sec:org77b3dd4}
+\label{sec:orgb767833}
 This chapter aims to give an understanding of the background and necessary
 concepts that will be used throughout the report. A basic understanding of
 functional programming ideas such as algebraic data types, recursion and the
@@ -99,7 +99,7 @@ state of the art dependently-typed programming languages with a more in-depth
 look at Idris in particular.
 
 \section{Intuitionistic Type Theory}
-\label{sec:orge31ec63}
+\label{sec:orgb6ac62a}
 Intuitionistic type theory is a type theory based on mathematical
 constructivism. Constructive mathematics is an alternative foundational theory
 of mathematics that argues that construction of a mathematical object is
@@ -119,7 +119,7 @@ as the underpinning of the development of dependently-typed programming
 languages and theorem provers based on Martin-Löf type theory.
 
 \section{Curry-Howard Isomorphism}
-\label{sec:org1b145e7}
+\label{sec:org8d3b9cc}
 From a modern computer science perspective it's almost taken for granted that
 computability theory and mathematical proofs are inherently linked. For example,
 many parallels can be drawn between the proof of Turing's Halting Problem and
@@ -162,7 +162,7 @@ program correctness by translating a mathematical proof of an algorithm to a
 computer program and having the machine type-check (proof-check) it.
 
 \section{Traditional Hindley-Milner Type Systems}
-\label{sec:orgd1355ef}
+\label{sec:org04b2771}
 Standard Hindley-Milner-esque type systems such as the one found in Haskell
 allow us to express some different dependencies between the types of terms and
 terms themselves. For example, terms can depend on other terms such as in this
@@ -201,7 +201,7 @@ id x = x
 \end{listing}
 
 \section{Dependent Type Systems}
-\label{sec:org022c27e}
+\label{sec:orge67bb1b}
 Dependent type systems extend this system of dependencies by allowing types to
 depend on terms. This leads to much greater expressivity power in the type
 system. For example, in a dependently typed system we can express types such as
@@ -222,7 +222,7 @@ There are 3 main concepts taken from Martin-Löf type theory and implemented in
 dependently-typed programming languages.
 
 \subsection{\texorpdfstring{$\Pi$}{Pi}-types}
-\label{sec:org0abdb7f}
+\label{sec:orgdca1296}
 \(\Pi\)-types are the types of functions whose return types depend on one or more of
 their arguments. In other words these functions map values from some domain to
 some non-fixed codomain that is determined by the input. In this sense the
@@ -236,7 +236,7 @@ to say that the type of the value returned by these functions is determined by
 the argument to the functions.
 
 \subsection{\texorpdfstring{$\Sigma$}{Sigma}-types}
-\label{sec:org826b640}
+\label{sec:org3765d17}
 \(\Sigma\)-types, also known as dependent pair types, are a more generalised form of
 Cartesian product that model pairs of values where the type of the second
 element depends on the first element.
@@ -258,7 +258,7 @@ the distinction between types and terms. Types and terms are unified as
 equivalent constructs.
 
 \subsection{The Equality Type}
-\label{sec:org4068a18}
+\label{sec:org18d4c71}
 The equality type \(=\) is a special type used to denote proofs of equality
 between two values. If there is an inhabitant of the type \(a \mathrel{=} b\) then
 \(a\) and \(b\) are considered to be equal. This proof allows \(b\) to be used
@@ -275,9 +275,9 @@ constructions of basic proofs and axioms such as \(n \mathbin{:} {\mathbb N}, n
 \mathbin{-} n \mathrel{=} 0\).
 
 \section{State of The Art Dependently-Typed Programming Languages}
-\label{sec:org5ef616b}
+\label{sec:org7b5319d}
 \subsection{Agda}
-\label{sec:orgcb3c6c0}
+\label{sec:org3d407e5}
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
@@ -307,7 +307,7 @@ These go unused for the purpose of Agda type-checking but do have runtime
 effects in the output compiled code.
 
 \subsection{Coq}
-\label{sec:org35f4009}
+\label{sec:orgad43672}
 Developed initially in the late 1980s at INRIA in France, Coq approaches
 dependently-typed programming more from the mathematical side as an interactive
 theorem prover. Coq is based on the Calculus of Constructions, a type theory
@@ -343,7 +343,7 @@ allows the production of a fast native binary from a correct and type-checked
 Coq program.
 
 \subsection{Haskell}
-\label{sec:orgc55e89c}
+\label{sec:org3da022b}
 GHC Haskell has slowly been implementing many of the capabilities of dependent
 types via extensions to the language such as \texttt{GADTs}, \texttt{DataKinds}, and
 \texttt{TypeFamilies}. Through particular use of the Haskell type system many of the
@@ -357,7 +357,7 @@ types which allows for the expression of a limited set of propositions at the
 type level in existing Haskell code \cite{vazou_refinement_2014}.
 
 \subsection{Idris}
-\label{sec:org8874cfc}
+\label{sec:org1f0cfa0}
 Idris is primarily the work of Edwin Brady and others at the University of St
 Andrews in Scotland. It has positioned itself as a more practical take on
 dependently-typed programming and as such is more aimed at being a language that
@@ -383,10 +383,10 @@ community provided backends of the compiler such as the Erlang
 This report focuses on using Idris in a practical manner while aiming to take
 advantage of dependent types to ensure that our code is more correct.
 \chapter{Project Objectives and Approach}
-\label{sec:orgdac6bb2}
+\label{sec:org20de713}
 
 \section{Objectives}
-\label{sec:org7da584a}
+\label{sec:org4eaedb5}
 The objectives of this project are the following:
 \begin{itemize}
 \item Evaluate the practicality of dependently-typed programming languages
@@ -401,7 +401,7 @@ someone with functional programming experience in some ML family language
 \end{itemize}
 
 \subsection{Practicality of Dependently-Typed Programming Languages}
-\label{sec:org96f7217}
+\label{sec:orga419d2c}
 Much of the literature about dependent types has been focused on advancing
 research in the study of the theory of the field. This has manifested itself by
 way of new or novel approaches to building dependently-typed systems. Despite
@@ -416,7 +416,7 @@ projects aim to further supplement this area of study with more data taking into
 account the state-of-the-art at the time of writing.
 
 \subsection{Expression of Correctness Properties}
-\label{sec:org0778f3c}
+\label{sec:org1937eb4}
 Many of the current teaching examples involving dependent types present fairly
 simple examples of correctness properties. In order to provide a cohesive
 example that illustrates one or two points this is understandable.
@@ -427,7 +427,7 @@ the limitations are in terms of the expressivity of specification of a dependent
 type as well as the feasibility of implementing a program to that specification.
 
 \subsection{Scale of Applicability of Dependent Types}
-\label{sec:org715dc1f}
+\label{sec:org9937621}
 In real-world settings in a software engineering project we are often faced with
 certain time, performance and other delivery constraints. Projects do not have
 unlimited time to work with crafting and deploying a perfectly verified piece of
@@ -443,7 +443,7 @@ subsystems or by applying formal verification using dependent types across an
 entire system.
 
 \subsection{Development Approaches when using Dependent Types}
-\label{sec:org4539384}
+\label{sec:orgd6849cd}
 A number of development approaches exist when using dependent types. One could
 take a bottom-up approach in that existing code that has no existing correctness
 properties is given some and then the proof obligations are discharged from the
@@ -458,7 +458,7 @@ case studies and to determine where one might favour one approach over the other
 for a particular problem.
 
 \subsection{Pain Points when using Dependent Types}
-\label{sec:org1ac039a}
+\label{sec:org420bc40}
 Current dependently-typed languages such as Agda and Idris bear much surface
 syntax similarity to ML family languages such as Haskell. However, past these
 surface details the underlying type frameworks differ quite a bit. Even with
@@ -468,7 +468,7 @@ detail some of these hurdles that will be common when beginning to use these
 type systems.
 
 \section{Approach}
-\label{sec:org84222d8}
+\label{sec:org16280e6}
 The approach by which the evaluation of the above objectives took place is by
 implementing a number of case studies. In order for these case studies to have
 significant meaning they were focused on implementing real world algorithms that
@@ -484,7 +484,7 @@ studies also made use of different tooling such as working with standard tools
 like text editors as well as more semantically rich interactive editing
 environments.
 \chapter{Idris and Type-Driven Development}
-\label{sec:orge2ee6fc}
+\label{sec:org958aa4a}
 In order to follow along with some of the code examples it is worth gaining an
 understanding of some of the basic principles of the Idris language. This
 section is by no means comprehensive both in terms of the contents of this
@@ -495,7 +495,7 @@ can be found on the Idris website \cite{idris_tutorial_2017} as well as in Edwin
 Brady's ``Type-Driven Development with Idris'' \cite{brady_book_2017} book.
 
 \section{Similarities to Haskell}
-\label{sec:org118c334}
+\label{sec:org95bf35a}
 Idris has inherited much of the surface syntax of Haskell and will be quite
 familiar to anyone who has worked in Haskell or a similar ML-like language
 before. For example, the function that calculates the length of the list would
@@ -549,7 +549,7 @@ data List : Type -> Type where
 \end{listing}
 
 \section{Typed Holes}
-\label{sec:orgd7e5a6b}
+\label{sec:org646caf2}
 Often when writing code with heavily polymorphic and dependent types it can
 become difficult to see how exactly the types should line up. Idris has a
 built-in syntax for declaring typed holes which are a useful tool to help
@@ -587,7 +587,7 @@ information available to us in our current environment. This approach will be
 explained and demonstrated later.
 
 \section{Implicit Arguments}
-\label{sec:org5d47711}
+\label{sec:org569aca1}
 If we consider the type of length-indexed lists (Vect) as defined in the Idris
 standard library we may notice something peculiar about the variables in the
 definition.
@@ -643,7 +643,7 @@ appendLength {n} {m} _ _ = n + m
 \end{listing}
 
 \section{Total Functional Programming}
-\label{sec:org657b3e8}
+\label{sec:orga240f5b}
 One of the key concepts advocated by the language designers of Idris is the
 concept of ``total'' functional programming. From languages such as Haskell you
 may be familiar with functions such as \texttt{head} and \texttt{tail} on lists which have the
@@ -738,7 +738,7 @@ necessary. This pragma is used throughout the code outlined in the case studies
 in the next chapter.
 
 \section{Interactive Editing Modes for Idris}
-\label{sec:orga3aa053}
+\label{sec:orgf452945}
 A feature of Idris used heavily throughout the implementation of the project was
 the interactive editing environment available to text editors such as Emacs, Vim
 and Atom. This interactive environment works in a similar way to tools such as
@@ -754,7 +754,7 @@ documentation string. It is also responsible for reporting back information
 about type errors, environments of definitions and typed holes.
 
 \subsection{Insert Definition}
-\label{sec:orgbca61b3}
+\label{sec:org9fd74dc}
 One of the most useful commands is the definition command. If we have some
 initial definition of a type signature we can issue a keyboard shortcut to have
 the interactive environment create an initial definition of the function with
@@ -769,7 +769,7 @@ appropriate names using \texttt{\%name List xs, ys, zs, ws}. These new names are
 we generate initial definitions with arguments of type \texttt{List}.
 
 \subsection{Case Split}
-\label{sec:org7dcb66e}
+\label{sec:org1c6b50b}
 Another command that is regularly used is the case split command. The command
 will create separate clauses in a function definition to cover each different
 case of a data type definition. This is quite useful after creating an initial
@@ -815,7 +815,7 @@ colourToString Red = "red"
 \end{listing}
 
 \subsection{Proof Search}
-\label{sec:org1963b46}
+\label{sec:orgd86ede4}
 Often, the value that needs to go in place of a typed hole can be automatically
 derived from the values in our environment. By successive case splitting and
 refinement of the goal of our typed holes and from our type signature we often
@@ -841,7 +841,7 @@ have to write any code ourselves.
 \end{figure}
 
 \section{Type-Driven Development}
-\label{sec:orgdf7adc9}
+\label{sec:org54d445b}
 The type-driven development approach is an iterative system for building up a
 definition of a function or a set of functions using dependent types. The
 approach is outlined, advocated and used throughout Edwin Brady's book
@@ -901,15 +901,15 @@ refine our definition this type information also becomes refined and we can
 continue to iterate over refining and modifying our types to reach a complete
 definition.
 \chapter{Case Studies}
-\label{sec:orgc624d1c}
+\label{sec:org4d1a853}
 \section{The Assignment Problem}
-\label{sec:org646cbfc}
-The next case study we'll examine is an implementation of a solution to the
+\label{sec:orga7510c7}
+The first case study we'll examine is an implementation of a solution to the
 assignment problem based off the Hungarian algorithm with correctness guarantees
 maintained throughout the steps of the algorithm.
 
 \subsection{Problem Definition}
-\label{sec:org1e5121a}
+\label{sec:orgf849204}
 The assignment problem is a classic example of a combinatorial optimisation
 problem. The problem involves assigning a number of \emph{agents} to \emph{tasks}. An agent
 can be assigned to any task however there is a cost to assigning a particular
@@ -927,7 +927,7 @@ optimally assigns the doctors based on their ability to perform specific
 treatments.
 
 \subsection{Existing Algorithms}
-\label{sec:org5ed501e}
+\label{sec:orgc6fbbc8}
 It may seem that the time complexity of an algorithm to solve such a problem
 would require time in the order \(O(n!)\) time with respect to the number of
 agents/tasks. Optimisation strategies exist however that produce polynomial time
@@ -937,7 +937,7 @@ Munkres' proven algorithm \cite{munkres_assignment_1957} that demonstrates
 \(O(n^3)\) time complexity.
 
 \subsection{Hungarian Algorithm}
-\label{sec:orge8a75f6}
+\label{sec:org073e792}
 Our Idris implementation focuses on implementing the Hungarian algorithm due to
 its straight forward specification. There are also a number of correctness
 properties that jump off the page when reading the specification that we can
@@ -971,7 +971,7 @@ interesting correctness properties that we can discuss and also some interesting
 design decisions made in terms of approach and design of our API.
 
 \subsection{Demonstration}
-\label{sec:org1ee76e5}
+\label{sec:org186bd32}
 First let us assume that we have some initial matrix that describes our tasks
 and our agents that we would like to create an assignment for.
 
@@ -1033,7 +1033,7 @@ this point and we can stop. In this case, the first agent is assigned task 1,
 the second agent is assigned task 2 and the third agent is assigned task 3.
 
 \subsection{Invariants}
-\label{sec:org8523a61}
+\label{sec:orgcbe79e5}
 There are some interesting invariants we notice when performing these steps.
 After performing the first step we can be certain that at least one of the
 values in each row will be a zero. The minimum value that we find must be an
@@ -1062,7 +1062,7 @@ These invariants will be studied in more detail as we outline the development of
 the different Idris implementations of the algorithm.
 
 \subsection{First Implementation - Lists}
-\label{sec:org200b175}
+\label{sec:org1833106}
 The first implementation uses the standard list type. As we will see, this
 implementation demonstrates the fewest number of correctness guarantees with no
 proofs of the invariants outlined given and introduces partiality and the risk
@@ -1170,7 +1170,7 @@ types. This is the avenue we will explore and demonstrate with the next
 implementation.
 
 \subsection{Second Implementation - Vectors}
-\label{sec:orgd893cdb}
+\label{sec:orgff86cdc}
 In the second implementation we begin to narrow down the possibilities of
 incorrect type-checking functions. To start off with, the definition of our
 \texttt{HungarianMatrix} type has been modified. We make use of the Idris standard
@@ -1266,7 +1266,7 @@ the algorithm. We would like to be able to reason about the algorithm in terms
 of the invariants mentioned before.
 
 \subsection{Third Implementation - Vectors with Proofs}
-\label{sec:org3dee2c8}
+\label{sec:org61dccbe}
 In the third implementation we will build upon the previous attempt using
 vectors. In this implementation however, we will create proofs about the code
 that we write and enforce the invariants discussed previously. If we want to be
@@ -1463,7 +1463,7 @@ error is due to a mistake on your part or if it is some detail of a bug in the
 compiler leaking out into your code.
 
 \subsection{API Considerations}
-\label{sec:orgbb4fdf0}
+\label{sec:orgbd8f65e}
 It is worth considering what kind of API we wish to expose to the consumers of
 our algorithm. Although we have these complicated proof terms as part of our
 module we can make some decisions about how simple or complicated the API is to
@@ -1495,7 +1495,7 @@ like access to the underlying formalism that ensures that the simple API behaves
 as it should.
 
 \subsection{Haskell Port - Bottom Up Approach}
-\label{sec:org9b7b512}
+\label{sec:org0fce2a2}
 Another implementation approach taken when tackling this algorithm was to take
 an existing Haskell version of the Hungarian method and port it to Idris. From
 there, we could add further specification of the correctness of our
@@ -1522,10 +1522,140 @@ not in a simple manner. Much more benefit and success was had when writing code
 that was specifically set out to be proven in the first place. This means
 specifying the properties you want to prove at the outset in your types and by
 implementing the functions in a type-driven development fashion.
+
+\section{Run-Length Encoding}
+\label{sec:orgadd8631}
+The next case study we'll examine is an Idris implementation of run-length
+encoding.
+
+\subsection{Problem Definition}
+\label{sec:org0523564}
+Numerous compression algorithms and techniques exist to squeeze data into
+occupying fewer bytes in memory or on disk. Often these algorithms optimise for
+specific use cases. For example, the compression present in the JPEG image
+format is lossy to because of the visual nature of the data being compressed.
+Even with mild loss to the quality of the image the overall image will still be
+only slightly distinguishable from the original image. Lossy compression schemes
+also exist for audio and video data again to optimise data that is tolerant to a
+loss of quality. For text however we don't want to introduce lossy compression
+as that would distort the original meaning of the data perceivably.
+
+Run-length encoding is a simple technique used to compress text data. The data
+is encoded as a series of ``runs'' which represent multiple repeated occurrences
+of a single character. To illustrate the working of this compression scheme the
+string ``foooobaaaar'' would be encoded as ``1f4o1b4a1r''. There is one 'f'
+followed by four 'o's and so on. If we were to store the run counters in 8 bit
+unsigned integers and deal with 8 bit ASCII characters the compressed version
+would come in at 10 bytes versus the original 11 bytes. This algorithm has saved
+very little memory in this example but we can see how this might scale up for
+longer runs in larger strings.
+
+\subsection{Invariants}
+\label{sec:orgdc7d0a6}
+There are two invariants that we might want to prove about a compression scheme
+such as run-length encoding. The first of which is that the compression
+algorithm actually produces a value which occupies less space than the original
+value. The second invariant is that there exists an identity from composing
+compress and decompress. If we take some data and call a compression function on
+it and then pass that result on to a decompression function then we would expect
+to get back the same initial data that we compressed. In this sense \texttt{decompress
+(compress data)} should be equal to \texttt{id data} and as a result \texttt{decompress . compress}
+should equal \texttt{id}. For reasons outlined later we will see why both of these
+invariants are either quite difficult or impossible to encode and prove.
+
+\subsection{Idris Implementation}
+\label{sec:org1f95c3d}
+This case study began by taking an initial piece of example code from the Idris
+repository that performed a simple run-length encoding. The initial code
+demonstrated how a run-length encoder might be written but did not properly
+encode the data. The output of the function was a string which does not
+accurately represent how we want to encode the data. A proper encoder would
+alternate between an 8 bit integer and an 8 bit ASCII character to produce an
+efficient format capable of being written byte-by-byte to a file.
+
+\begin{listing}[H]
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
+intermediate : {auto p : m `LTE` (S n)} -> Vect (S n) Char -> (m : Nat ** Vect (S m) (Nat, Char))
+intermediate xs with (rle xs)
+  intermediate (_ :: _) | REnd impossible
+  intermediate (c :: (replicate n c ++ [])) | (RChar n c rs) = (_ ** [(S n, c)])
+  intermediate (c :: (replicate n c ++ (z :: zs))) | (RChar n c rs)
+    = let (_ ** ws) = intermediate (z :: zs)
+        in (_ ** (S n, c) :: ws)
+\end{minted}
+\caption{Intermediate format encoder for run-length encoding}
+\end{listing}
+
+This function creates an intermediate representation of our run-length encoded
+data as a vector of pairs of natural numbers and characters. The natural numbers
+give the length of the run and the character represents the character that is
+being counted for that run. As seen before, we make use of the dependent pair
+type \texttt{**} to specify the length of our resultant vector. We also make use of \texttt{auto}
+proof search to ensure that the length of the resultant vector is less than or
+equal to the length of the vector of characters passed in to be compressed. This
+should be the case as if we have all length 1 runs then the vectors will have
+equal length and if there is ever a run that is more than 1 long then there will
+be fewer intermediate values as we only need to store the character once with
+its run length.
+
+With our intermediate value representation we can now begin to turn the data
+into bytes that are suitable for output to a file. Idris includes a library
+\texttt{Data.Bits} that contains numerous functions for manipulating binary data. We can
+represent the data that we want to flush out to our file as a list of \texttt{Bits 8}
+values which essentially map down to bytes. The drawback of this approach is
+that we will truncate runs longer than 255 as we only have 8 bits to work with.
+An extension to this scheme could be added such that runs longer than 255 are
+represented as separate runs.
+
+\begin{listing}[H]
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
+compressedBits : (n : Nat ** Vect (S n) (Nat, Char)) -> List (Bits 8)
+compressedBits (Z ** ((n, c) :: [])) = [intToBits (cast n), intToBits (cast (ord c))]
+compressedBits ((S x) ** ((n, c) :: xs)) = intToBits (cast n) :: intToBits (cast (ord c)) :: compressedBits (x ** xs)
+\end{minted}
+\caption{Translation of our intermediate data to bytes}
+\end{listing}
+
+With the information encoded as bytes we can use the Idris \texttt{Data.Buffer} module to
+allocate a buffer that we can write the data into. We know that the size of the
+buffer we want to allocate will be 2 times the length of our intermediate vector
+format. One byte will be allocated for the length of the run and one byte
+allocated for the actual character. Recursion over our list of bytes allows us
+to build up a series of \texttt{IO} actions for writing out to our allocated buffer. We
+can then sequence these actions to perform the modifications to the buffer and
+flush it out to a file as compressed data.
+
+\begin{listing}[H]
+\begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
+writeCompressed' : List (Bits 8) -> Buffer -> Int -> List (IO ())
+writeCompressed' [] buf loc = [pure ()]
+writeCompressed' ((MkBits x) :: xs) buf loc = setByte buf loc x :: writeCompressed' xs buf (loc + 1)
+
+writeCompressed : List (Bits 8) -> Buffer -> List (IO ())
+writeCompressed xs buf = writeCompressed' xs buf 0
+
+main : IO ()
+main = do
+  putStrLn ("Compressing: " ++ testString)
+  putStrLn $ show compressed
+  let bufferSize = cast $ 2 * (S (fst inter))
+  Just buffer <- newBuffer bufferSize
+    | Nothing => putStrLn "Failed to allocate buffer" -- If out of memory
+  sequence_ $ writeCompressed compressed buffer -- Fill buffer
+  Right file <- openFile "output.bin" WriteTruncate -- Get file handle
+    | Left _ => putStrLn "Failed to get file handle"
+  writeBufferToFile file buffer bufferSize
+  putStrLn "Output written to output.bin"
+\end{minted}
+\caption{The main RLE program}
+\end{listing}
+
+\subsection{Proving Our Invariants}
+\label{sec:org7229e5b}
 \chapter{Assessments and Conclusions}
-\label{sec:orgd73692a}
+\label{sec:orga161e83}
 \chapter{Future Work}
-\label{sec:org8c7c5c7}
+\label{sec:orgd53dfd4}
 
 \emergencystretch=1em
 \printbibliography[heading=bibintoc, title=References]

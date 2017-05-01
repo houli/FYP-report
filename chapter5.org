@@ -1,6 +1,6 @@
 * Case Studies
 ** The Assignment Problem
-The next case study we'll examine is an implementation of a solution to the
+The first case study we'll examine is an implementation of a solution to the
 assignment problem based off the Hungarian algorithm with correctness guarantees
 maintained throughout the steps of the algorithm.
 
@@ -574,3 +574,122 @@ not in a simple manner. Much more benefit and success was had when writing code
 that was specifically set out to be proven in the first place. This means
 specifying the properties you want to prove at the outset in your types and by
 implementing the functions in a type-driven development fashion.
+
+** Run-Length Encoding
+The next case study we'll examine is an Idris implementation of run-length
+encoding.
+
+*** Problem Definition
+Numerous compression algorithms and techniques exist to squeeze data into
+occupying fewer bytes in memory or on disk. Often these algorithms optimise for
+specific use cases. For example, the compression present in the JPEG image
+format is lossy to because of the visual nature of the data being compressed.
+Even with mild loss to the quality of the image the overall image will still be
+only slightly distinguishable from the original image. Lossy compression schemes
+also exist for audio and video data again to optimise data that is tolerant to a
+loss of quality. For text however we don't want to introduce lossy compression
+as that would distort the original meaning of the data perceivably.
+
+Run-length encoding is a simple technique used to compress text data. The data
+is encoded as a series of ``runs'' which represent multiple repeated occurrences
+of a single character. To illustrate the working of this compression scheme the
+string ``foooobaaaar'' would be encoded as ``1f4o1b4a1r''. There is one 'f'
+followed by four 'o's and so on. If we were to store the run counters in 8 bit
+unsigned integers and deal with 8 bit ASCII characters the compressed version
+would come in at 10 bytes versus the original 11 bytes. This algorithm has saved
+very little memory in this example but we can see how this might scale up for
+longer runs in larger strings.
+
+*** Invariants
+There are two invariants that we might want to prove about a compression scheme
+such as run-length encoding. The first of which is that the compression
+algorithm actually produces a value which occupies less space than the original
+value. The second invariant is that there exists an identity from composing
+compress and decompress. If we take some data and call a compression function on
+it and then pass that result on to a decompression function then we would expect
+to get back the same initial data that we compressed. In this sense =decompress
+(compress data)= should be equal to =id data= and as a result =decompress . compress=
+should equal =id=. For reasons outlined later we will see why both of these
+invariants are either quite difficult or impossible to encode and prove.
+
+*** Idris Implementation
+This case study began by taking an initial piece of example code from the Idris
+repository that performed a simple run-length encoding. The initial code
+demonstrated how a run-length encoder might be written but did not properly
+encode the data. The output of the function was a string which does not
+accurately represent how we want to encode the data. A proper encoder would
+alternate between an 8 bit integer and an 8 bit ASCII character to produce an
+efficient format capable of being written byte-by-byte to a file.
+
+#+CAPTION: Intermediate format encoder for run-length encoding
+#+BEGIN_SRC idris
+intermediate : {auto p : m `LTE` (S n)} -> Vect (S n) Char -> (m : Nat ** Vect (S m) (Nat, Char))
+intermediate xs with (rle xs)
+  intermediate (_ :: _) | REnd impossible
+  intermediate (c :: (replicate n c ++ [])) | (RChar n c rs) = (_ ** [(S n, c)])
+  intermediate (c :: (replicate n c ++ (z :: zs))) | (RChar n c rs)
+    = let (_ ** ws) = intermediate (z :: zs)
+        in (_ ** (S n, c) :: ws)
+#+END_SRC
+
+This function creates an intermediate representation of our run-length encoded
+data as a vector of pairs of natural numbers and characters. The natural numbers
+give the length of the run and the character represents the character that is
+being counted for that run. As seen before, we make use of the dependent pair
+type =**= to specify the length of our resultant vector. We also make use of =auto=
+proof search to ensure that the length of the resultant vector is less than or
+equal to the length of the vector of characters passed in to be compressed. This
+should be the case as if we have all length 1 runs then the vectors will have
+equal length and if there is ever a run that is more than 1 long then there will
+be fewer intermediate values as we only need to store the character once with
+its run length.
+
+With our intermediate value representation we can now begin to turn the data
+into bytes that are suitable for output to a file. Idris includes a library
+=Data.Bits= that contains numerous functions for manipulating binary data. We can
+represent the data that we want to flush out to our file as a list of =Bits 8=
+values which essentially map down to bytes. The drawback of this approach is
+that we will truncate runs longer than 255 as we only have 8 bits to work with.
+An extension to this scheme could be added such that runs longer than 255 are
+represented as separate runs.
+
+#+CAPTION: Translation of our intermediate data to bytes
+#+BEGIN_SRC idris
+compressedBits : (n : Nat ** Vect (S n) (Nat, Char)) -> List (Bits 8)
+compressedBits (Z ** ((n, c) :: [])) = [intToBits (cast n), intToBits (cast (ord c))]
+compressedBits ((S x) ** ((n, c) :: xs)) = intToBits (cast n) :: intToBits (cast (ord c)) :: compressedBits (x ** xs)
+#+END_SRC
+
+With the information encoded as bytes we can use the Idris =Data.Buffer= module to
+allocate a buffer that we can write the data into. We know that the size of the
+buffer we want to allocate will be 2 times the length of our intermediate vector
+format. One byte will be allocated for the length of the run and one byte
+allocated for the actual character. Recursion over our list of bytes allows us
+to build up a series of =IO= actions for writing out to our allocated buffer. We
+can then sequence these actions to perform the modifications to the buffer and
+flush it out to a file as compressed data.
+
+#+CAPTION: The main RLE program
+#+BEGIN_SRC idris
+writeCompressed' : List (Bits 8) -> Buffer -> Int -> List (IO ())
+writeCompressed' [] buf loc = [pure ()]
+writeCompressed' ((MkBits x) :: xs) buf loc = setByte buf loc x :: writeCompressed' xs buf (loc + 1)
+
+writeCompressed : List (Bits 8) -> Buffer -> List (IO ())
+writeCompressed xs buf = writeCompressed' xs buf 0
+
+main : IO ()
+main = do
+  putStrLn ("Compressing: " ++ testString)
+  putStrLn $ show compressed
+  let bufferSize = cast $ 2 * (S (fst inter))
+  Just buffer <- newBuffer bufferSize
+    | Nothing => putStrLn "Failed to allocate buffer" -- If out of memory
+  sequence_ $ writeCompressed compressed buffer -- Fill buffer
+  Right file <- openFile "output.bin" WriteTruncate -- Get file handle
+    | Left _ => putStrLn "Failed to get file handle"
+  writeBufferToFile file buffer bufferSize
+  putStrLn "Output written to output.bin"
+#+END_SRC
+
+*** Proving Our Invariants
