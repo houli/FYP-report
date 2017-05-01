@@ -246,3 +246,279 @@ statically at compile time. Fortunately Idris provides the tools to ensure that
 these kinds of errors are made impossible through sufficiently descriptive
 types. This is the avenue we will explore and demonstrate with the next
 implementation.
+
+*** Second Implementation - Vectors
+In the second implementation we begin to narrow down the possibilities of
+incorrect type-checking functions. To start off with, the definition of our
+=HungarianMatrix= type has been modified. We make use of the Idris standard
+library type =Matrix n m a= which is simply defined as =Vect n (Vect m a)=.
+
+#+CAPTION: Type alias to represent our cost matrix
+#+BEGIN_SRC idris
+HungarianMatrix : (n : Nat) -> {auto p : n `GT` Z} -> Type
+HungarianMatrix Z {p = LTEZero} impossible
+HungarianMatrix Z {p = (LTESucc _)} impossible
+HungarianMatrix (S k) {p = (LTESucc x)} = Matrix (S k) (S k) Int
+#+END_SRC
+
+There are a couple of things worth noting in this definition. The aim of this
+type alias is to ensure that our =HungarianMatrix= can only represent the square
+matrices that have at least 1 row and column. The first argument to this
+type-computing function is the size $n$ of our matrix.
+
+The second argument represents a proof that $n > 0$. The curly braces
+surrounding this argument denote that it is an implicit argument as outlined in
+the previous chapter. As it is implicit, we do not need to explicitly pass this
+proof when calling this function to create the type. For example, we can refer
+to a square matrix of size 2 as having the type =HungarianMatrix (S (S Z))=
+rather than =HungarianMatrix (S (S Z)) someProofTerm=. The use of the =auto=
+keyword allows the compiler to perform a proof search to find the proof term
+that fits instead of forcing us as the user to create it.
+
+We can bring the implicit argument p down to our function definition and perform
+a case split on it. We know that if the natural number passed to the function is
+ever zero then it is impossible to have a value of type =Z `GT` Z= and as such
+the compiler accepts that the two clauses above are impossible. This definition
+was carried out in a type-driven way by defining our initial specification that
+$n$ had to be greater than zero (i.e. we wanted to create a non-empty matrix).
+By using the interactive editing capabilities of Idris and case splitting on the
+proof term, the clauses above fell out immediately leaving just one clause that
+wasn't impossible and where we could insert the definition of our non-empty
+matrix.
+
+Using the =Vect= type of length-indexed lists helps us achieve more totality in
+this implementation. In our previous list of lists based version the partiality
+of our =listMin= function had the effect of bubbling up and creating partiality in
+all of the functions in our interface. Using the =Vect= type of length-indexed
+lists we can reduce the number of cases that need to be matched in order to
+achieve a total definition of a minimum function. Restricting our type to only
+work on vectors that have at least one element ensures that we can always return
+a value from the =vectMin= function. If we tried to pattern match on the nil
+constructor for =Vect= then that would result in a type error as we've explicitly
+stated in the type of =vectMin= that it will only accept vectors with at least one
+element as input.
+
+#+CAPTION: The =minimum= function defined over length-indexed lists
+#+BEGIN_SRC idris
+vectMin' : Ord a => a -> Vect n a -> a
+vectMin' x [] = x
+vectMin' x (y :: ys) with (compare x y)
+  vectMin' x (y :: ys) | GT = vectMin' y ys
+  vectMin' x (y :: ys) | EQ = vectMin' y ys
+  vectMin' x (y :: ys) | LT = vectMin' x ys
+
+vectMin : Ord a => Vect (S n) a -> a
+vectMin (x :: xs) = vectMin' x xs
+#+END_SRC
+
+The effect that this has on our code is that now if a consumer of our algorithm
+tries to call into it with an empty matrix that error can be statically detected
+at compile time. We don't run the risk of introducing runtime errors that may
+only be detected when a system has been running for days with buggy and
+under-specified code. This reflects itself in the types of the functions that
+implement the specific steps in the algorithm. The types outlined below provide
+us with the knowledge that we can never call these functions with ill-typed data
+such as empty matrices.
+
+#+CAPTION: Types of the algorithm's steps
+#+BEGIN_SRC idris
+step1 : HungarianMatrix (S n) -> HungarianMatrix (S n)
+
+step2 : HungarianMatrix (S n) -> HungarianMatrix (S n)
+
+export
+hungarianMethod : HungarianMatrix (S n) -> HungarianMatrix (S n)
+#+END_SRC
+
+Although we have now introduced an implementation of the algorithm which passes
+the Idris totality checker by encoding the size of our cost matrix in the type
+we have yet to provide any meaningful correctness properties for the steps of
+the algorithm. We would like to be able to reason about the algorithm in terms
+of the invariants mentioned before.
+
+*** Third Implementation - Vectors with Proofs
+In the third implementation we will build upon the previous attempt using
+vectors. In this implementation however, we will create proofs about the code
+that we write and enforce the invariants discussed previously. If we want to be
+more certain about the correctness of the code that we write we will need to be
+able to construct correct proofs that type check but are also semantically
+correct in that the type is a correct specification for the proof.
+
+The invariants discussed previously have something in common. They both express
+that there must exist a zero somewhere in our matrix. The Idris standard library
+provides a type =Elem= which encodes exactly this notion of existence within a
+vector. There are two constructors of this type, =Here= and =There=. =Here= represents
+a proof that the element at the head of the vector is equal to the element that
+is being shown to exist. The repeated use of the name =x= ensures that this
+reflexive equality must hold in order to construct a =Here= value. =There=
+represents the fact that if an item is an element somewhere later in the vector
+then it is an element of a vector constructed by prepending an element to the
+front of the vector in discussion.
+
+#+CAPTION: The Idris standard library definition of =Elem=
+#+BEGIN_SRC idris
+||| A proof that some element is found in a vector
+data Elem : a -> Vect k a -> Type where
+     Here : Elem x (x::xs)
+     There : (later : Elem x xs) -> Elem x (y::xs)
+#+END_SRC
+
+This type allows us to express notions such as =(xs : Vect n a) -> Elem 0
+(subSmallest xs)=. In our invariants however we want to encode that all of the
+rows and columns contain a specific element. Idris also provides some
+quantifiers that act over lists and vectors. These quantifiers =Any= and =All=
+encode notions of existential quantification and universal quantification
+respectively. If we look at how =All= is defined we can see that it is very
+closely related to the =Vect= type we have been using. In a sense we can reason
+about it as a vector of proofs that some property holds corresponding
+element-wise to the =Vect= passed as an input to the type.
+
+#+CAPTION: The Idris standard library definition of =All=
+#+BEGIN_SRC idris
+||| A proof that all elements of a vector satisfy a property. It is a list of
+||| proofs, corresponding element-wise to the `Vect`.
+data All : (P : a -> Type) -> Vect n a -> Type where
+  Nil : {P : a -> Type} -> All P Nil
+  (::) : {P : a -> Type} -> {xs : Vect n a} -> P x -> All P xs -> All P (x :: xs)
+#+END_SRC
+
+We can implement a map-like operation that takes a vector and a function that
+shows the property holds for any particular element of that vector and produce a
+proof that the property holds for all elements of that vector.
+
+#+CAPTION: A proof mapping function to create a proof of =All=
+#+BEGIN_SRC idris
+proofMap : {P : a -> Type} -> ((x : a) -> P x) -> (xs : Vect n a) -> All P xs
+proofMap _ [] = []
+proofMap f (x :: xs) = f x :: proofMap f xs
+#+END_SRC
+
+Having looked at =Elem=, =All= and discussed some ways of creating proofs over
+vectors and matrices we can now encode the invariants we outlined previously as
+Idris types.
+
+#+CAPTION: An encoding of our invariants as Idris types
+#+BEGIN_SRC idris
+step1 : HungarianMatrix (S n) -> (ys : HungarianMatrix (S n) ** All (Elem 0) ys)
+
+step2 : (xs : HungarianMatrix (S n) ** All (Elem 0) xs)
+     -> (ys : HungarianMatrix (S n) ** All (Elem 0) ys)
+#+END_SRC
+
+The =step1= function says that we will take some non-empty matrix and produce not
+only a transformed matrix after having performed the operations of the algorithm
+but also a proof that all of the rows of this matrix contain a zero somewhere in
+them. The =step2= function takes the result of the =step1= function and produces a
+newly transformed matrix and also a proof that the columns of this new matrix
+all contain a zero. In both of these functions we make use of the dependent pair
+type, =**=. This is Idris' encoding of Martin-Löf's \Sigma-types. In both of these
+examples the /type/ of the second element of the pair is dependent upon the /value/
+of the first.
+
+We have also encoded some sense of ordering of the steps of the algorithm in
+these types. We do not want to write correct implementations of the steps of the
+algorithm and then interleave them in an incorrect order. By enforcing in step 2
+that we first have a value that is of the type output from step 1 then we can
+enforce an ordering between the steps of the algorithm. There should be no way
+to call into step 2 without having obtained the value from having called step 1.
+We can also think of this in terms of preconditions and postconditions. The
+precondition of step 2 of the algorithm is the same as the postcondition of
+step 1. This can continue for the other steps of the algorithm to ensure a
+correct order of application.
+
+There are a number of underlying proof steps that are required to get to the
+point where we can write the functions =step1= and =step2= above.
+1. The =vectMin= function produces a value present in the passed vector
+2. Subtracting that value across a row/column produces at least one zero
+3. Subtracting minimums across all rows/columns produces zeroes in all
+   rows/columns
+
+We will focus on this first proof step as an example to illustrate the approach
+to performing these proofs in the type-driven style.
+
+#+CAPTION: Proof that =vectMin= produces an element of the passed vector
+#+BEGIN_SRC idris
+||| If we have a function to show `x` being in `zs` implies `x` being in `as`
+||| and we can show `x` is in `y :: zs` then we can show `x` is in `y :: as`
+congElem : (Elem x zs -> Elem x as) -> Elem x (y :: zs) -> Elem x (y :: as)
+congElem _ Here = Here
+congElem f (There later) = There (f later)
+
+vectMinElem' : Ord a => (x : a) -> (ys : Vect n a) -> Elem (vectMin' x ys) (x :: ys)
+vectMinElem' x [] = Here
+vectMinElem' x (y :: ys) with (compare x y)
+  vectMinElem' x (y :: ys) | GT = There (vectMinElem' y ys)
+  vectMinElem' x (y :: ys) | EQ = There (vectMinElem' y ys)
+  vectMinElem' x (y :: ys) | LT = congElem There (vectMinElem' x ys)
+
+vectMinElem : Ord a => (xs : Vect (S n) a) -> Elem (vectMin xs) xs
+vectMinElem (x :: xs) = vectMinElem' x xs
+#+END_SRC
+
+Structurally, this proof is very similar to the definitions of =vectMin= and
+=vectMin'= discussed in the previous section. We can see that the proof is
+deferred to a helper function =vectMinElem'= which states that if we have value =x=
+and a vector =ys= then we can prove that applying the helper function =vectMin'= to
+those arguments results in a value in =x :: ys=. For the empty vector, type-driven
+development allows the compiler to know that the only case that is possible is
+that the element must be at the current position as we have the singleton list
+=[x]= in our type. In this case proof search is sufficient to find the correct
+value for us.
+
+The use of the =with= pattern for a non-empty vector allows us to dependently
+pattern match on the result of the comparison. If the value at the head of the
+vector is either greater than or equal to the current minimum, by the definition
+of the =vectMin'= function, we know that the value returned will not be =x= but some
+later value and so the constructor =There= is used with a recursive call to
+=vectMinElem'=. The =congElem= function represents the congruence of =Elem= in that if
+we have an implication that =x= is in =zs= implies =x= being in =as= then if =x= is in =y
+:: zs= that will imply that =x= is in =y :: as=. We use this to prove that our
+minimum is in the vector when it continues to be the minimum value inspected so
+far while recursing through the vector. This gives a flavour of the approach
+used when writing proofs of functions in Idris. The rest of the proofs for the
+steps of the algorithm are provided as part of the full code listing for the
+=HungarianMatrixProof= module should you wish to inspect more of these same
+approaches at work.
+
+There were some particular challenges that appeared while writing this
+implementation. The first of which was the lack of dependent pattern matching
+for integers. As =Int= is defined as a primitive type in Idris we cannot perform
+any meaningful induction over its structure like we can do with the =Nat=
+datatype. As part of this proven implementation we need to be able to show that
+subtracting a number from itself produces zero. If our implementation were using
+natural numbers then we could leverage the already defined proof of this fact
+from the standard library. Unfortunately the Hungarian algorithm has to deal
+with negative numbers in the later steps of the algorithm and use of =Nat= won't
+be satisfactory for an implementation. As we can't do dependent pattern matching
+on =Int= we have to define this is a postulate that we tell Idris to trust. For
+small and self-evident theorems such as this it may be acceptable to write a
+postulate but we would like to encode as much of our proof within the Idris
+framework as possible so having to use postulates is indicative of a problem in
+the code. There exists a wrapper around =Nat= to represent signed integers in the
+standard library however it was only discovered after the version using integers
+was complete.
+
+#+CAPTION: We tell Idris to trust us that $n\mathbin{-} n \mathrel{=} 0$
+#+BEGIN_SRC idris
+postulate minusSelfZero : {x : Int} -> x - x = 0
+#+END_SRC
+
+Another pain point encountered were the sometimes complex type errors. In one
+instance a particularly wordy and incomprehensible 200 line type error was
+produced when attempting to prove that all of the rows contained zeroes. The use
+of the names =meth1=, =meth5= etc. indicated that we needed to somehow examine how
+interfaces were being used in our implementation. The problem turned out to only
+demonstrate itself in a particular use of the =map= function from the =Functor=
+interface. Replacing the call to =map= with a local definition specialised only to
+work over =Vect= caused the type errors to disappear. This turned out to be a bug
+in the Idris compiler and how it handles interfaces that has since been
+corrected although we weren't aware of this at the time of writing the code.
+These cryptic error messages can often manifest themselves when working in a
+system with such an expressive type system. It will often be hard to tell if the
+error is due to a mistake on your part or if it is some detail of a bug in the
+compiler leaking out into your code.
+
+*** API Considerations
+
+
+*** Haskell Port - Bottom Up Approach
