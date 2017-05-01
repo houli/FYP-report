@@ -498,7 +498,7 @@ the code. There exists a wrapper around =Nat= to represent signed integers in th
 standard library however it was only discovered after the version using integers
 was complete.
 
-#+CAPTION: We tell Idris to trust us that $n\mathbin{-} n \mathrel{=} 0$
+#+CAPTION: We tell Idris to trust us that $x\mathbin{-} x \mathrel{=} 0$
 #+BEGIN_SRC idris
 postulate minusSelfZero : {x : Int} -> x - x = 0
 #+END_SRC
@@ -519,6 +519,58 @@ error is due to a mistake on your part or if it is some detail of a bug in the
 compiler leaking out into your code.
 
 *** API Considerations
+It is worth considering what kind of API we wish to expose to the consumers of
+our algorithm. Although we have these complicated proof terms as part of our
+module we can make some decisions about how simple or complicated the API is to
+use. In each implementation we have elected to export a simple function that
+performs the steps of the algorithm. Each of our modules contains a definition
+similar to the following.
 
+#+CAPTION: Our user-facing API for the Hungarian algorithm
+#+BEGIN_SRC idris
+export
+hungarianMethod : HungarianMatrix (S n) -> HungarianMatrix (S n)
+hungarianMethod xs = transpose (fst (step2 (step1 xs)))
+#+END_SRC
+
+With dependent types we can choose to expose as much or as little of the
+underlying proof terms as we wish. We may not wish to complicate the use of our
+library with the correctness proofs that ensure that we have a rigorous
+implementation that is formally verified. We can achieve a simple user-facing
+API while still having that formalism beneath ensuring that more static errors
+are detected at compile time. To compliment this simple API a number of other
+correctness proofs about the main functions could be exported from the module
+separately. If someone wanted to take advantage of the fact the implementation
+has been verified then they can use these properties in their code. For most
+consumers of the library this will probably not be the case but it is still
+possible to satisfy both the users that want a simple API and those that would
+like access to the underlying formalism that ensures that the simple API behaves
+as it should.
 
 *** Haskell Port - Bottom Up Approach
+Another implementation approach taken when tackling this algorithm was to take
+an existing Haskell version of the Hungarian method and port it to Idris. From
+there, we could add further specification of the correctness of our
+implementation to the types of the ported functions. This can be seen as more of
+a bottom-up approach as compared to the top-down approach of type-driven
+development where the specification (types) come first.
+
+The code being ported was a package cite:komuves_munkres_2008 on the Haskell
+package server Hackage. The aim was to take this package and directly port the
+code over to Idris however there were a number of complications with this
+approach. The major problem was the use of efficient stateful data structures
+such as =Data.Array= in the Haskell package. Idris doesn't provide an analogous
+data structure to this efficient array type. The Haskell implementation had to
+be pulled apart in order to translate it into a representation using lists and
+recursion rather than mutating references to arrays. The surface syntax may make
+it seem simple to port this code to Idris however that wasn't the case as we
+found. There were some subtleties involved in getting the code to type-check in
+Idris.
+
+At this point we can begin to add our correctness proofs onto our ported Idris
+code. Ultimately this work had to be abandoned and a new approach taken in the
+type-driven style. The implementation wasn't suited to writing proofs at least
+not in a simple manner. Much more benefit and success was had when writing code
+that was specifically set out to be proven in the first place. This means
+specifying the properties you want to prove at the outset in your types and by
+implementing the functions in a type-driven development fashion.
