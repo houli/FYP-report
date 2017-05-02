@@ -262,8 +262,8 @@ definition and we want to do case analysis on one of our arguments.
 
 This command also helps achieve a definition which will pass the Idris totality
 checker. If we have gotten the compiler to generate the cases for us we can be
-sure that we haven't caused an error by failing to remember to insert a case for
-one of our data constructors. In the following example we create a data type
+sure that we have not caused an error by failing to remember to insert a case
+for one of our data constructors. In the following example we create a data type
 representing colours and ask the compiler to provide definitions for each of the
 different cases.
 
@@ -281,8 +281,8 @@ colourToString Blue = ?colourToString_rhs_3
 #+END_SRC
 
 If we were to instead try and manually create these definitions we may forget to
-insert the case for the =Green= constructor. If we don't check this definition for
-totality and try to call it with the value =Green= then it will result in a
+insert the case for the =Green= constructor. If we do not check this definition
+for totality and try to call it with the value =Green= then it will result in a
 runtime error causing our program to crash despite our =colourToString= function
 type-checking. Automatic case splits driven by the compiler's semantic
 information help us achieve the total functional programming style that Idris
@@ -338,7 +338,7 @@ In the second step, ``Define'', we create an initial definition for the
 function, possibly leaving in some typed holes. We do not yet know exactly how
 to make our definition line up with the specification in the type so we use
 holes to defer the actual implementation of the function. At this point we
-should make use of as much knowledge as we know to the point where we can't
+should make use of as much knowledge as we know to the point where we cannot
 continue to implement the function. We can gain more information by making use
 of features such as case splitting. We may also refer back to step one and
 modify the type to continue with the process.

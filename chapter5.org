@@ -1,6 +1,6 @@
 * Case Studies
 ** The Assignment Problem
-The first case study we'll examine is an implementation of a solution to the
+The first case study we will examine is an implementation of a solution to the
 assignment problem based off the Hungarian algorithm with correctness guarantees
 maintained throughout the steps of the algorithm.
 
@@ -156,10 +156,10 @@ limited information at the type level.
 
 In order to implement the algorithm we first need to decide how the data is
 modelled. In this list implementation our matrix will be defined as a list of
-lists of ints. We can use Idris' ability to calculate types as the results of
-functions to create some type aliases that allow us to write more specific types
-that relate to the domain of the algorithm. In this case, =HungarianMatrix= as
-opposed to =List (List Int))=.
+lists of integers. We can use Idris' ability to calculate types as the results
+of functions to create some type aliases that allow us to write more specific
+types that relate to the domain of the algorithm. In this case, =HungarianMatrix=
+as opposed to =List (List Int))=.
 
 #+CAPTION: Type aliases to represent our cost matrix
 #+BEGIN_SRC idris
@@ -188,10 +188,10 @@ listMin : Ord a => List a -> a
 listMin (x :: xs) = listMin' x xs
 #+END_SRC
 
-In this function we've made use of the interface mechanism of Idris. This system
-is analogous to the type class system in Haskell. We can define the =listMin=
-function using ad-hoc polymorphism over any type that provides an implementation
-of the =Ord= interface.
+In this function we have made use of the interface mechanism of Idris. This
+system is analogous to the type class system in Haskell. We can define the
+=listMin= function using ad-hoc polymorphism over any type that provides an
+implementation of the =Ord= interface.
 
 Despite this function working as intended and type-checking, a problem is
 starting to emerge. The =listMin= function is a partial function. There is no
@@ -277,13 +277,13 @@ that fits instead of forcing us as the user to create it.
 
 We can bring the implicit argument p down to our function definition and perform
 a case split on it. We know that if the natural number passed to the function is
-ever zero then it is impossible to have a value of type =Z `GT` Z= and as such
-the compiler accepts that the two clauses above are impossible. This definition
-was carried out in a type-driven way by defining our initial specification that
-$n$ had to be greater than zero (i.e. we wanted to create a non-empty matrix).
-By using the interactive editing capabilities of Idris and case splitting on the
+ever zero then it is impossible to have a value of type =Z `GT` Z= and as such the
+compiler accepts that the two clauses above are impossible. This definition was
+carried out in a type-driven way by defining our initial specification that $n$
+had to be greater than zero (i.e. we wanted to create a non-empty matrix). By
+using the interactive editing capabilities of Idris and case splitting on the
 proof term, the clauses above fell out immediately leaving just one clause that
-wasn't impossible and where we could insert the definition of our non-empty
+was not impossible and where we could insert the definition of our non-empty
 matrix.
 
 Using the =Vect= type of length-indexed lists helps us achieve more totality in
@@ -294,9 +294,9 @@ lists we can reduce the number of cases that need to be matched in order to
 achieve a total definition of a minimum function. Restricting our type to only
 work on vectors that have at least one element ensures that we can always return
 a value from the =vectMin= function. If we tried to pattern match on the nil
-constructor for =Vect= then that would result in a type error as we've explicitly
-stated in the type of =vectMin= that it will only accept vectors with at least one
-element as input.
+constructor for =Vect= then that would result in a type error as we have
+explicitly stated in the type of =vectMin= that it will only accept vectors with
+at least one element as input.
 
 #+CAPTION: The =minimum= function defined over length-indexed lists
 #+BEGIN_SRC idris
@@ -313,7 +313,7 @@ vectMin (x :: xs) = vectMin' x xs
 
 The effect that this has on our code is that now if a consumer of our algorithm
 tries to call into it with an empty matrix that error can be statically detected
-at compile time. We don't run the risk of introducing runtime errors that may
+at compile time. We do not run the risk of introducing runtime errors that may
 only be detected when a system has been running for days with buggy and
 under-specified code. This reflects itself in the types of the functions that
 implement the specific steps in the algorithm. The types outlined below provide
@@ -488,15 +488,15 @@ datatype. As part of this proven implementation we need to be able to show that
 subtracting a number from itself produces zero. If our implementation were using
 natural numbers then we could leverage the already defined proof of this fact
 from the standard library. Unfortunately the Hungarian algorithm has to deal
-with negative numbers in the later steps of the algorithm and use of =Nat= won't
-be satisfactory for an implementation. As we can't do dependent pattern matching
-on =Int= we have to define this is a postulate that we tell Idris to trust. For
-small and self-evident theorems such as this it may be acceptable to write a
-postulate but we would like to encode as much of our proof within the Idris
-framework as possible so having to use postulates is indicative of a problem in
-the code. There exists a wrapper around =Nat= to represent signed integers in the
-standard library however it was only discovered after the version using integers
-was complete.
+with negative numbers in the later steps of the algorithm and use of =Nat= will
+not be satisfactory for an implementation. As we cannot do dependent pattern
+matching on =Int= we have to define this is a postulate that we tell Idris to
+trust. For small and self-evident theorems such as this it may be acceptable to
+write a postulate but we would like to encode as much of our proof within the
+Idris framework as possible so having to use postulates is indicative of a
+problem in the code. There exists a wrapper around =Nat= to represent signed
+integers in the standard library however it was only discovered after the
+version using integers was complete.
 
 #+CAPTION: We tell Idris to trust us that $x\mathbin{-} x \mathrel{=} 0$
 #+BEGIN_SRC idris
@@ -512,7 +512,7 @@ demonstrate itself in a particular use of the =map= function from the =Functor=
 interface. Replacing the call to =map= with a local definition specialised only to
 work over =Vect= caused the type errors to disappear. This turned out to be a bug
 in the Idris compiler and how it handles interfaces that has since been
-corrected although we weren't aware of this at the time of writing the code.
+corrected although we were not aware of this at the time of writing the code.
 These cryptic error messages can often manifest themselves when working in a
 system with such an expressive type system. It will often be hard to tell if the
 error is due to a mistake on your part or if it is some detail of a bug in the
@@ -559,24 +559,24 @@ The code being ported was a package cite:komuves_munkres_2008 on the Haskell
 package server Hackage. The aim was to take this package and directly port the
 code over to Idris however there were a number of complications with this
 approach. The major problem was the use of efficient stateful data structures
-such as =Data.Array= in the Haskell package. Idris doesn't provide an analogous
+such as =Data.Array= in the Haskell package. Idris does not provide an analogous
 data structure to this efficient array type. The Haskell implementation had to
 be pulled apart in order to translate it into a representation using lists and
 recursion rather than mutating references to arrays. The surface syntax may make
-it seem simple to port this code to Idris however that wasn't the case as we
+it seem simple to port this code to Idris however that was not the case as we
 found. There were some subtleties involved in getting the code to type-check in
 Idris.
 
 At this point we can begin to add our correctness proofs onto our ported Idris
 code. Ultimately this work had to be abandoned and a new approach taken in the
-type-driven style. The implementation wasn't suited to writing proofs at least
+type-driven style. The implementation was not suited to writing proofs at least
 not in a simple manner. Much more benefit and success was had when writing code
 that was specifically set out to be proven in the first place. This means
 specifying the properties you want to prove at the outset in your types and by
 implementing the functions in a type-driven development fashion.
 
 ** Run-Length Encoding
-The next case study we'll examine is an Idris implementation of run-length
+The next case study we will examine is an Idris implementation of run-length
 encoding.
 
 *** Problem Definition
@@ -587,7 +587,7 @@ format is lossy to because of the visual nature of the data being compressed.
 Even with mild loss to the quality of the image the overall image will still be
 only slightly distinguishable from the original image. Lossy compression schemes
 also exist for audio and video data again to optimise data that is tolerant to a
-loss of quality. For text however we don't want to introduce lossy compression
+loss of quality. For text however we do not want to introduce lossy compression
 as that would distort the original meaning of the data perceivably.
 
 Run-length encoding is a simple technique used to compress text data. The data
@@ -696,7 +696,7 @@ main = do
 Unfortunately proving the invariants discussed above was not as straight-forward
 as providing a working version of the compression algorithm. The first invariant
 which states that compression in some sense reduces the amount of memory that
-the data occupies in many cases won't be true. If we consider the string
+the data occupies in many cases will not be true. If we consider the string
 ``idris-compiler'' we can see that there are no runs greater than length 1. When
 we do a run-length encoding of this string we get the output
 ``1i1d1r1i1s1-1c1o1m1p1i1l1e1r''. A run-length encoding of the original 14 bytes

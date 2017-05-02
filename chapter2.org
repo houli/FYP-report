@@ -27,7 +27,7 @@ as the underpinning of the development of dependently-typed programming
 languages and theorem provers based on Martin-Löf type theory.
 
 ** Curry-Howard Isomorphism
-From a modern computer science perspective it's almost taken for granted that
+From a modern computer science perspective it is almost taken for granted that
 computability theory and mathematical proofs are inherently linked. For example,
 many parallels can be drawn between the proof of Turing's Halting Problem and
 Gödel's incompleteness theorems. Between the 1930s and the 1960s Haskell Curry
