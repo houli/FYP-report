@@ -693,3 +693,25 @@ main = do
 #+END_SRC
 
 *** Proving Our Invariants
+Unfortunately proving the invariants discussed above was not as straight-forward
+as providing a working version of the compression algorithm. The first invariant
+which states that compression in some sense reduces the amount of memory that
+the data occupies in many cases won't be true. If we consider the string
+``idris-compiler'' we can see that there are no runs greater than length 1. When
+we do a run-length encoding of this string we get the output
+``1i1d1r1i1s1-1c1o1m1p1i1l1e1r''. A run-length encoding of the original 14 bytes
+gives an output that is 28 bytes long. Optimisations may be made to handle these
+single character runs however that was not part of our algorithm. One upside
+however is that we were able to prove that the intermediate format must be a
+vector with less than or equal elements to the string being compressed.
+
+The second invariant which states that composition of compression and
+decompression is an identity function was also beyond the scope of this case
+study. Our initial expectation was that we would be able to prove this fact as
+part of our implementation. Upon further reading and assessing of the problem we
+found that there would be too much work involved and that the problem was at a
+level of research far beyond this project. Only in the past year and more
+recently have formal proofs for this identity property for compression
+algorithms started to emerge. One example is Senjak and Hofmann's 2016 proof
+cite:senjak_deflate_2016 of deflate compression and decompression forming an
+identity in Coq.
