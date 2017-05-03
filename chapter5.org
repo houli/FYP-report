@@ -1,9 +1,10 @@
 * Case Studies
 In this chapter we will take a look at two case studies of real-world problems
-solved in Idris. The two case studies are implementations of the Hungarian
-algorithm for the assignment problem and run-length encoding of text to a
-compressed file. The main focus will be on the Hungarian algorithm case study
-due to the more extensive correctness properties successfully expressed in it.
+solved in Idris. The two case studies described are an implementation of the
+Hungarian algorithm for the assignment problem and run-length encoding of text
+to a compressed file. The main focus will be on the Hungarian algorithm case
+study due to the more extensive correctness properties successfully expressed in
+it.
 
 ** The Assignment Problem
 The first case study we will examine is an implementation of a solution to the
@@ -574,8 +575,9 @@ Idris.
 At this point we can begin to add our correctness proofs onto our ported Idris
 code. Ultimately this work had to be abandoned and a new approach taken in the
 type-driven style. The implementation was not suited to writing proofs at least
-not in a simple manner. Much more benefit and success was had when writing code
-that was specifically set out to be proven in the first place. This means
+not in a simple manner because the code didn't have any notion of these
+properties to begin with. Much more benefit and success was had when writing
+code that was specifically set out to be proven in the first place. This means
 specifying the properties you want to prove at the outset in your types and by
 implementing the functions in a type-driven development fashion.
 
@@ -705,9 +707,18 @@ the data occupies in many cases will not be true. If we consider the string
 we do a run-length encoding of this string we get the output
 ``1i1d1r1i1s1-1c1o1m1p1i1l1e1r''. A run-length encoding of the original 14 bytes
 gives an output that is 28 bytes long. Optimisations may be made to handle these
-single character runs however that was not part of our algorithm. One upside
-however is that we were able to prove that the intermediate format must be a
-vector with less than or equal elements to the string being compressed.
+single character runs however that was not part of our algorithm. For many
+typical inputs such as a paragraph of English text we might expect that this
+property holds. There will always exist outliers however among any kind of data
+especially when it is user-provided. By examining a large corpus of English
+textual data we might be able to draw up some probabilities for how a run-length
+encoding affects data compression for that sample and extrapolate it out to text
+in general but we can see that that kind of statistical reasoning goes beyond
+the kinds of properties we can express with a static type system or expressive
+computer logic. This illustrates that the ``simple'' and ``obvious'' properties
+aren't always as they initially seem. One upside however is that we were able to
+prove that the intermediate format must be a vector with less than or equal
+elements to the string being compressed.
 
 The second invariant which states that composition of compression and
 decompression is an identity function was also beyond the scope of this case

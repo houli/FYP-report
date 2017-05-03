@@ -54,8 +54,6 @@ data List : Type -> Type where
   Cons : a -> List a -> List a
 #+END_SRC
 
-# TODO: this needs some work
-
 ** Typed Holes
 Often when writing code with heavily polymorphic and dependent types it can
 become difficult to see how exactly the types should line up. Idris has a

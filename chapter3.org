@@ -90,5 +90,5 @@ where correctness properties are validated after the program has been
 implemented. The case studies also utilised different tooling such as working
 with standard tools like text editors as well as more semantically rich
 interactive editing environments. As the scope of the project is limited in
-terms of what can be achieved within the time limits a particular tool must be
-chosen. For this project all of the case studies have been implemented in Idris.
+terms of what can be achieved within the time limits, a particular tool must be
+chosen. All of the case studies for this project have been implemented in Idris.

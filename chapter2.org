@@ -126,13 +126,12 @@ some non-fixed codomain that is determined by the input. In this sense the
 return type is said to be dependent upon the input.
 
 If we have a representation of $n\textrm{-tuples}$ of some type $A$,
-$\operatorname{Vect}(A,n)$, then the \Pi-type $\Pi_{(n \mathbin{:} {\mathbb N})}
-\operatorname{Vect}(A,n)$ represents the type of functions that, given some
-natural number $n$, return a tuple of size $n$ of elements of type $A$. That is
-to say that the type of the value returned by these functions is determined by
-the argument to the functions.
-
-# TODO: Make this better, expand out a definition
+$\operatorname{Vect}(A,n)$, then we might write a \Pi-type for an append
+function over these tuples as $\Pi_{(n, m \mathbin{:} {\mathbb N})}
+\operatorname{Vect}(A,n) \rightarrow \operatorname{Vect}(A,m) \rightarrow
+\operatorname{Vect}(A,n\mathbin{+}m)$. This represents a function that given
+some tuples returns a tuple with size $n\mathbin{+}m$ of type $A$. The return
+type is dependent upon the values of the arguments.
 
 *** @@latex:\texorpdfstring{$\Sigma$}{Sigma}-types@@
 \Sigma-types, also known as ``dependent pair types'', are a more generalised
@@ -173,7 +172,6 @@ of basic proofs and axioms such as $n \mathbin{:} {\mathbb N}, n \mathbin{-} n
 
 ** State of The Art Dependently-Typed Programming Languages
 *** Agda
-# TODO: this section isn't very good
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
