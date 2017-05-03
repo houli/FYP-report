@@ -1,4 +1,4 @@
-% Created 2017-05-02 Tue 20:48
+% Created 2017-05-03 Wed 14:49
 % Intended LaTeX compiler: xelatex
 \documentclass[a4paper, notitlepage]{report}
 \usepackage{graphicx}
@@ -38,12 +38,12 @@
 \pagenumbering{arabic}
 
 \chapter{Introduction}
-\label{sec:org8f63748}
+\label{sec:org7763027}
 \begin{quote}
 ``Beware of bugs in the above code; I have only proved it correct, not tried
 it.''
 
--- Donald Knuth
+\hfill-- Donald Knuth
 \end{quote}
 
 Software now more than ever plays an important role in the management of
@@ -72,7 +72,7 @@ properties and dependent types to ensure a more rigorous and correct program
 than one written using a conventional programming language.
 
 \section{Report Structure}
-\label{sec:org6e63712}
+\label{sec:org9662a12}
 The remainder of this report is structured as follows:
 \begin{itemize}
 \item \emph{Chapter 2} provides the necessary background information about the theory and
@@ -89,7 +89,7 @@ studies and evaluated the current landscape of dependent types.
 \item \emph{Chapter 7} lists some possible areas of future work.
 \end{itemize}
 \chapter{Background}
-\label{sec:orgce35136}
+\label{sec:orgac2b857}
 This chapter aims to give an understanding of the background and necessary
 concepts that will be used throughout the report. A basic understanding of
 functional programming ideas such as algebraic data types, recursion and the
@@ -99,7 +99,7 @@ state of the art dependently-typed programming languages with a more in-depth
 look at Idris in particular.
 
 \section{Intuitionistic Type Theory}
-\label{sec:orgfbea41a}
+\label{sec:org6f9ab5d}
 Intuitionistic type theory is a type theory based on mathematical
 constructivism. Constructive mathematics is an alternative foundational theory
 of mathematics that argues that construction of a mathematical object is
@@ -115,11 +115,11 @@ theory) introduces a number of interesting concepts. Most notable in terms of
 their influences on programming language design were the concepts of \(\Pi\)-types
 and \(\Sigma\)-types. These constructs can be seen as analogous to the logical
 quantifiers ``forall'' and ``exists'' respectively. These concepts have served
-as the underpinning of the development of dependently-typed programming
-languages and theorem provers based on Martin-Löf type theory.
+as the foundation of the development of dependently-typed programming languages
+and theorem provers based on Martin-Löf type theory.
 
 \section{Curry-Howard Isomorphism}
-\label{sec:org0da9ebe}
+\label{sec:org8e8b7e6}
 From a modern computer science perspective it is almost taken for granted that
 computability theory and mathematical proofs are inherently linked. For example,
 many parallels can be drawn between the proof of Turing's Halting Problem and
@@ -127,21 +127,21 @@ Gödel's incompleteness theorems. Between the 1930s and the 1960s Haskell Curry
 and William Alvin Howard began to formalise this direct link between computer
 programs and mathematical proofs which is known as the Curry-Howard isomorphism
 \cite{mcadams_tutor_2013}. As Philip Wadler, one of the original authors of the
-Haskell report, put it \cite{strange_loop_2015,wadler_propos_2015}
+Haskell report, described it \cite{strange_loop_2015,wadler_propos_2015}
 
 \begin{quote}
 ``Every good idea will be discovered twice. Once by a logician and once by a
 computer scientist.''
 
--- Philip Wadler
+\hfill-- Philip Wadler
 \end{quote}
 
-According to the Curry-Howard isomorphism the type of an expression is
+According to the Curry-Howard isomorphism, the type of an expression is
 equivalent to a proposition of a logical formula. A term inhabiting that type is
 therefore equivalent to a proof that the proposition holds. Some concrete value
 exists that bears witness to the type being inhabited. In other words, a proof
 can be constructed. This very much aligns with the constructivist view of
-mathematics. Other correspondences can be shown such as between logical
+mathematics. Other correspondences can be shown such as that between logical
 implication and function types, conjunction and product types and between false
 formulas and the uninhabited type, bottom (\(\bot\)). We can even see from the
 shape of the syntax rules of both natural deduction and simply-typed lambda
@@ -154,19 +154,19 @@ t\;u:\beta}$} \]
 
 One of the consequences of this relationship is the possibility of a unification
 at a primitive level between mathematical logic and the foundations of
-computation. In practical terms this relationship has influenced the work on
+computation. In practical terms, this relationship has influenced the work on
 programming languages such as Coq and Idris that allow proofs to be written as
-programs that can be formalised, verified and executed. This is interesting to
+programs that can be formalised, verified and executed. This is of interest to
 the practice of software engineering as it gives us the power to reason about
 program correctness by translating a mathematical proof of an algorithm to a
 computer program and having the machine type-check (proof-check) it.
 
 \section{Traditional Hindley-Milner Type Systems}
-\label{sec:orgc0dd29a}
+\label{sec:org3158e76}
 Standard Hindley-Milner-esque type systems such as the one found in Haskell
 allow us to express some different dependencies between the types of terms and
-terms themselves. For example, terms can depend on other terms such as in this
-Haskell function definition.
+the terms themselves. For example, terms can depend on other terms as can be
+seen in the following Haskell function definition.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{haskell}
@@ -175,9 +175,9 @@ plusOne x = x + 1
 \caption{A simple Haskell function definition (terms depending on terms)}
 \end{listing}
 
-Here we can see that the term \texttt{plusOne} has been defined with respect to the
-terms \texttt{x}, which is its argument and \texttt{1}, an integer. Types can also depend on
-other types as shown here.
+Here we can see that the term \texttt{plusOne} has been defined with respect to the terms
+\texttt{x} (its argument) and \texttt{1} (an integer). Types can also depend on other types as
+shown here.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{haskell}
@@ -188,7 +188,7 @@ data List a = Nil
 \end{listing}
 
 In this Haskell data type definition, the type constructor \texttt{List} depends on the
-type \texttt{a} provided to it. This allows polymorphism and lists of any type.
+type \texttt{a} provided to it. This facilitates polymorphism and lists of any type.
 Finally, in the world of Haskell, terms can depend on types. This is apparent in
 polymorphic functions such as the identity function.
 
@@ -201,52 +201,51 @@ id x = x
 \end{listing}
 
 \section{Dependent Type Systems}
-\label{sec:org034564e}
+\label{sec:org7ee7334}
 Dependent type systems extend this system of dependencies by allowing types to
-depend on terms. This leads to much greater expressivity power in the type
-system. For example, in a dependently typed system we can express types such as
-the type of pairs of natural numbers where the second number is greater than the
-first.
+depend on terms. This leads to much greater expressive power in the type system.
+For example, in a dependently-typed system we can express types such as the type
+of pairs of natural numbers where the second number is greater than the first.
 
-If we take the view of the Curry-Howard isomorphism that types are propositions
-and terms are witnesses to a proof of that proposition then we can see the
-advantages of a more expressive type system. We can now encode much more
-sophisticated propositions in the type system and if we can prove them (i.e.
-construct a value that inhabits that type) then we can guarantee much more
-interesting correctness properties about the code that we are writing. For this
-reason, dependent types have seen much use in the areas of formal verification
-of computer programs and formal computer encoding of mathematical objects and
-proofs.
+If we take the view of the Curry-Howard isomorphism - that types are
+propositions and terms are witnesses to a proof of that proposition - then the
+advantages of a more expressive type system are more clearly visible. We can now
+encode much more sophisticated propositions in the type system and if we can
+prove them (i.e. construct a value that inhabits that type) then we can
+guarantee much more interesting correctness properties about the code that we
+are writing. For this reason, dependent types have seen much use in the areas of
+formal verification of computer programs and formal computer encoding of
+mathematical objects and proofs \cite{gonthier_formal_2008,leroy_compiler_2009}.
 
 There are 3 main concepts taken from Martin-Löf type theory and implemented in
 dependently-typed programming languages.
 
 \subsection{\texorpdfstring{$\Pi$}{Pi}-types}
-\label{sec:org64645c6}
+\label{sec:orgaa1a7e4}
 \(\Pi\)-types are the types of functions whose return types depend on one or more of
-their arguments. In other words these functions map values from some domain to
+their arguments. In other words, these functions map values from some domain to
 some non-fixed codomain that is determined by the input. In this sense the
 return type is said to be dependent upon the input.
 
 If we have a representation of \(n\textrm{-tuples}\) of some type \(A\),
 \(\operatorname{Vect}(A,n)\), then the \(\Pi\)-type \(\Pi_{(n \mathbin{:} {\mathbb N})}
-\operatorname{Vect}(A,n)\) represents the type of functions that given some
-natural number \(n\) return a tuple of size \(n\) of elements of type \(A\). That is
+\operatorname{Vect}(A,n)\) represents the type of functions that, given some
+natural number \(n\), return a tuple of size \(n\) of elements of type \(A\). That is
 to say that the type of the value returned by these functions is determined by
 the argument to the functions.
 
 \subsection{\texorpdfstring{$\Sigma$}{Sigma}-types}
-\label{sec:org6787664}
-\(\Sigma\)-types, also known as dependent pair types, are a more generalised form of
-Cartesian product that model pairs of values where the type of the second
-element depends on the first element.
+\label{sec:org36ea897}
+\(\Sigma\)-types, also known as ``dependent pair types'', are a more generalised
+form of Cartesian product that model pairs of values where the type of the
+second element depends on the first element.
 
 Again using the \(\operatorname{Vect}\) representation of \(n\textrm{-tuples}\) of
 some type \(A\), the \(\Sigma\)-type \(\Sigma_{(n \mathbin{:} {\mathbb N})}
 \operatorname{Vect}(A,n)\) represents a pair of a natural number \(n\) and a tuple
 of length \(n\) of values of type \(A\).
 
-This representation is similar to the Haskell \texttt{List} type however there is extra
+This representation is similar to the Haskell \texttt{List} type however it encodes extra
 information in that the type of the \(\Sigma\)-type \(\operatorname{Vect}\) also
 carries around a witness to its length expressed as a natural number. We say
 that \(\operatorname{Vect}\) is ``indexed'' by the type \(A\) as well as the value
@@ -254,12 +253,12 @@ that \(\operatorname{Vect}\) is ``indexed'' by the type \(A\) as well as the val
 
 Being able to index types by both types and terms in the language is a key
 feature of dependently-typed programming languages. These languages eliminate
-the distinction between types and terms. Types and terms are unified as
+the distinction between types and terms; types and terms are unified as
 equivalent constructs.
 
 \subsection{The Equality Type}
-\label{sec:orgb56411f}
-The equality type \(=\) is a special type used to denote proofs of equality
+\label{sec:orga3e4189}
+The equality type, \(=\), is a special type used to denote proofs of equality
 between two values. If there is an inhabitant of the type \(a \mathrel{=} b\) then
 \(a\) and \(b\) are considered to be equal. This proof allows \(b\) to be used
 anywhere \(a\) would have been used. There is only one inhabitant of the type \(a
@@ -268,23 +267,23 @@ anywhere \(a\) would have been used. There is only one inhabitant of the type \(
 \[ \scalebox{2}{$\operatorname{refl} \mathbin{:} \Pi_{(a \mathbin{:} A)} (a
 \mathrel{=} a)$} \]
 
-This type is particularly useful in dependently-typed programming in that it can
-be used as a witness that two terms are equivalent and allows a substitution of
-one term for another to take place. With it, we can begin to develop
-constructions of basic proofs and axioms such as \(n \mathbin{:} {\mathbb N}, n
-\mathbin{-} n \mathrel{=} 0\).
+This type is particularly useful in dependently-typed programming as it can be
+used as a witness that two terms are equivalent and allows a substitution of one
+term for another to take place. With it, we can begin to develop constructions
+of basic proofs and axioms such as \(n \mathbin{:} {\mathbb N}, n \mathbin{-} n
+\mathrel{=} 0\).
 
 \section{State of The Art Dependently-Typed Programming Languages}
-\label{sec:orgd6d91b8}
+\label{sec:orge5e2105}
 \subsection{Agda}
-\label{sec:orgb494cda}
+\label{sec:org83907df}
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
 definition of inductive data types.
 
 For example, the inductive data type representing the Peano natural numbers can
-be declared as follows in Agda.
+be declared in Agda as follows:
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{agda}
@@ -300,14 +299,14 @@ for successor) takes a natural number and returns a new natural number. It
 represents a natural number plus 1. We will see more definitions of inductive
 types similar to this one throughout the later chapters.
 
-Agda has the capability of producing executable code however it is mostly used
-for the purpose of automated theorem proving. Agda does however provide a
-foreign function interface to import arbitrary Haskell types and functions.
-These go unused for the purpose of Agda type-checking but do have runtime
-effects in the output compiled code.
+While Agda has the capability of producing executable code it is mostly used for
+the purpose of automated theorem proving. Agda does however provide a foreign
+function interface to import arbitrary Haskell types and functions. These go
+unused for the purpose of Agda type-checking but do have runtime effects in the
+resultant compiled code.
 
 \subsection{Coq}
-\label{sec:org81be82e}
+\label{sec:org5ac5b97}
 Developed initially in the late 1980s at INRIA in France, Coq approaches
 dependently-typed programming more from the mathematical side as an interactive
 theorem prover. Coq is based on the Calculus of Constructions, a type theory
@@ -335,15 +334,15 @@ current goal that you are attempting to prove.
 Coq's primary mechanism for producing executable code is via program extraction.
 This is the process by which correct Coq code can be transformed into an
 equivalent Haskell or OCaml module which provides the user with the ability to
-run the extracted code. This extraction process has benefits in that it allows
-for the expression and type-checking of interesting correctness properties in a
-dependently-typed language while also giving us a way to compile it to native
-code using compilers with state-of-the-art code optimisation techniques. This
-allows the production of a fast native binary from a correct and type-checked
-Coq program.
+run the extracted code. This extraction process has a number of benefits in that
+it facilitates the expression and type-checking of interesting correctness
+properties in a dependently-typed language while also providing a way to compile
+dependently-typed code written in the system to native code using compilers with
+state-of-the-art code optimisation techniques. This allows us to produce fast,
+native, binaries from correct type-checked Coq programs.
 
 \subsection{Haskell}
-\label{sec:orgd127f27}
+\label{sec:org2846189}
 GHC Haskell has slowly been implementing many of the capabilities of dependent
 types via extensions to the language such as \texttt{GADTs}, \texttt{DataKinds}, and
 \texttt{TypeFamilies}. Through particular use of the Haskell type system many of the
@@ -351,23 +350,23 @@ features of dependently-typed languages can be simulated in roundabout ways
 \cite{mcbride_faking_2002,lindley_hasochism_2013}.
 
 A full dependent type system is currently being implemented for future releases
-of GHC 8 \cite{eisenberg_dependent_2016,weirich_specif_2017}. Existing
-extensions and offshoots of GHC such as Liquid Haskell implement refinement
-types which allows for the expression of a limited set of propositions at the
-type level in existing Haskell code \cite{vazou_refinement_2014}.
+of GHC 8 \cite{eisenberg_dependent_2016,weirich_specif_2017}. Existing extensions
+and forks of GHC such as Liquid Haskell implement refinement types which
+facilitates the expression of a limited set of propositions at the type level in
+existing Haskell code \cite{vazou_refinement_2014}.
 
 \subsection{Idris}
-\label{sec:org7c992bf}
+\label{sec:org649c28a}
 Idris is primarily the work of Edwin Brady and others at the University of St
 Andrews in Scotland. It has positioned itself as a more practical take on
-dependently-typed programming and as such is more aimed at being a language that
-you can write programs leveraging dependent types while also performing
-interesting effectful actions such as file I/O and drawing graphics to the
+dependently-typed programming and as such is more aimed at being a language in
+which you can write programs leveraging dependent types while also performing
+interesting effectful actions such as file I/O or drawing graphics to the
 screen.
 
-Edwin Brady, the author of Idris has jokingly put it before that Idris has the
-interesting property of being ``Pac-Man Complete'' \cite{scala_world_2015}. Idris
-is not just a Turing complete language as everything from the x86 MOV
+Edwin Brady, the author of Idris, has previously jokingly stated that Idris has
+the interesting property of being ``Pac-Man Complete'' \cite{scala_world_2015}.
+Idris is not just a Turing complete language as everything from the x86 MOV
 instruction \cite{dolan_mov_2013} to C++ templates \cite{veldhuizen_templates_2003}
 turn out to be. Rather, if you wanted to, you could write a version of a simple
 2D game such as Pac-Man in the language with bitmap graphics, animations, and
@@ -384,10 +383,10 @@ community provided backends of the compiler such as the Erlang
 This report focuses on using Idris in a practical manner while aiming to take
 advantage of dependent types to ensure that our code is more correct.
 \chapter{Project Objectives and Approach}
-\label{sec:org2bc20e1}
+\label{sec:org4d6684d}
 
-\section{Objectives}
-\label{sec:org5fd57b7}
+\section{Objectives \label{sec-objectives}}
+\label{sec:org18d2ff8}
 The objectives of this project are the following:
 \begin{itemize}
 \item Evaluate the practicality of dependently-typed programming languages
@@ -398,106 +397,109 @@ applied in a software project
 \item Explore and evaluate multiple approaches to building software with dependent
 types
 \item Discover the main pain points of approaching this style of development as
-someone with functional programming experience in some ML family language
+someone with functional programming experience in an ML family language
 \end{itemize}
 
 \subsection{Practicality of Dependently-Typed Programming Languages}
-\label{sec:orgb3f2cb6}
-Much of the literature about dependent types has been focused on advancing
+\label{sec:orgb038b9a}
+Much of the literature regarding dependent types has been focused on advancing
 research in the study of the theory of the field. This has manifested itself by
 way of new or novel approaches to building dependently-typed systems. Despite
-the push to advance the underlying theory and concepts not much research has
+the push to advance the underlying theory and concepts, not much research has
 emerged in the area of evaluating these languages' applicability to software
 engineering as practised by programmers in general.
 
 Some research exists such as Wouter Swierstra's 2012 evaluation
-\cite{swierstra_xmonad_2012} of program extraction from Coq to Haskell of a
+\cite{swierstra_xmonad_2012} of program extraction from Coq to Haskell as a
 drop-in replacement for one of the modules of the xmonad window manager. This
-projects aim to further supplement this area of study with more data taking into
-account the state-of-the-art at the time of writing.
+project's aim is to further supplement this area of study with more data taking
+into account the state-of-the-art at the time of writing.
 
 \subsection{Expression of Correctness Properties}
-\label{sec:org873fa28}
+\label{sec:org4e81810}
 Many of the current teaching examples involving dependent types present fairly
 simple examples of correctness properties. In order to provide a cohesive
 example that illustrates one or two points, this is understandable.
 
-This project aims to outline some more in-depth example of expressing
-complicated correctness properties. By doing this we aim to understand what some
+However, this project aims to outline some more in-depth examples of expressing
+complicated correctness properties. By doing so, we aim to understand what some
 of the limitations are in terms of the expressivity of specification of a
 dependent type as well as the feasibility of implementing a program to that
 specification.
 
 \subsection{Scale of Applicability of Dependent Types}
-\label{sec:orgbe5391e}
+\label{sec:orgc855d39}
 In real-world settings in a software engineering project we are often faced with
 certain time, performance and other delivery constraints. Projects do not have
-unlimited time to work with crafting and deploying a perfectly verified piece of
+unlimited time to spend crafting and deploying a perfectly verified piece of
 software. While dependent types can give us more guarantees about the
 correctness of our programs that does not mean that we will be able to deliver a
-fully verified system within real-world constraints such as deadlines.
+fully verified system within real-world constraints and deadlines.
 
-This project aims to understand where dependent types are most suited to being
-applied both in terms of problem domains as well as scale. The aim is to see if
-the biggest return on investment will be in verifying critical algorithms and
-processes within a system, verifying a system at the boundaries between
-subsystems or by applying formal verification using dependent types across an
-entire system.
+This project aims to gain a better understanding of where dependent types are
+most suited to being applied both in terms of problem domains as well as scale.
+The aim is to see if the biggest return on investment will be in verifying
+critical algorithms and processes within a system, verifying a system at the
+boundaries between subsystems or by applying formal verification using dependent
+types across an entire system.
 
 \subsection{Development Approaches when using Dependent Types}
-\label{sec:orgea287e9}
-A number of development approaches exist when using dependent types. One could
-take a bottom-up approach in that existing code that has no existing correctness
-properties is given some and then the proof obligations are discharged from the
-implementation out to the type signature. Another approach that is seeing more
-traction is the top-down type-driven or proof-driven development style. This
-approach starts by deciding on a specification in a type and driving the
-implementation based on that specification. This approach is outlined fully in
-its own section of the report.
+\label{sec:orga0ddc30}
+A number of development approaches exist when using dependent types. One
+approach that we might take is a bottom-up approach. This involves taking
+existing code with no correctness properties and discharging proof obligations
+from the implementation out to the type signature. Another approach that is
+seeing more traction is the top-down type-driven or proof-driven development
+style. This approach starts by deciding on a specification in a type and driving
+the implementation based on that specification. This approach is outlined fully
+in section \ref{sec-tdd} of the report.
 
 Among the project's aims is to see how these approaches can be applied to the
-case studies and to determine where one might favour one approach over the other
-for a particular problem.
+case studies and to determine cirumstances in which one might favour one
+approach over the other for a particular problem.
 
 \subsection{Pain Points when using Dependent Types}
-\label{sec:org196e786}
+\label{sec:org7428207}
 Current dependently-typed languages such as Agda and Idris bear much surface
 syntax similarity to ML family languages such as Haskell. However, past these
-surface details the underlying type frameworks differ quite a bit. Even with
-experience and a good knowledge of a language like Haskell there will be many
-pain points when learning how to use dependent types. This project aims to
-detail some of these hurdles that will be common when beginning to use these
-type systems.
+surface details, the underlying type frameworks differ quite a bit. Even with a
+strong understanding extensive experience with a language like Haskell there
+will be many pain points when learning how to use dependent types. This project
+aims to detail some of these hurdles that are commonplace when beginning to use
+these type systems.
 
 \section{Approach}
-\label{sec:orgba5e326}
+\label{sec:org0b13dbb}
 The approach by which the evaluation of the above objectives took place is by
 implementing a number of case studies. In order for these case studies to have
 significant meaning they were focused on implementing real world algorithms that
 have interesting correctness properties that can be expressed about them.
 
 In the implementation of these case studies multiple software engineering tools
-and approaches were used. This included trying to implement the case studies
-using different levels of correctness guarantees. It also meant that the case
-studies should be implemented with different engineering approaches such as the
-top-down type-driven approach and the bottom-up approach where correctness
-properties are validated after the program has been implemented. The case
-studies also made use of different tooling such as working with standard tools
-like text editors as well as more semantically rich interactive editing
-environments.
+and approaches were used. This analysis involved attempting to implement the
+case studies using different levels of correctness guarantees. It also meant
+that the case studies should be implemented with different engineering
+approaches such as the top-down type-driven approach and the bottom-up approach
+where correctness properties are validated after the program has been
+implemented. The case studies also utilised different tooling such as working
+with standard tools like text editors as well as more semantically rich
+interactive editing environments. As the scope of the project is limited in
+terms of what can be achieved within the time limits a particular tool must be
+chosen. For this project all of the case studies have been implemented in Idris.
 \chapter{Idris and Type-Driven Development}
-\label{sec:orgc2b6eeb}
+\label{sec:org557b90b}
 In order to follow along with some of the code examples it is worth gaining an
 understanding of some of the basic principles of the Idris language. This
 section is by no means comprehensive both in terms of the contents of this
-report as well as the language as a whole but will make it easier to understand
-the code fragments in later sections. More advanced concepts will be covered as
-we encounter them throughout the report. A more thorough reference and tutorial
-can be found on the Idris website \cite{idris_tutorial_2017} as well as in Edwin
-Brady's ``Type-Driven Development with Idris'' \cite{brady_book_2017} book.
+report as well as the language as a whole but our goal here is to make it easier
+to understand the code fragments in later sections. More advanced concepts will
+be covered as we encounter them throughout the report. A more thorough reference
+and tutorial can be found on the Idris website \cite{idris_tutorial_2017} as well
+as in Edwin Brady's ``Type-Driven Development with Idris'' \cite{brady_book_2017}
+book.
 
 \section{Similarities to Haskell}
-\label{sec:org0a44b53}
+\label{sec:orgca3d830}
 Idris has inherited much of the surface syntax of Haskell and will be quite
 familiar to anyone who has worked in Haskell or a similar ML-like language
 before. For example, the function that calculates the length of the list would
@@ -537,7 +539,7 @@ data List a = Nil
 \caption{Definition of a simple Haskell data type \label{list-haskell}}
 \end{listing}
 
-In Idris we could define it the same way however the idiom is to use the
+This code will actually compile as-is in Idris however the idiom is to use
 explicit type signatures as it becomes the only way to implement more powerful
 dependently-typed data types later on.
 
@@ -551,7 +553,7 @@ data List : Type -> Type where
 \end{listing}
 
 \section{Typed Holes}
-\label{sec:orge528c66}
+\label{sec:orgfbd4c8c}
 Often when writing code with heavily polymorphic and dependent types it can
 become difficult to see how exactly the types should line up. Idris has a
 built-in syntax for declaring typed holes which are a useful tool to help
@@ -564,8 +566,8 @@ needs to be replaced by. This allows the user to incrementally fill in values of
 the correct type or defer writing the value that fits the type until later.
 
 All Idris typed holes are identifiers that begin with a ``?'' such as
-\texttt{?length\_rhs\_1}. In the following example, the compiler informs us when we load
-the module that the type of both \texttt{?length\_rhs\_1} and \texttt{?length\_rhs\_2} is \texttt{Integer}.
+\texttt{?length\_rhs\_1}. In the following example, when we load the module the compiler
+informs us that the type of both \texttt{?length\_rhs\_1} and \texttt{?length\_rhs\_2} is \texttt{Integer}.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
@@ -577,7 +579,7 @@ length (x :: xs) = 1 + ?length_rhs_2
 \end{listing}
 
 As seen here, typed holes can appear anywhere in an expression such as the
-right-hand-side of the \texttt{+} operator. Using typed holes to defer writing the
+right-hand-side of the \texttt{+} operator. Using typed holes to defer writing an
 expression of the correct type allows us to more clearly see what types are
 creating the full expression needed to compile the program. It also allows us to
 quickly see types of complicated expressions that we may want to extract as top
@@ -586,10 +588,10 @@ level definitions or ``where'' clauses to improve code clarity and readability.
 Typed holes also allow for a powerful interactive development style based around
 creating holes and eventually filling in the values (providing proofs) using the
 information available to us in our current environment. This approach will be
-explained and demonstrated later.
+explained and demonstrated in section \ref{sec-tdd}.
 
 \section{Implicit Arguments}
-\label{sec:orgaf4949a}
+\label{sec:orga000c27}
 If we consider the type of length-indexed lists (Vect) as defined in the Idris
 standard library we may notice something peculiar about the variables in the
 definition.
@@ -607,17 +609,17 @@ The variables in the type signature, \texttt{ty} and \texttt{n} have not been ex
 but have in fact been implicitly declared and the types have been inferred. The
 type of \texttt{ty} is \texttt{Type} whereas the type of \texttt{n} is \texttt{Nat}.
 
-Idris for most cases is able to automatically infer these types for our implicit
+In most cases Idris is able to automatically infer these types for our implicit
 arguments. Other languages such as Agda and Coq will require that implicit
 arguments be explicitly listed in the definition but will not require them to be
 supplied as they can be automatically inferred when the function or data type is
-used. Coq does provide a switch however that allows for the omission of implicit
+used. Coq does however provide a switch that allows for the omission of implicit
 arguments.
 
 In some cases we may need to or may want to explicitly list the implicit
 arguments in our data type or function declarations. Idris provides syntax for
-this particular case. We can use it to expand out the above definition and list
-the types involved out fully.
+this particular case. We can use it to expand out the above definition and fully
+list out the types involved.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
@@ -645,8 +647,8 @@ appendLength {n} {m} _ _ = n + m
 \end{listing}
 
 \section{Total Functional Programming}
-\label{sec:org3d8ef85}
-One of the key concepts advocated by the language designers of Idris is the
+\label{sec:orgc7de3e5}
+One of the key concepts advocated by the designers of the Idris language is the
 concept of ``total'' functional programming. From languages such as Haskell you
 may be familiar with functions such as \texttt{head} and \texttt{tail} on lists which have the
 possibility of crashing at runtime.
@@ -666,7 +668,7 @@ Both of these functions will crash our programs at runtime if we call them with
 the empty list but will still pass Idris' type checker. The reason for this is
 that the functions are partial. Both functions fail to provide a function clause
 that will match the empty list as an input resulting in a runtime error but not
-a type error. The simple solution to this is define some safe versions of these
+a type error. The simple solution to this is to define safe versions of these
 functions using the \texttt{Maybe} type.
 
 \begin{listing}[H]
@@ -684,15 +686,15 @@ tail (_::xs) = Just xs
 
 We now have total versions of these functions in so far as they guarantee to
 always return a result for any well-typed input. This style of ``total''
-functional programming is heavily recommended in Idris. In fact, any function
+functional programming is heavily encouraged in Idris. In fact, any function
 that we use to compute a type must pass the compiler's built-in totality
 checker. If the function is not total it leaves us with the possibility of a
 runtime error in the type checker when computing the value of the function.
 
-Functions that do not terminate are also partial functions in that they can
-never produce a result. If these functions were total we could have a type that
-could never be computed to some normal form and cause the Idris type checker to
-run forever.
+Functions that do not terminate are also partial functions due to the fact that
+they can never produce a result. If these functions were total we could have a
+type that could never be computed to some normal form and cause the Idris type
+checker to run forever.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
@@ -708,9 +710,9 @@ is provided inputs of the correct type it will produce a proof if it terminates.
 A total function on the other hand gives us a much stronger guarantee that if
 the function is provided inputs of the correct type it will terminate and it
 will produce the proof (the value). When dealing with functions that compute
-proofs it is quite important that we ensure that our definitions are total to be
-confident that our proof holds in all cases. A partial program that just
-infinitely loops will satisfy any type that we give it.
+proofs it is quite important that we ensure that our definitions are total in
+order to be confident that our proof holds in all cases. A partial program that
+just infinitely loops will satisfy any type that we give it.
 
 Idris provides some mechanisms to help prevent us from writing partial code. The
 first of which is the \texttt{total} annotation. We can add this to any function
@@ -739,8 +741,8 @@ of our modules with this compiler pragma and use the \texttt{partial} annotation
 necessary. This pragma is used throughout the code outlined in the case studies
 in the next chapter.
 
-\section{Interactive Editing Modes for Idris}
-\label{sec:orgf3d7e58}
+\section{Interactive Editing Modes for Idris \label{sec-interactive}}
+\label{sec:org2be7182}
 A feature of Idris used heavily throughout the implementation of the project was
 the interactive editing environment available to text editors such as Emacs, Vim
 and Atom. This interactive environment works in a similar way to tools such as
@@ -756,7 +758,7 @@ documentation string. It is also responsible for reporting back information
 about type errors, environments of definitions and typed holes.
 
 \subsection{Insert Definition}
-\label{sec:org11b6d0c}
+\label{sec:org28b781c}
 One of the most useful commands is the definition command. If we have some
 initial definition of a type signature we can issue a keyboard shortcut to have
 the interactive environment create an initial definition of the function with
@@ -771,14 +773,14 @@ appropriate names using \texttt{\%name List xs, ys, zs, ws}. These new names are
 we generate initial definitions with arguments of type \texttt{List}.
 
 \subsection{Case Split}
-\label{sec:org0122083}
+\label{sec:orge4b2926}
 Another command that is regularly used is the case split command. The command
 will create separate clauses in a function definition to cover each different
 case of a data type definition. This is quite useful after creating an initial
-definition and we want to do case analysis on one of our arguments.
+definition upon which we want to do case analysis on one of our arguments.
 
 This command also helps achieve a definition which will pass the Idris totality
-checker. If we have gotten the compiler to generate the cases for us we can be
+checker. If we have used the compiler to generate the cases for us we can be
 sure that we have not caused an error by failing to remember to insert a case
 for one of our data constructors. In the following example we create a data type
 representing colours and ask the compiler to provide definitions for each of the
@@ -799,7 +801,7 @@ colourToString Blue = ?colourToString_rhs_3
 \caption{Generated function clauses by case splitting}
 \end{listing}
 
-If we were to instead try and manually create these definitions we may forget to
+If we were to instead try to manually create these definitions we may forget to
 insert the case for the \texttt{Green} constructor. If we do not check this definition
 for totality and try to call it with the value \texttt{Green} then it will result in a
 runtime error causing our program to crash despite our \texttt{colourToString} function
@@ -817,7 +819,7 @@ colourToString Red = "red"
 \end{listing}
 
 \subsection{Proof Search}
-\label{sec:orgea3480f}
+\label{sec:orga86883d}
 Often, the value that needs to go in place of a typed hole can be automatically
 derived from the values in our environment. By successive case splitting and
 refinement of the goal of our typed holes and from our type signature we often
@@ -829,12 +831,12 @@ and replace the hole with the correct well-typed value.
 Automating the definition of our function based on the information the compiler
 knows to be true allows for a rapid development cycle in the small scale
 problems in our program. With a stringent enough dependent type for our function
-we can be fairly sure that the definition found is the ``correct'' one in terms
-of the intended semantics of the function. This definition can also be manually
-verified for having the intended semantics by inspection or by testing. It is
-often worth attempting a proof search on a typed hole initially to see what the
-compiler is able to infer for us automatically. In certain situations we do not
-have to write any code ourselves.
+we can be fairly certain that the definition found is the ``correct'' one in
+terms of the intended semantics of the function. This definition can also be
+manually verified for having the intended semantics by inspection or by testing.
+It is often worth attempting a proof search on a typed hole initially to see
+what the compiler is able to infer for us automatically. In certain situations
+we do not have to write any code ourselves.
 
 \begin{figure}[H]
 \centering
@@ -842,13 +844,13 @@ have to write any code ourselves.
 \caption{An in-progress editing session using the interactive Idris mode}
 \end{figure}
 
-\section{Type-Driven Development}
-\label{sec:orgd66194b}
+\section{Type-Driven Development \label{sec-tdd}}
+\label{sec:org8f871a7}
 The type-driven development approach is an iterative system for building up a
 definition of a function or a set of functions using dependent types. The
-approach is outlined, advocated and used throughout Edwin Brady's book
-\cite{brady_book_2017} on Idris and this style of development. The approach
-consists of three main steps:
+approach is outlined, advocated and practiced throughout Edwin Brady's book
+\cite{brady_book_2017} on Idris and type-driven-development. The approach consists
+of three main steps:
 \begin{enumerate}
 \item Type
 \item Define
@@ -865,10 +867,10 @@ In the second step, ``Define'', we create an initial definition for the
 function, possibly leaving in some typed holes. We do not yet know exactly how
 to make our definition line up with the specification in the type so we use
 holes to defer the actual implementation of the function. At this point we
-should make use of as much knowledge as we know to the point where we cannot
-continue to implement the function. We can gain more information by making use
-of features such as case splitting. We may also refer back to step one and
-modify the type to continue with the process.
+should exhaust our knowledge base to the point where we cannot continue to
+implement the function without more information. We can gain more information by
+making use of features such as case splitting. We may also refer back to step
+one and modify the type to continue with the process.
 
 The third step, ``Refine'', is where we complete the function definition,
 possibly modifying the type. This is the point where we use the other
@@ -877,7 +879,7 @@ type-checked definition according to our specification. We may at this point
 realise also that our initial specification was incorrect or missing some piece
 of information so that can lead us back to our first step in the cycle and we
 can continue from there with a more rigorous type specification to drive our
-implementation from.
+implementation.
 
 \begin{figure}[H]
 \centering
@@ -888,36 +890,43 @@ implementation from.
 This style of development is greatly helped by the use of one of Idris'
 interactive editing modes described earlier. In some cases the only manual
 typing we might have to do is just writing our initial type specification. The
-definition step in particular is aided. Using interactive editing modes we can
-introduce an initial definition, case split on arguments and even try an initial
-proof search on the typed holes we introduce. It may work out that the compiler
-has everything it needs to create a correct type-checked definition without any
-manual input from the user beyond the type of the function.
+definition step in particular is aided by this approach. Using interactive
+editing modes we can introduce an initial definition, case split on arguments
+and even try an initial proof search on the typed holes we introduce. It may
+work out that the compiler has everything it needs to create a correct
+type-checked definition without any manual input from the user beyond the type
+of the function.
 
-If we do need to provide more information, again, interactive editing helps get
-us there. We can continue to inspect our environment to see the types of the
-holes we need to define and also the environment of information available to us.
-Reloading our modules and inspecting our current goals is one of the main
+If we do need to provide more information, again, interactive editing helps lead
+us to a solution. We can continue to inspect our environment to see the types of
+the holes we need to define and also the environment of information available to
+us. Reloading our modules and inspecting our current goals is one of the main
 activities when programming in this type-driven fashion. As we continue to
 refine our definition this type information also becomes refined and we can
 continue to iterate over refining and modifying our types to reach a complete
 definition.
 \chapter{Case Studies}
-\label{sec:org2037b8f}
+\label{sec:org3c04d14}
+In this chapter we will take a look at two case studies of real-world problems
+solved in Idris. The two case studies are implementations of the Hungarian
+algorithm for the assignment problem and run-length encoding of text to a
+compressed file. The main focus will be on the Hungarian algorithm case study
+due to the more extensive correctness properties successfully expressed in it.
+
 \section{The Assignment Problem}
-\label{sec:org243397f}
+\label{sec:orgfa271a8}
 The first case study we will examine is an implementation of a solution to the
 assignment problem based off the Hungarian algorithm with correctness guarantees
 maintained throughout the steps of the algorithm.
 
 \subsection{Problem Definition}
-\label{sec:orgdf42e22}
+\label{sec:org78c5eae}
 The assignment problem is a classic example of a combinatorial optimisation
 problem. The problem involves assigning a number of \emph{agents} to \emph{tasks}. An agent
 can be assigned to any task however there is a cost to assigning a particular
 agent to a particular task. The assignment problem is the problem of assigning
-exactly one task to each agent so that the total cost of doing this assignment
-is minimal.
+exactly one task to each agent so that the sum of all of our assignment costs is
+minimal.
 
 To think of the problem in a concrete setting we might imagine a clinical
 practice with patients that need treatments as our tasks. The agents in this
@@ -929,17 +938,17 @@ optimally assigns the doctors based on their ability to perform specific
 treatments.
 
 \subsection{Existing Algorithms}
-\label{sec:org0598d2c}
+\label{sec:org8de791d}
 It may seem that the time complexity of an algorithm to solve such a problem
-would require time in the order \(O(n!)\) time with respect to the number of
-agents/tasks. Optimisation strategies exist however that produce polynomial time
-algorithms. The most famous example is the Hungarian algorithm which runs in
-\(O(n^4)\) time. Further algorithmic optimisations have been applied such as James
-Munkres' proven algorithm \cite{munkres_assignment_1957} that demonstrates
+would require in the order \(O(n!)\) time with respect to the number of
+agents/tasks. However, optimisation strategies exist that result in polynomial
+time algorithms. The most famous example is the Hungarian algorithm which runs
+in \(O(n^4)\) time. Further algorithmic optimisations have been applied such as
+James Munkres' proven algorithm \cite{munkres_assignment_1957} that demonstrates
 \(O(n^3)\) time complexity.
 
 \subsection{Hungarian Algorithm}
-\label{sec:orgfb5730f}
+\label{sec:orga118f4f}
 Our Idris implementation focuses on implementing the Hungarian algorithm due to
 its straight forward specification. There are also a number of correctness
 properties that jump off the page when reading the specification that we can
@@ -973,8 +982,8 @@ interesting correctness properties that we can discuss and also some interesting
 design decisions made in terms of approach and design of our API.
 
 \subsection{Demonstration}
-\label{sec:org25e36e9}
-First let us assume that we have some initial matrix that describes our tasks
+\label{sec:orgbae2000}
+First, let us assume that we have some initial matrix that describes our tasks
 and our agents that we would like to create an assignment for.
 
 \[ \begin{bmatrix}
@@ -1035,7 +1044,7 @@ this point and we can stop. In this case, the first agent is assigned task 1,
 the second agent is assigned task 2 and the third agent is assigned task 3.
 
 \subsection{Invariants}
-\label{sec:orgfcda426}
+\label{sec:org8a74a16}
 There are some interesting invariants we notice when performing these steps.
 After performing the first step we can be certain that at least one of the
 values in each row will be a zero. The minimum value that we find must be an
@@ -1064,13 +1073,13 @@ These invariants will be studied in more detail as we outline the development of
 the different Idris implementations of the algorithm.
 
 \subsection{First Implementation - Lists}
-\label{sec:orgbc4dbdf}
+\label{sec:orgfa77231}
 The first implementation uses the standard list type. As we will see, this
 implementation demonstrates the fewest number of correctness guarantees with no
-proofs of the invariants outlined given and introduces partiality and the risk
-of runtime errors that come with partial functions. This implementation is quite
-similar to how you might approach the problem in a language such as Haskell with
-limited information at the type level.
+proofs of the invariants outlined previously and introduces partiality and the
+risk of runtime errors that come with partial functions. This implementation is
+quite similar to how you might approach the problem in a language such as
+Haskell with limited information at the type level.
 
 In order to implement the algorithm we first need to decide how the data is
 modelled. In this list implementation our matrix will be defined as a list of
@@ -1144,9 +1153,9 @@ subSmallest (x :: xs) = map (flip (-) $ (listMin x)) x :: subSmallest xs
 \end{listing}
 
 As defined, \texttt{subSmallest} matches both cases, the empty list case and the
-non-empty case. Then we might ask why does this function have an annotation that
-it is partial? The reason is that in the second function clause we make a call
-to the \texttt{listMin} function. As this function is partial this has the knock-on
+non-empty list case. Then we might ask why does this function have an annotation
+that it is partial? The reason is that in the second function clause we make a
+call to the \texttt{listMin} function. As this function is partial this has the knock-on
 effect of introducing partiality into the \texttt{subSmallest} function which is used
 throughout the algorithm. If we were to remove this partiality annotation the
 compiler will correctly inform us that the function has failed to satisfy the
@@ -1172,7 +1181,7 @@ types. This is the avenue we will explore and demonstrate with the next
 implementation.
 
 \subsection{Second Implementation - Vectors}
-\label{sec:orgd2a2e71}
+\label{sec:org5ec2563}
 In the second implementation we begin to narrow down the possibilities of
 incorrect type-checking functions. To start off with, the definition of our
 \texttt{HungarianMatrix} type has been modified. We make use of the Idris standard
@@ -1202,28 +1211,26 @@ rather than \texttt{HungarianMatrix (S (S Z)) someProofTerm}. The use of the \te
 keyword allows the compiler to perform a proof search to find the proof term
 that fits instead of forcing us as the user to create it.
 
-We can bring the implicit argument p down to our function definition and perform
+We can bring the implicit argument \texttt{p} down to our function definition and perform
 a case split on it. We know that if the natural number passed to the function is
 ever zero then it is impossible to have a value of type \texttt{Z `GT` Z} and as such the
 compiler accepts that the two clauses above are impossible. This definition was
 carried out in a type-driven way by defining our initial specification that \(n\)
 had to be greater than zero (i.e. we wanted to create a non-empty matrix). By
 using the interactive editing capabilities of Idris and case splitting on the
-proof term, the clauses above fell out immediately leaving just one clause that
-was not impossible and where we could insert the definition of our non-empty
-matrix.
+proof term, the clauses above arose immediately leaving just one clause that was
+not impossible and where we could insert the definition of our non-empty matrix.
 
 Using the \texttt{Vect} type of length-indexed lists helps us achieve more totality in
 this implementation. In our previous list of lists based version the partiality
 of our \texttt{listMin} function had the effect of bubbling up and creating partiality in
-all of the functions in our interface. Using the \texttt{Vect} type of length-indexed
-lists we can reduce the number of cases that need to be matched in order to
-achieve a total definition of a minimum function. Restricting our type to only
-work on vectors that have at least one element ensures that we can always return
-a value from the \texttt{vectMin} function. If we tried to pattern match on the nil
-constructor for \texttt{Vect} then that would result in a type error as we have
-explicitly stated in the type of \texttt{vectMin} that it will only accept vectors with
-at least one element as input.
+all of the functions in our interface. Using the \texttt{Vect} type we can reduce the
+number of cases that need to be matched in order to achieve a total definition
+of a minimum function. Restricting our type to only work on vectors that have at
+least one element ensures that we can always return a value from the \texttt{vectMin}
+function. If we tried to pattern match on the nil constructor for \texttt{Vect} then that
+would result in a type error as we have explicitly stated in the type of \texttt{vectMin}
+that it will only accept vectors with at least one element as input.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
@@ -1262,13 +1269,13 @@ hungarianMethod : HungarianMatrix (S n) -> HungarianMatrix (S n)
 \end{listing}
 
 Although we have now introduced an implementation of the algorithm which passes
-the Idris totality checker by encoding the size of our cost matrix in the type
+the Idris totality checker by encoding the size of our cost matrix in its type
 we have yet to provide any meaningful correctness properties for the steps of
 the algorithm. We would like to be able to reason about the algorithm in terms
 of the invariants mentioned before.
 
 \subsection{Third Implementation - Vectors with Proofs}
-\label{sec:orgb54b20a}
+\label{sec:org926ace8}
 In the third implementation we will build upon the previous attempt using
 vectors. In this implementation however, we will create proofs about the code
 that we write and enforce the invariants discussed previously. If we want to be
@@ -1401,13 +1408,13 @@ vectMinElem (x :: xs) = vectMinElem' x xs
 
 Structurally, this proof is very similar to the definitions of \texttt{vectMin} and
 \texttt{vectMin'} discussed in the previous section. We can see that the proof is
-deferred to a helper function \texttt{vectMinElem'} which states that if we have value \texttt{x}
-and a vector \texttt{ys} then we can prove that applying the helper function \texttt{vectMin'} to
-those arguments results in a value in \texttt{x :: ys}. For the empty vector, type-driven
-development allows the compiler to know that the only case that is possible is
-that the element must be at the current position as we have the singleton list
-\texttt{[x]} in our type. In this case proof search is sufficient to find the correct
-value for us.
+deferred to a helper function \texttt{vectMinElem'} which states that if we have a value
+\texttt{x} and a vector \texttt{ys} then we can prove that applying the helper function \texttt{vectMin'}
+to those arguments results in a value in \texttt{x :: ys}. For the empty vector,
+type-driven development allows the compiler to know that the only case that is
+possible is that the element must be at the current position as we have the
+singleton list \texttt{[x]} in our type. In this case proof search is sufficient to find
+the correct value for us.
 
 The use of the \texttt{with} pattern for a non-empty vector allows us to dependently
 pattern match on the result of the comparison. If the value at the head of the
@@ -1421,8 +1428,8 @@ minimum is in the vector when it continues to be the minimum value inspected so
 far while recursing through the vector. This gives a flavour of the approach
 used when writing proofs of functions in Idris. The rest of the proofs for the
 steps of the algorithm are provided as part of the full code listing for the
-\texttt{HungarianMatrixProof} module should you wish to inspect more of these same
-approaches at work.
+\texttt{HungarianMatrixProof} Idris module should you wish to inspect more of these same
+approaches in use.
 
 There were some particular challenges that appeared while writing this
 implementation. The first of which was the lack of dependent pattern matching
@@ -1431,16 +1438,16 @@ any meaningful induction over its structure like we can do with the \texttt{Nat}
 datatype. As part of this proven implementation we need to be able to show that
 subtracting a number from itself produces zero. If our implementation were using
 natural numbers then we could leverage the already defined proof of this fact
-from the standard library. Unfortunately the Hungarian algorithm has to deal
-with negative numbers in the later steps of the algorithm and use of \texttt{Nat} will
-not be satisfactory for an implementation. As we cannot do dependent pattern
-matching on \texttt{Int} we have to define this is a postulate that we tell Idris to
-trust. For small and self-evident theorems such as this it may be acceptable to
-write a postulate but we would like to encode as much of our proof within the
-Idris framework as possible so having to use postulates is indicative of a
-problem in the code. There exists a wrapper around \texttt{Nat} to represent signed
-integers in the standard library however it was only discovered after the
-version using integers was complete.
+from the Idris standard library. Unfortunately the Hungarian algorithm has to
+deal with negative numbers in the later steps of the algorithm and the use of
+\texttt{Nat} will not be satisfactory for such an implementation. As we cannot perform
+dependent pattern matching on \texttt{Int} we have to define this is a postulate that we
+tell Idris to trust. For small and self-evident theorems such as this it may be
+acceptable to write a postulate but we would like to encode as much of our proof
+within the Idris framework as possible so having to use postulates is indicative
+of a deficiency in the code. There exists a wrapper around \texttt{Nat} to represent
+signed integers in the Idris standard library however it was only discovered
+after the version using integers was complete.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
@@ -1449,8 +1456,8 @@ postulate minusSelfZero : {x : Int} -> x - x = 0
 \caption{We tell Idris to trust us that \(x\mathbin{-} x \mathrel{=} 0\)}
 \end{listing}
 
-Another pain point encountered were the sometimes complex type errors. In one
-instance a particularly wordy and incomprehensible 200 line type error was
+Another pain point arose from the oftentimes complex type errors. In one
+instance a particularly verbose and incomprehensible 200 line type error was
 produced when attempting to prove that all of the rows contained zeroes. The use
 of the names \texttt{meth1}, \texttt{meth5} etc. indicated that we needed to somehow examine how
 interfaces were being used in our implementation. The problem turned out to only
@@ -1460,18 +1467,18 @@ work over \texttt{Vect} caused the type errors to disappear. This turned out to 
 in the Idris compiler and how it handles interfaces that has since been
 corrected although we were not aware of this at the time of writing the code.
 These cryptic error messages can often manifest themselves when working in a
-system with such an expressive type system. It will often be hard to tell if the
-error is due to a mistake on your part or if it is some detail of a bug in the
-compiler leaking out into your code.
+system with such an expressive type system. It will often be difficult to tell
+if the error is due to a mistake on your part or if it is some detail of a bug
+in the compiler leaking out into your code.
 
 \subsection{API Considerations}
-\label{sec:orgc7a16dc}
-It is worth considering what kind of API we wish to expose to the consumers of
-our algorithm. Although we have these complicated proof terms as part of our
-module we can make some decisions about how simple or complicated the API is to
-use. In each implementation we have elected to export a simple function that
-performs the steps of the algorithm. Each of our modules contains a definition
-similar to the following.
+\label{sec:org89f4b46}
+It is worth considering what kind of application programming interface we wish
+to expose to the consumers of our algorithm. Although we have these complicated
+proof terms as part of our module we can make some decisions about how simple or
+complicated the API is to use. In each implementation we have elected to export
+a simple function that performs the steps of the algorithm. Each of our modules
+contains a definition similar to the following.
 
 \begin{listing}[H]
 \begin{minted}[frame=single,fontsize=\normalsize,linenos,breaklines,escapeinside=\#\#]{idris}
@@ -1497,7 +1504,7 @@ like access to the underlying formalism that ensures that the simple API behaves
 as it should.
 
 \subsection{Haskell Port - Bottom Up Approach}
-\label{sec:org49cdfa8}
+\label{sec:orgf205a59}
 Another implementation approach taken when tackling this algorithm was to take
 an existing Haskell version of the Hungarian method and port it to Idris. From
 there, we could add further specification of the correctness of our
@@ -1526,47 +1533,47 @@ specifying the properties you want to prove at the outset in your types and by
 implementing the functions in a type-driven development fashion.
 
 \section{Run-Length Encoding}
-\label{sec:orge21442c}
+\label{sec:orgf3b26e0}
 The next case study we will examine is an Idris implementation of run-length
 encoding.
 
 \subsection{Problem Definition}
-\label{sec:orgd1fd0f7}
+\label{sec:orgba5ac29}
 Numerous compression algorithms and techniques exist to squeeze data into
 occupying fewer bytes in memory or on disk. Often these algorithms optimise for
 specific use cases. For example, the compression present in the JPEG image
-format is lossy to because of the visual nature of the data being compressed.
-Even with mild loss to the quality of the image the overall image will still be
-only slightly distinguishable from the original image. Lossy compression schemes
-also exist for audio and video data again to optimise data that is tolerant to a
-loss of quality. For text however we do not want to introduce lossy compression
-as that would distort the original meaning of the data perceivably.
+format is lossy because of the visual nature of the data being compressed. Even
+with mild loss to the quality of the image the overall image will still be only
+slightly distinguishable from the original image. Lossy compression schemes also
+exist for audio and video data again to optimise data that is tolerant to a loss
+of quality. For text however we do not want to introduce lossy compression as
+that would distort the original meaning of the data perceivably.
 
-Run-length encoding is a simple technique used to compress text data. The data
-is encoded as a series of ``runs'' which represent multiple repeated occurrences
-of a single character. To illustrate the working of this compression scheme the
-string ``foooobaaaar'' would be encoded as ``1f4o1b4a1r''. There is one 'f'
-followed by four 'o's and so on. If we were to store the run counters in 8 bit
-unsigned integers and deal with 8 bit ASCII characters the compressed version
-would come in at 10 bytes versus the original 11 bytes. This algorithm has saved
-very little memory in this example but we can see how this might scale up for
-longer runs in larger strings.
+Run-length encoding is a simple, lossless technique used to compress text data.
+The data is encoded as a series of ``runs'' which represent multiple repeated
+occurrences of a single character. To illustrate the working of this compression
+scheme the string ``foooobaaaar'' would be encoded as ``1f4o1b4a1r''. There is
+one 'f' followed by four 'o's and so on. If we were to store the run counters in
+8 bit unsigned integers and deal with 8 bit ASCII characters the compressed
+version would come in at 10 bytes versus the original 11 bytes. This algorithm
+has saved very little memory in this example but we can see how this might scale
+up for longer runs in larger strings.
 
 \subsection{Invariants}
-\label{sec:org70fe7f4}
+\label{sec:org2b88036}
 There are two invariants that we might want to prove about a compression scheme
 such as run-length encoding. The first of which is that the compression
 algorithm actually produces a value which occupies less space than the original
 value. The second invariant is that there exists an identity from composing
-compress and decompress. If we take some data and call a compression function on
-it and then pass that result on to a decompression function then we would expect
-to get back the same initial data that we compressed. In this sense \texttt{decompress
-(compress data)} should be equal to \texttt{id data} and as a result \texttt{decompress . compress}
-should equal \texttt{id}. For reasons outlined later we will see why both of these
-invariants are either quite difficult or impossible to encode and prove.
+compression and decompression. If we take some data and call a compression
+function on it and then pass that result on to a decompression function then we
+expect to get back the same initial data that we compressed. In this sense
+\texttt{decompress (compress data)} should be equal to \texttt{id data} and as a result \texttt{decompress
+. compress} should equal \texttt{id}. For reasons outlined later we will see why both of
+these invariants are either quite difficult or impossible to encode and prove.
 
 \subsection{Idris Implementation}
-\label{sec:org43a9d17}
+\label{sec:orgef99b29}
 This case study began by taking an initial piece of example code from the Idris
 repository that performed a simple run-length encoding. The initial code
 demonstrated how a run-length encoder might be written but did not properly
@@ -1653,7 +1660,7 @@ main = do
 \end{listing}
 
 \subsection{Proving Our Invariants}
-\label{sec:orgb162665}
+\label{sec:orgf901d3c}
 Unfortunately proving the invariants discussed above was not as straight-forward
 as providing a working version of the compression algorithm. The first invariant
 which states that compression in some sense reduces the amount of memory that
@@ -1669,17 +1676,124 @@ vector with less than or equal elements to the string being compressed.
 The second invariant which states that composition of compression and
 decompression is an identity function was also beyond the scope of this case
 study. Our initial expectation was that we would be able to prove this fact as
-part of our implementation. Upon further reading and assessing of the problem we
-found that there would be too much work involved and that the problem was at a
-level of research far beyond this project. Only in the past year and more
+part of our implementation. Upon further reading and assessment of the problem
+we found that there would be too much work involved and that the problem was at
+a level of research far beyond this project. Only in the past year and more
 recently have formal proofs for this identity property for compression
 algorithms started to emerge. One example is Senjak and Hofmann's 2016 proof
 \cite{senjak_deflate_2016} of deflate compression and decompression forming an
-identity in Coq.
-\chapter{Assessments and Conclusions}
-\label{sec:org1684a77}
+identity in Coq. A project of this scale for run-length encoding would be worthy
+of being studied in isolation as the topic of discussion of its own bachelor's
+thesis.
+\chapter{Assessment and Conclusions}
+\label{sec:org7ca222f}
+
+Having completed these two case studies we can now evaluate Idris and dependent
+types with regards to the objectives set out in section \ref{sec-objectives}. At a
+high level, these case studies demonstrate the ability to program solutions to
+practical real-world problems in a dependently-typed language however there are
+shortcomings we must also consider in this evaluation.
+
+Idris has set itself up as a tool focused on applying more expressive type
+systems but in a way that doesn't inhibit a traditional practical functional
+programming style. In the Hungarian algorithm case study we were able to achieve
+an implementation that was not only backed up and formally verified with proofs
+but also was able to present a simple external API to an end user of the
+library. This can be seen as a win for Idris' approach of letting the programmer
+be only as formal as they want to be with their implementation.
+
+From a software engineering standpoint we believe there are some particularly
+noteworthy points to draw from the case studies. One of our objectives was to
+understand the different approaches taken when writing programs with dependent
+types. From our Hungarian algorithm case study we can see one approach standing
+out as superior for working with correctness properties in our code. The
+original attempt at doing a bottom-up proof with ported Haskell code wasn't
+successful and we found that adding proof types on after the fact was unsuited
+to this particular problem. The more successful approach was to follow the
+type-driven development style as advocated by the Idris ecosystem, both in the
+literature \cite{brady_book_2017} and in the interactive tools as discussed
+previously in section \ref{sec-interactive}.
+
+This has effects in terms of the kinds of correctness properties that we can
+express in our code. In the Hungarian algorithm case study we had success in
+proving properties when following the type-driven approach. These properties
+included expressing existence of items within a collection and proofs that
+quantify other proofs existentially or universally over a collection. We also
+saw that Idris was particularly suited towards expressing properties of numeric
+types and operations with many of the basic mathematical theorems available to
+users out of the box in the Idris standard library. In our port of the Haskell
+code in the bottom-up style we found that it was difficult to find correctness
+properties that we could express about the ported functions at least without
+significantly more effort involved. The type-driven approach was not a perfect
+solution however. Despite following this style for the implementation of our
+run-length encoding study, we found that properties that were simple to state
+such as the composition of decompression and compression forming an identity
+function were not as simple to prove and were beyond the scope of this project.
+
+We must also consider the scale at which these correctness properties can be
+applied to a real software system under time constraints and deadlines. From our
+understanding having worked on sizable problems the best place to apply
+dependent types and strict formal verification guarantees is in the critical
+paths of the application. This could mean an important algorithm or data
+structure or in a business process that should be ensured to conform to some
+specificaton such as a finite state machine with sufficiently descriptive states
+and state transitions. We do not feel yet that dependent types scale up to whole
+system verification when considering the upfront cose of training someone to
+think in a dependently-typed way as well as the extra cost of proving an
+implementation correct with the current state-of-the-art tools. The maturity of
+these tools is also something that will be considered in any software
+engineering project looking to be more formally correct. Idris for example only
+reached version 1.0 in April of this year and still has much work to be a mature
+tool suitable to be used in production. For industries that are already serious
+about correctness such as aerospace and railways we do however feel that it may
+be worth evaluating replacing existing formal verification tools such as model
+checkers and SMT solvers with dependently-typed programs with sufficient
+correctness guarantees.
+
+A number of pain points presented themselves through the case studies. The most
+notable is the time taken to ramp up to being proficient in Idris. Despite
+having more than a year experience working in Haskell and learning its finer
+points such as the typeclass heirarchy and monad transformers, moving to
+dependent types was a large leap. It took several months following through the
+tutorials and books about Idris for many of the concepts unique to dependent
+types to click. It was also important to search the wider field of type theory
+and the derivatives of Martin-Löf's work to fully understand some of the basic
+constructs in Idris at a more technical level. An initial glance at a language
+such as Idris or Agda gives an impression - at least a syntactic level - that
+they are very similar to Haskell. While general functional programming
+experience like you would gain with Haskell is definitely helpful to becoming a
+better Idris programmer it requires a different mind-set and approach to a more
+traditional functional language if you want to exploit the type system to write
+more-correct code.
 \chapter{Future Work}
-\label{sec:org6fb17ee}
+\label{sec:orgf36f482}
+There are many avenues that could be taken to expand upon the work done in this
+project. One thing that we would have liked to have achieved was a comparison of
+the same case studies implemented in other dependently-typed languages such as
+Agda, Coq or Lean. This would give a much more thorough understanding of what
+the landscape of current state-of-the-art dependently-typed programming
+languages looks like.
+
+For the Hungarian algorithm it would be worth investigating further and
+providing a proven implementation of the remaining steps of the algorithm. The
+real interest would be in encoding the minimal assignment property in an Idris
+type and being able to prove that the property holds in a fully completed
+implementation.
+
+As noted previously, the properties that we would like to prove about the
+run-length encoding case study were beyond the scope of this project. It is
+possible that proving these properties on an algorithm such as Liv-Zempel,
+run-length encoding or Huffman encoding would make for a good in-depth look at
+proving in a dependently-typed setting. This is a particularly exciting avenue
+to explore in its own right as its own final year project.
+
+We feel that the real test of the practicality of dependent types will come when
+they are enabled in a release of the Glasgow Haskell Compiler in the near future
+\cite{eisenberg_dependent_2016,weirich_specif_2017}. Haskell is seeing further
+interest and uptake in industry including at major tech firms such as Facebook
+\cite{facebook_haxl}. It will be particularly interesting to see what kind of
+adoption the dependent type features see in popular libraries and application
+code.
 
 \emergencystretch=1em
 \printbibliography[heading=bibintoc, title=References]

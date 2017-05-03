@@ -23,8 +23,8 @@ theory) introduces a number of interesting concepts. Most notable in terms of
 their influences on programming language design were the concepts of \Pi-types
 and \Sigma-types. These constructs can be seen as analogous to the logical
 quantifiers ``forall'' and ``exists'' respectively. These concepts have served
-as the underpinning of the development of dependently-typed programming
-languages and theorem provers based on Martin-Löf type theory.
+as the foundation of the development of dependently-typed programming languages
+and theorem provers based on Martin-Löf type theory.
 
 ** Curry-Howard Isomorphism
 From a modern computer science perspective it is almost taken for granted that
@@ -34,21 +34,21 @@ Gödel's incompleteness theorems. Between the 1930s and the 1960s Haskell Curry
 and William Alvin Howard began to formalise this direct link between computer
 programs and mathematical proofs which is known as the Curry-Howard isomorphism
 cite:mcadams_tutor_2013. As Philip Wadler, one of the original authors of the
-Haskell report, put it cite:strange_loop_2015,wadler_propos_2015
+Haskell report, described it cite:strange_loop_2015,wadler_propos_2015
 
 #+BEGIN_QUOTE
 ``Every good idea will be discovered twice. Once by a logician and once by a
 computer scientist.''
 
--- Philip Wadler
+\hfill-- Philip Wadler
 #+END_QUOTE
 
-According to the Curry-Howard isomorphism the type of an expression is
+According to the Curry-Howard isomorphism, the type of an expression is
 equivalent to a proposition of a logical formula. A term inhabiting that type is
 therefore equivalent to a proof that the proposition holds. Some concrete value
 exists that bears witness to the type being inhabited. In other words, a proof
 can be constructed. This very much aligns with the constructivist view of
-mathematics. Other correspondences can be shown such as between logical
+mathematics. Other correspondences can be shown such as that between logical
 implication and function types, conjunction and product types and between false
 formulas and the uninhabited type, bottom ($\bot$). We can even see from the
 shape of the syntax rules of both natural deduction and simply-typed lambda
@@ -61,9 +61,9 @@ t\;u:\beta}$} \]
 
 One of the consequences of this relationship is the possibility of a unification
 at a primitive level between mathematical logic and the foundations of
-computation. In practical terms this relationship has influenced the work on
+computation. In practical terms, this relationship has influenced the work on
 programming languages such as Coq and Idris that allow proofs to be written as
-programs that can be formalised, verified and executed. This is interesting to
+programs that can be formalised, verified and executed. This is of interest to
 the practice of software engineering as it gives us the power to reason about
 program correctness by translating a mathematical proof of an algorithm to a
 computer program and having the machine type-check (proof-check) it.
@@ -71,17 +71,17 @@ computer program and having the machine type-check (proof-check) it.
 ** Traditional Hindley-Milner Type Systems
 Standard Hindley-Milner-esque type systems such as the one found in Haskell
 allow us to express some different dependencies between the types of terms and
-terms themselves. For example, terms can depend on other terms such as in this
-Haskell function definition.
+the terms themselves. For example, terms can depend on other terms as can be
+seen in the following Haskell function definition.
 
 #+CAPTION: A simple Haskell function definition (terms depending on terms)
 #+BEGIN_SRC haskell
 plusOne x = x + 1
 #+END_SRC
 
-Here we can see that the term =plusOne= has been defined with respect to the
-terms =x=, which is its argument and =1=, an integer. Types can also depend on
-other types as shown here.
+Here we can see that the term =plusOne= has been defined with respect to the terms
+=x= (its argument) and =1= (an integer). Types can also depend on other types as
+shown here.
 
 #+CAPTION: A Haskell data type definition with a type parameter (types depending on types)
 #+BEGIN_SRC haskell
@@ -90,7 +90,7 @@ data List a = Nil
 #+END_SRC
 
 In this Haskell data type definition, the type constructor =List= depends on the
-type =a= provided to it. This allows polymorphism and lists of any type.
+type =a= provided to it. This facilitates polymorphism and lists of any type.
 Finally, in the world of Haskell, terms can depend on types. This is apparent in
 polymorphic functions such as the identity function.
 
@@ -102,50 +102,49 @@ id x = x
 
 ** Dependent Type Systems
 Dependent type systems extend this system of dependencies by allowing types to
-depend on terms. This leads to much greater expressivity power in the type
-system. For example, in a dependently typed system we can express types such as
-the type of pairs of natural numbers where the second number is greater than the
-first.
+depend on terms. This leads to much greater expressive power in the type system.
+For example, in a dependently-typed system we can express types such as the type
+of pairs of natural numbers where the second number is greater than the first.
 
-If we take the view of the Curry-Howard isomorphism that types are propositions
-and terms are witnesses to a proof of that proposition then we can see the
-advantages of a more expressive type system. We can now encode much more
-sophisticated propositions in the type system and if we can prove them (i.e.
-construct a value that inhabits that type) then we can guarantee much more
-interesting correctness properties about the code that we are writing. For this
-reason, dependent types have seen much use in the areas of formal verification
-of computer programs and formal computer encoding of mathematical objects and
-proofs.
+If we take the view of the Curry-Howard isomorphism - that types are
+propositions and terms are witnesses to a proof of that proposition - then the
+advantages of a more expressive type system are more clearly visible. We can now
+encode much more sophisticated propositions in the type system and if we can
+prove them (i.e. construct a value that inhabits that type) then we can
+guarantee much more interesting correctness properties about the code that we
+are writing. For this reason, dependent types have seen much use in the areas of
+formal verification of computer programs and formal computer encoding of
+mathematical objects and proofs cite:gonthier_formal_2008,leroy_compiler_2009.
 
 There are 3 main concepts taken from Martin-Löf type theory and implemented in
 dependently-typed programming languages.
 
 *** @@latex:\texorpdfstring{$\Pi$}{Pi}-types@@
 \Pi-types are the types of functions whose return types depend on one or more of
-their arguments. In other words these functions map values from some domain to
+their arguments. In other words, these functions map values from some domain to
 some non-fixed codomain that is determined by the input. In this sense the
 return type is said to be dependent upon the input.
 
 If we have a representation of $n\textrm{-tuples}$ of some type $A$,
 $\operatorname{Vect}(A,n)$, then the \Pi-type $\Pi_{(n \mathbin{:} {\mathbb N})}
-\operatorname{Vect}(A,n)$ represents the type of functions that given some
-natural number $n$ return a tuple of size $n$ of elements of type $A$. That is
+\operatorname{Vect}(A,n)$ represents the type of functions that, given some
+natural number $n$, return a tuple of size $n$ of elements of type $A$. That is
 to say that the type of the value returned by these functions is determined by
 the argument to the functions.
 
 # TODO: Make this better, expand out a definition
 
 *** @@latex:\texorpdfstring{$\Sigma$}{Sigma}-types@@
-\Sigma-types, also known as dependent pair types, are a more generalised form of
-Cartesian product that model pairs of values where the type of the second
-element depends on the first element.
+\Sigma-types, also known as ``dependent pair types'', are a more generalised
+form of Cartesian product that model pairs of values where the type of the
+second element depends on the first element.
 
 Again using the $\operatorname{Vect}$ representation of $n\textrm{-tuples}$ of
 some type $A$, the \Sigma-type $\Sigma_{(n \mathbin{:} {\mathbb N})}
 \operatorname{Vect}(A,n)$ represents a pair of a natural number $n$ and a tuple
 of length $n$ of values of type $A$.
 
-This representation is similar to the Haskell =List= type however there is extra
+This representation is similar to the Haskell =List= type however it encodes extra
 information in that the type of the \Sigma-type $\operatorname{Vect}$ also
 carries around a witness to its length expressed as a natural number. We say
 that $\operatorname{Vect}$ is ``indexed'' by the type $A$ as well as the value
@@ -153,11 +152,11 @@ $n$.
 
 Being able to index types by both types and terms in the language is a key
 feature of dependently-typed programming languages. These languages eliminate
-the distinction between types and terms. Types and terms are unified as
+the distinction between types and terms; types and terms are unified as
 equivalent constructs.
 
 *** The Equality Type
-The equality type $=$ is a special type used to denote proofs of equality
+The equality type, $=$, is a special type used to denote proofs of equality
 between two values. If there is an inhabitant of the type $a \mathrel{=} b$ then
 $a$ and $b$ are considered to be equal. This proof allows $b$ to be used
 anywhere $a$ would have been used. There is only one inhabitant of the type $a
@@ -166,22 +165,22 @@ anywhere $a$ would have been used. There is only one inhabitant of the type $a
 \[ \scalebox{2}{$\operatorname{refl} \mathbin{:} \Pi_{(a \mathbin{:} A)} (a
 \mathrel{=} a)$} \]
 
-This type is particularly useful in dependently-typed programming in that it can
-be used as a witness that two terms are equivalent and allows a substitution of
-one term for another to take place. With it, we can begin to develop
-constructions of basic proofs and axioms such as $n \mathbin{:} {\mathbb N}, n
-\mathbin{-} n \mathrel{=} 0$.
+This type is particularly useful in dependently-typed programming as it can be
+used as a witness that two terms are equivalent and allows a substitution of one
+term for another to take place. With it, we can begin to develop constructions
+of basic proofs and axioms such as $n \mathbin{:} {\mathbb N}, n \mathbin{-} n
+\mathrel{=} 0$.
 
 ** State of The Art Dependently-Typed Programming Languages
 *** Agda
-    # TODO: this section isn't very good
+# TODO: this section isn't very good
 Originally developed in the late 1990s by Catarina Coquand and subsequently
 rewritten by Ulf Norell in 2007, Agda is a dependently typed programming
 language with support for features such as dependent pattern matching and
 definition of inductive data types.
 
 For example, the inductive data type representing the Peano natural numbers can
-be declared as follows in Agda.
+be declared in Agda as follows:
 
 #+CAPTION: Agda definition of a natural number type
 #+BEGIN_SRC agda
@@ -195,11 +194,11 @@ for successor) takes a natural number and returns a new natural number. It
 represents a natural number plus 1. We will see more definitions of inductive
 types similar to this one throughout the later chapters.
 
-Agda has the capability of producing executable code however it is mostly used
-for the purpose of automated theorem proving. Agda does however provide a
-foreign function interface to import arbitrary Haskell types and functions.
-These go unused for the purpose of Agda type-checking but do have runtime
-effects in the output compiled code.
+While Agda has the capability of producing executable code it is mostly used for
+the purpose of automated theorem proving. Agda does however provide a foreign
+function interface to import arbitrary Haskell types and functions. These go
+unused for the purpose of Agda type-checking but do have runtime effects in the
+resultant compiled code.
 
 *** Coq
 Developed initially in the late 1980s at INRIA in France, Coq approaches
@@ -227,12 +226,12 @@ current goal that you are attempting to prove.
 Coq's primary mechanism for producing executable code is via program extraction.
 This is the process by which correct Coq code can be transformed into an
 equivalent Haskell or OCaml module which provides the user with the ability to
-run the extracted code. This extraction process has benefits in that it allows
-for the expression and type-checking of interesting correctness properties in a
-dependently-typed language while also giving us a way to compile it to native
-code using compilers with state-of-the-art code optimisation techniques. This
-allows the production of a fast native binary from a correct and type-checked
-Coq program.
+run the extracted code. This extraction process has a number of benefits in that
+it facilitates the expression and type-checking of interesting correctness
+properties in a dependently-typed language while also providing a way to compile
+dependently-typed code written in the system to native code using compilers with
+state-of-the-art code optimisation techniques. This allows us to produce fast,
+native, binaries from correct type-checked Coq programs.
 
 *** Haskell
 GHC Haskell has slowly been implementing many of the capabilities of dependent
@@ -242,22 +241,22 @@ features of dependently-typed languages can be simulated in roundabout ways
 cite:mcbride_faking_2002,lindley_hasochism_2013.
 
 A full dependent type system is currently being implemented for future releases
-of GHC 8 cite:eisenberg_dependent_2016,weirich_specif_2017. Existing
-extensions and offshoots of GHC such as Liquid Haskell implement refinement
-types which allows for the expression of a limited set of propositions at the
-type level in existing Haskell code cite:vazou_refinement_2014.
+of GHC 8 cite:eisenberg_dependent_2016,weirich_specif_2017. Existing extensions
+and forks of GHC such as Liquid Haskell implement refinement types which
+facilitates the expression of a limited set of propositions at the type level in
+existing Haskell code cite:vazou_refinement_2014.
 
 *** Idris
 Idris is primarily the work of Edwin Brady and others at the University of St
 Andrews in Scotland. It has positioned itself as a more practical take on
-dependently-typed programming and as such is more aimed at being a language that
-you can write programs leveraging dependent types while also performing
-interesting effectful actions such as file I/O and drawing graphics to the
+dependently-typed programming and as such is more aimed at being a language in
+which you can write programs leveraging dependent types while also performing
+interesting effectful actions such as file I/O or drawing graphics to the
 screen.
 
-Edwin Brady, the author of Idris has jokingly put it before that Idris has the
-interesting property of being ``Pac-Man Complete'' cite:scala_world_2015. Idris
-is not just a Turing complete language as everything from the x86 MOV
+Edwin Brady, the author of Idris, has previously jokingly stated that Idris has
+the interesting property of being ``Pac-Man Complete'' cite:scala_world_2015.
+Idris is not just a Turing complete language as everything from the x86 MOV
 instruction cite:dolan_mov_2013 to C++ templates cite:veldhuizen_templates_2003
 turn out to be. Rather, if you wanted to, you could write a version of a simple
 2D game such as Pac-Man in the language with bitmap graphics, animations, and

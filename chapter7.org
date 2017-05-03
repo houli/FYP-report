@@ -1,1 +1,28 @@
 * Future Work
+There are many avenues that could be taken to expand upon the work done in this
+project. One thing that we would have liked to have achieved was a comparison of
+the same case studies implemented in other dependently-typed languages such as
+Agda, Coq or Lean. This would give a much more thorough understanding of what
+the landscape of current state-of-the-art dependently-typed programming
+languages looks like.
+
+For the Hungarian algorithm it would be worth investigating further and
+providing a proven implementation of the remaining steps of the algorithm. The
+real interest would be in encoding the minimal assignment property in an Idris
+type and being able to prove that the property holds in a fully completed
+implementation.
+
+As noted previously, the properties that we would like to prove about the
+run-length encoding case study were beyond the scope of this project. It is
+possible that proving these properties on an algorithm such as Liv-Zempel,
+run-length encoding or Huffman encoding would make for a good in-depth look at
+proving in a dependently-typed setting. This is a particularly exciting avenue
+to explore in its own right as its own final year project.
+
+We feel that the real test of the practicality of dependent types will come when
+they are enabled in a release of the Glasgow Haskell Compiler in the near future
+cite:eisenberg_dependent_2016,weirich_specif_2017. Haskell is seeing further
+interest and uptake in industry including at major tech firms such as Facebook
+cite:facebook_haxl. It will be particularly interesting to see what kind of
+adoption the dependent type features see in popular libraries and application
+code.

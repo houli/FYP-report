@@ -1,6 +1,6 @@
 * Project Objectives and Approach
 
-** Objectives
+** Objectives label:sec-objectives
 The objectives of this project are the following:
 - Evaluate the practicality of dependently-typed programming languages
 - Evaluate Idris in particular in this regard
@@ -10,29 +10,29 @@ The objectives of this project are the following:
 - Explore and evaluate multiple approaches to building software with dependent
   types
 - Discover the main pain points of approaching this style of development as
-  someone with functional programming experience in some ML family language
+  someone with functional programming experience in an ML family language
 
 *** Practicality of Dependently-Typed Programming Languages
-Much of the literature about dependent types has been focused on advancing
+Much of the literature regarding dependent types has been focused on advancing
 research in the study of the theory of the field. This has manifested itself by
 way of new or novel approaches to building dependently-typed systems. Despite
-the push to advance the underlying theory and concepts not much research has
+the push to advance the underlying theory and concepts, not much research has
 emerged in the area of evaluating these languages' applicability to software
 engineering as practised by programmers in general.
 
 Some research exists such as Wouter Swierstra's 2012 evaluation
-cite:swierstra_xmonad_2012 of program extraction from Coq to Haskell of a
+cite:swierstra_xmonad_2012 of program extraction from Coq to Haskell as a
 drop-in replacement for one of the modules of the xmonad window manager. This
-projects aim to further supplement this area of study with more data taking into
-account the state-of-the-art at the time of writing.
+project's aim is to further supplement this area of study with more data taking
+into account the state-of-the-art at the time of writing.
 
 *** Expression of Correctness Properties
 Many of the current teaching examples involving dependent types present fairly
 simple examples of correctness properties. In order to provide a cohesive
 example that illustrates one or two points, this is understandable.
 
-This project aims to outline some more in-depth example of expressing
-complicated correctness properties. By doing this we aim to understand what some
+However, this project aims to outline some more in-depth examples of expressing
+complicated correctness properties. By doing so, we aim to understand what some
 of the limitations are in terms of the expressivity of specification of a
 dependent type as well as the feasibility of implementing a program to that
 specification.
@@ -40,40 +40,40 @@ specification.
 *** Scale of Applicability of Dependent Types
 In real-world settings in a software engineering project we are often faced with
 certain time, performance and other delivery constraints. Projects do not have
-unlimited time to work with crafting and deploying a perfectly verified piece of
+unlimited time to spend crafting and deploying a perfectly verified piece of
 software. While dependent types can give us more guarantees about the
 correctness of our programs that does not mean that we will be able to deliver a
-fully verified system within real-world constraints such as deadlines.
+fully verified system within real-world constraints and deadlines.
 
-This project aims to understand where dependent types are most suited to being
-applied both in terms of problem domains as well as scale. The aim is to see if
-the biggest return on investment will be in verifying critical algorithms and
-processes within a system, verifying a system at the boundaries between
-subsystems or by applying formal verification using dependent types across an
-entire system.
+This project aims to gain a better understanding of where dependent types are
+most suited to being applied both in terms of problem domains as well as scale.
+The aim is to see if the biggest return on investment will be in verifying
+critical algorithms and processes within a system, verifying a system at the
+boundaries between subsystems or by applying formal verification using dependent
+types across an entire system.
 
 *** Development Approaches when using Dependent Types
-A number of development approaches exist when using dependent types. One could
-take a bottom-up approach in that existing code that has no existing correctness
-properties is given some and then the proof obligations are discharged from the
-implementation out to the type signature. Another approach that is seeing more
-traction is the top-down type-driven or proof-driven development style. This
-approach starts by deciding on a specification in a type and driving the
-implementation based on that specification. This approach is outlined fully in
-its own section of the report.
+A number of development approaches exist when using dependent types. One
+approach that we might take is a bottom-up approach. This involves taking
+existing code with no correctness properties and discharging proof obligations
+from the implementation out to the type signature. Another approach that is
+seeing more traction is the top-down type-driven or proof-driven development
+style. This approach starts by deciding on a specification in a type and driving
+the implementation based on that specification. This approach is outlined fully
+in section ref:sec-tdd of the report.
 
 Among the project's aims is to see how these approaches can be applied to the
-case studies and to determine where one might favour one approach over the other
-for a particular problem.
+case studies and to determine cirumstances in which one might favour one
+approach over the other for a particular problem.
 
 *** Pain Points when using Dependent Types
 Current dependently-typed languages such as Agda and Idris bear much surface
 syntax similarity to ML family languages such as Haskell. However, past these
-surface details the underlying type frameworks differ quite a bit. Even with
-experience and a good knowledge of a language like Haskell there will be many
-pain points when learning how to use dependent types. This project aims to
-detail some of these hurdles that will be common when beginning to use these
-type systems.
+surface details, the underlying type frameworks differ quite a bit. Even with a
+strong understanding extensive experience with a language like Haskell there
+will be many pain points when learning how to use dependent types. This project
+aims to detail some of these hurdles that are commonplace when beginning to use
+these type systems.
 
 ** Approach
 The approach by which the evaluation of the above objectives took place is by
@@ -82,13 +82,13 @@ significant meaning they were focused on implementing real world algorithms that
 have interesting correctness properties that can be expressed about them.
 
 In the implementation of these case studies multiple software engineering tools
-and approaches were used. This included trying to implement the case studies
-using different levels of correctness guarantees. It also meant that the case
-studies should be implemented with different engineering approaches such as the
-top-down type-driven approach and the bottom-up approach where correctness
-properties are validated after the program has been implemented. The case
-studies also made use of different tooling such as working with standard tools
-like text editors as well as more semantically rich interactive editing
-environments.
-
-# TODO: Note the choice of Idris here
+and approaches were used. This analysis involved attempting to implement the
+case studies using different levels of correctness guarantees. It also meant
+that the case studies should be implemented with different engineering
+approaches such as the top-down type-driven approach and the bottom-up approach
+where correctness properties are validated after the program has been
+implemented. The case studies also utilised different tooling such as working
+with standard tools like text editors as well as more semantically rich
+interactive editing environments. As the scope of the project is limited in
+terms of what can be achieved within the time limits a particular tool must be
+chosen. For this project all of the case studies have been implemented in Idris.

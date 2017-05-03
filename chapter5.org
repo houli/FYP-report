@@ -1,4 +1,10 @@
 * Case Studies
+In this chapter we will take a look at two case studies of real-world problems
+solved in Idris. The two case studies are implementations of the Hungarian
+algorithm for the assignment problem and run-length encoding of text to a
+compressed file. The main focus will be on the Hungarian algorithm case study
+due to the more extensive correctness properties successfully expressed in it.
+
 ** The Assignment Problem
 The first case study we will examine is an implementation of a solution to the
 assignment problem based off the Hungarian algorithm with correctness guarantees
@@ -9,8 +15,8 @@ The assignment problem is a classic example of a combinatorial optimisation
 problem. The problem involves assigning a number of /agents/ to /tasks/. An agent
 can be assigned to any task however there is a cost to assigning a particular
 agent to a particular task. The assignment problem is the problem of assigning
-exactly one task to each agent so that the total cost of doing this assignment
-is minimal.
+exactly one task to each agent so that the sum of all of our assignment costs is
+minimal.
 
 To think of the problem in a concrete setting we might imagine a clinical
 practice with patients that need treatments as our tasks. The agents in this
@@ -23,11 +29,11 @@ treatments.
 
 *** Existing Algorithms
 It may seem that the time complexity of an algorithm to solve such a problem
-would require time in the order $O(n!)$ time with respect to the number of
-agents/tasks. Optimisation strategies exist however that produce polynomial time
-algorithms. The most famous example is the Hungarian algorithm which runs in
-$O(n^4)$ time. Further algorithmic optimisations have been applied such as James
-Munkres' proven algorithm cite:munkres_assignment_1957 that demonstrates
+would require in the order $O(n!)$ time with respect to the number of
+agents/tasks. However, optimisation strategies exist that result in polynomial
+time algorithms. The most famous example is the Hungarian algorithm which runs
+in $O(n^4)$ time. Further algorithmic optimisations have been applied such as
+James Munkres' proven algorithm cite:munkres_assignment_1957 that demonstrates
 $O(n^3)$ time complexity.
 
 *** Hungarian Algorithm
@@ -62,7 +68,7 @@ interesting correctness properties that we can discuss and also some interesting
 design decisions made in terms of approach and design of our API.
 
 *** Demonstration
-First let us assume that we have some initial matrix that describes our tasks
+First, let us assume that we have some initial matrix that describes our tasks
 and our agents that we would like to create an assignment for.
 
 \[ \begin{bmatrix}
@@ -149,10 +155,10 @@ the different Idris implementations of the algorithm.
 *** First Implementation - Lists
 The first implementation uses the standard list type. As we will see, this
 implementation demonstrates the fewest number of correctness guarantees with no
-proofs of the invariants outlined given and introduces partiality and the risk
-of runtime errors that come with partial functions. This implementation is quite
-similar to how you might approach the problem in a language such as Haskell with
-limited information at the type level.
+proofs of the invariants outlined previously and introduces partiality and the
+risk of runtime errors that come with partial functions. This implementation is
+quite similar to how you might approach the problem in a language such as
+Haskell with limited information at the type level.
 
 In order to implement the algorithm we first need to decide how the data is
 modelled. In this list implementation our matrix will be defined as a list of
@@ -220,9 +226,9 @@ subSmallest (x :: xs) = map (flip (-) $ (listMin x)) x :: subSmallest xs
 #+END_SRC
 
 As defined, =subSmallest= matches both cases, the empty list case and the
-non-empty case. Then we might ask why does this function have an annotation that
-it is partial? The reason is that in the second function clause we make a call
-to the =listMin= function. As this function is partial this has the knock-on
+non-empty list case. Then we might ask why does this function have an annotation
+that it is partial? The reason is that in the second function clause we make a
+call to the =listMin= function. As this function is partial this has the knock-on
 effect of introducing partiality into the =subSmallest= function which is used
 throughout the algorithm. If we were to remove this partiality annotation the
 compiler will correctly inform us that the function has failed to satisfy the
@@ -275,28 +281,26 @@ rather than =HungarianMatrix (S (S Z)) someProofTerm=. The use of the =auto=
 keyword allows the compiler to perform a proof search to find the proof term
 that fits instead of forcing us as the user to create it.
 
-We can bring the implicit argument p down to our function definition and perform
+We can bring the implicit argument =p= down to our function definition and perform
 a case split on it. We know that if the natural number passed to the function is
 ever zero then it is impossible to have a value of type =Z `GT` Z= and as such the
 compiler accepts that the two clauses above are impossible. This definition was
 carried out in a type-driven way by defining our initial specification that $n$
 had to be greater than zero (i.e. we wanted to create a non-empty matrix). By
 using the interactive editing capabilities of Idris and case splitting on the
-proof term, the clauses above fell out immediately leaving just one clause that
-was not impossible and where we could insert the definition of our non-empty
-matrix.
+proof term, the clauses above arose immediately leaving just one clause that was
+not impossible and where we could insert the definition of our non-empty matrix.
 
 Using the =Vect= type of length-indexed lists helps us achieve more totality in
 this implementation. In our previous list of lists based version the partiality
 of our =listMin= function had the effect of bubbling up and creating partiality in
-all of the functions in our interface. Using the =Vect= type of length-indexed
-lists we can reduce the number of cases that need to be matched in order to
-achieve a total definition of a minimum function. Restricting our type to only
-work on vectors that have at least one element ensures that we can always return
-a value from the =vectMin= function. If we tried to pattern match on the nil
-constructor for =Vect= then that would result in a type error as we have
-explicitly stated in the type of =vectMin= that it will only accept vectors with
-at least one element as input.
+all of the functions in our interface. Using the =Vect= type we can reduce the
+number of cases that need to be matched in order to achieve a total definition
+of a minimum function. Restricting our type to only work on vectors that have at
+least one element ensures that we can always return a value from the =vectMin=
+function. If we tried to pattern match on the nil constructor for =Vect= then that
+would result in a type error as we have explicitly stated in the type of =vectMin=
+that it will only accept vectors with at least one element as input.
 
 #+CAPTION: The =minimum= function defined over length-indexed lists
 #+BEGIN_SRC idris
@@ -331,7 +335,7 @@ hungarianMethod : HungarianMatrix (S n) -> HungarianMatrix (S n)
 #+END_SRC
 
 Although we have now introduced an implementation of the algorithm which passes
-the Idris totality checker by encoding the size of our cost matrix in the type
+the Idris totality checker by encoding the size of our cost matrix in its type
 we have yet to provide any meaningful correctness properties for the steps of
 the algorithm. We would like to be able to reason about the algorithm in terms
 of the invariants mentioned before.
@@ -457,13 +461,13 @@ vectMinElem (x :: xs) = vectMinElem' x xs
 
 Structurally, this proof is very similar to the definitions of =vectMin= and
 =vectMin'= discussed in the previous section. We can see that the proof is
-deferred to a helper function =vectMinElem'= which states that if we have value =x=
-and a vector =ys= then we can prove that applying the helper function =vectMin'= to
-those arguments results in a value in =x :: ys=. For the empty vector, type-driven
-development allows the compiler to know that the only case that is possible is
-that the element must be at the current position as we have the singleton list
-=[x]= in our type. In this case proof search is sufficient to find the correct
-value for us.
+deferred to a helper function =vectMinElem'= which states that if we have a value
+=x= and a vector =ys= then we can prove that applying the helper function =vectMin'=
+to those arguments results in a value in =x :: ys=. For the empty vector,
+type-driven development allows the compiler to know that the only case that is
+possible is that the element must be at the current position as we have the
+singleton list =[x]= in our type. In this case proof search is sufficient to find
+the correct value for us.
 
 The use of the =with= pattern for a non-empty vector allows us to dependently
 pattern match on the result of the comparison. If the value at the head of the
@@ -477,8 +481,8 @@ minimum is in the vector when it continues to be the minimum value inspected so
 far while recursing through the vector. This gives a flavour of the approach
 used when writing proofs of functions in Idris. The rest of the proofs for the
 steps of the algorithm are provided as part of the full code listing for the
-=HungarianMatrixProof= module should you wish to inspect more of these same
-approaches at work.
+=HungarianMatrixProof= Idris module should you wish to inspect more of these same
+approaches in use.
 
 There were some particular challenges that appeared while writing this
 implementation. The first of which was the lack of dependent pattern matching
@@ -487,24 +491,24 @@ any meaningful induction over its structure like we can do with the =Nat=
 datatype. As part of this proven implementation we need to be able to show that
 subtracting a number from itself produces zero. If our implementation were using
 natural numbers then we could leverage the already defined proof of this fact
-from the standard library. Unfortunately the Hungarian algorithm has to deal
-with negative numbers in the later steps of the algorithm and use of =Nat= will
-not be satisfactory for an implementation. As we cannot do dependent pattern
-matching on =Int= we have to define this is a postulate that we tell Idris to
-trust. For small and self-evident theorems such as this it may be acceptable to
-write a postulate but we would like to encode as much of our proof within the
-Idris framework as possible so having to use postulates is indicative of a
-problem in the code. There exists a wrapper around =Nat= to represent signed
-integers in the standard library however it was only discovered after the
-version using integers was complete.
+from the Idris standard library. Unfortunately the Hungarian algorithm has to
+deal with negative numbers in the later steps of the algorithm and the use of
+=Nat= will not be satisfactory for such an implementation. As we cannot perform
+dependent pattern matching on =Int= we have to define this is a postulate that we
+tell Idris to trust. For small and self-evident theorems such as this it may be
+acceptable to write a postulate but we would like to encode as much of our proof
+within the Idris framework as possible so having to use postulates is indicative
+of a deficiency in the code. There exists a wrapper around =Nat= to represent
+signed integers in the Idris standard library however it was only discovered
+after the version using integers was complete.
 
 #+CAPTION: We tell Idris to trust us that $x\mathbin{-} x \mathrel{=} 0$
 #+BEGIN_SRC idris
 postulate minusSelfZero : {x : Int} -> x - x = 0
 #+END_SRC
 
-Another pain point encountered were the sometimes complex type errors. In one
-instance a particularly wordy and incomprehensible 200 line type error was
+Another pain point arose from the oftentimes complex type errors. In one
+instance a particularly verbose and incomprehensible 200 line type error was
 produced when attempting to prove that all of the rows contained zeroes. The use
 of the names =meth1=, =meth5= etc. indicated that we needed to somehow examine how
 interfaces were being used in our implementation. The problem turned out to only
@@ -514,17 +518,17 @@ work over =Vect= caused the type errors to disappear. This turned out to be a bu
 in the Idris compiler and how it handles interfaces that has since been
 corrected although we were not aware of this at the time of writing the code.
 These cryptic error messages can often manifest themselves when working in a
-system with such an expressive type system. It will often be hard to tell if the
-error is due to a mistake on your part or if it is some detail of a bug in the
-compiler leaking out into your code.
+system with such an expressive type system. It will often be difficult to tell
+if the error is due to a mistake on your part or if it is some detail of a bug
+in the compiler leaking out into your code.
 
 *** API Considerations
-It is worth considering what kind of API we wish to expose to the consumers of
-our algorithm. Although we have these complicated proof terms as part of our
-module we can make some decisions about how simple or complicated the API is to
-use. In each implementation we have elected to export a simple function that
-performs the steps of the algorithm. Each of our modules contains a definition
-similar to the following.
+It is worth considering what kind of application programming interface we wish
+to expose to the consumers of our algorithm. Although we have these complicated
+proof terms as part of our module we can make some decisions about how simple or
+complicated the API is to use. In each implementation we have elected to export
+a simple function that performs the steps of the algorithm. Each of our modules
+contains a definition similar to the following.
 
 #+CAPTION: Our user-facing API for the Hungarian algorithm
 #+BEGIN_SRC idris
@@ -583,34 +587,34 @@ encoding.
 Numerous compression algorithms and techniques exist to squeeze data into
 occupying fewer bytes in memory or on disk. Often these algorithms optimise for
 specific use cases. For example, the compression present in the JPEG image
-format is lossy to because of the visual nature of the data being compressed.
-Even with mild loss to the quality of the image the overall image will still be
-only slightly distinguishable from the original image. Lossy compression schemes
-also exist for audio and video data again to optimise data that is tolerant to a
-loss of quality. For text however we do not want to introduce lossy compression
-as that would distort the original meaning of the data perceivably.
+format is lossy because of the visual nature of the data being compressed. Even
+with mild loss to the quality of the image the overall image will still be only
+slightly distinguishable from the original image. Lossy compression schemes also
+exist for audio and video data again to optimise data that is tolerant to a loss
+of quality. For text however we do not want to introduce lossy compression as
+that would distort the original meaning of the data perceivably.
 
-Run-length encoding is a simple technique used to compress text data. The data
-is encoded as a series of ``runs'' which represent multiple repeated occurrences
-of a single character. To illustrate the working of this compression scheme the
-string ``foooobaaaar'' would be encoded as ``1f4o1b4a1r''. There is one 'f'
-followed by four 'o's and so on. If we were to store the run counters in 8 bit
-unsigned integers and deal with 8 bit ASCII characters the compressed version
-would come in at 10 bytes versus the original 11 bytes. This algorithm has saved
-very little memory in this example but we can see how this might scale up for
-longer runs in larger strings.
+Run-length encoding is a simple, lossless technique used to compress text data.
+The data is encoded as a series of ``runs'' which represent multiple repeated
+occurrences of a single character. To illustrate the working of this compression
+scheme the string ``foooobaaaar'' would be encoded as ``1f4o1b4a1r''. There is
+one 'f' followed by four 'o's and so on. If we were to store the run counters in
+8 bit unsigned integers and deal with 8 bit ASCII characters the compressed
+version would come in at 10 bytes versus the original 11 bytes. This algorithm
+has saved very little memory in this example but we can see how this might scale
+up for longer runs in larger strings.
 
 *** Invariants
 There are two invariants that we might want to prove about a compression scheme
 such as run-length encoding. The first of which is that the compression
 algorithm actually produces a value which occupies less space than the original
 value. The second invariant is that there exists an identity from composing
-compress and decompress. If we take some data and call a compression function on
-it and then pass that result on to a decompression function then we would expect
-to get back the same initial data that we compressed. In this sense =decompress
-(compress data)= should be equal to =id data= and as a result =decompress . compress=
-should equal =id=. For reasons outlined later we will see why both of these
-invariants are either quite difficult or impossible to encode and prove.
+compression and decompression. If we take some data and call a compression
+function on it and then pass that result on to a decompression function then we
+expect to get back the same initial data that we compressed. In this sense
+=decompress (compress data)= should be equal to =id data= and as a result =decompress
+. compress= should equal =id=. For reasons outlined later we will see why both of
+these invariants are either quite difficult or impossible to encode and prove.
 
 *** Idris Implementation
 This case study began by taking an initial piece of example code from the Idris
@@ -708,10 +712,12 @@ vector with less than or equal elements to the string being compressed.
 The second invariant which states that composition of compression and
 decompression is an identity function was also beyond the scope of this case
 study. Our initial expectation was that we would be able to prove this fact as
-part of our implementation. Upon further reading and assessing of the problem we
-found that there would be too much work involved and that the problem was at a
-level of research far beyond this project. Only in the past year and more
+part of our implementation. Upon further reading and assessment of the problem
+we found that there would be too much work involved and that the problem was at
+a level of research far beyond this project. Only in the past year and more
 recently have formal proofs for this identity property for compression
 algorithms started to emerge. One example is Senjak and Hofmann's 2016 proof
 cite:senjak_deflate_2016 of deflate compression and decompression forming an
-identity in Coq.
+identity in Coq. A project of this scale for run-length encoding would be worthy
+of being studied in isolation as the topic of discussion of its own bachelor's
+thesis.
