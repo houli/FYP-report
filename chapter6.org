@@ -3,7 +3,7 @@
 Having completed these two case studies we can now evaluate Idris and dependent
 types with regards to the objectives set out in section ref:sec-objectives. At a
 high level, these case studies demonstrate the ability to program solutions to
-practical real-world problems in a dependently-typed language however there are
+practical real-world problems in a dependently-typed language, however there are
 shortcomings we must also consider in this evaluation.
 
 Idris has set itself up as a tool focused on applying more expressive type
@@ -14,15 +14,15 @@ but was also able to present a simple external API to an end user of the
 library. This can be seen as a win for Idris' approach of letting the programmer
 be only as formal as they want to be with their implementation.
 
-From a software engineering standpoint we believe there are some particularly
-noteworthy points to draw from the case studies. One of our objectives was to
-weigh up the different approaches taken when writing programs with dependent
-types. From our Hungarian algorithm case study we can see one approach standing
-out as superior for working with correctness properties in our code. The
-original attempt at doing a bottom-up proof with ported Haskell code wasn't
-successful and we found that adding proof types on after the fact was
-inappropriate for this particular problem. The more successful approach was to
-follow the type-driven development style as advocated by the Idris ecosystem,
+From a software engineering standpoint we believe that there are a number of
+particularly noteworthy points to draw from the case studies. One of our
+objectives was to weigh up the different approaches taken when writing programs
+with dependent types. From our Hungarian algorithm case study we can see one
+approach standing out as superior for working with correctness properties in our
+code. The original attempt at creating a bottom-up proof with ported Haskell
+code wasn't successful and we found that adding proof types on after the fact
+was inappropriate for this particular problem. The more successful approach was
+to follow the type-driven development style as advocated by the Idris ecosystem,
 both in the literature cite:brady_book_2017 and in the interactive tools as
 discussed previously in section ref:sec-interactive.
 
@@ -32,7 +32,7 @@ proving properties when following the type-driven approach. These properties
 included expressing existence of items within a collection and proofs that
 quantify other proofs existentially or universally over a collection. We also
 saw that Idris was particularly suited towards expressing properties of numeric
-types and operations with many of the basic mathematical theorems available to
+types and operations, with many of the basic mathematical theorems available to
 users out of the box in the Idris standard library. In our port of the Haskell
 code in the bottom-up style we found that it was difficult to find correctness
 properties that we could express about the ported functions at least without
@@ -49,31 +49,31 @@ dependent types and strict formal verification guarantees is in the critical
 paths of the application. This could mean an important algorithm or data
 structure or in a business process that should be ensured to conform to some
 specification such as a finite state machine with sufficiently descriptive
-states and state transitions. We do not feel yet that dependent types scale up
+states and state transitions. We do not yet feel that dependent types scale up
 to whole-system verification when considering the upfront cost of training
-someone to think in a dependently-typed way as well as the extra cost of proving
-an implementation correct with the current state-of-the-art tools. The maturity
-of these tools is also something that will be considered in any software
-engineering project looking to be more formally correct. Singling out Idris yet
-again, it only reached version 1.0 in April of this year and still requires much
-work to be a mature tool suitable to be used in production. For industries that
-are already serious about correctness such as aerospace and railway we do
-however feel that it may be worth evaluating replacing existing formal
-verification tools such as model checkers and SMT solvers with dependently-typed
-programs with sufficient correctness guarantees.
+developers to think in a dependently-typed way as well as the extra cost of
+proving an implementation correct with the current state-of-the-art tools. The
+maturity of these tools is also something that will be considered in any
+software engineering project looking to be more formally correct. Singling out
+Idris yet again, it only reached version 1.0 in April of this year and still
+requires much work to be a mature tool suitable for production use. For
+industries that are already serious about correctness such as aerospace and
+railway we do however feel that it may be worth evaluating replacing existing
+formal verification tools such as model checkers and SMT solvers with
+dependently-typed programs with sufficient correctness guarantees.
 
 A number of pain points presented themselves through the case studies. The most
-notable is the time taken to ramp up to being proficient in Idris. Despite
-having more than a year experience working in Haskell and having learnt some of
-its finer points such as the typeclass hierarchy and monad transformers, moving
-to dependent types was a large leap. It took several months following through
-the tutorials and books about Idris for many of the concepts unique to dependent
+notable is the time taken to begin being proficient in Idris. Despite having
+more than a year's experience working in Haskell and having learnt some of its
+finer points such as the typeclass hierarchy and monad transformers, moving to
+dependent types was a large leap. It took several months following through the
+tutorials and books about Idris for many of the concepts specific to dependent
 types to click. It was also important to search the wider field of type theory
 and the derivatives of Martin-Löf's work to fully understand some of the basic
 constructs in Idris at a more technical and theoretical level. An initial glance
 at a language such as Idris or Agda gives an impression - at least at a
 syntactic level - that they are very similar to Haskell. While general
-functional programming experience like you would gain with Haskell is definitely
-helpful to becoming a better Idris programmer it requires a different mind-set
+functional programming experience as you would gain with Haskell is definitely
+helpful to becoming a better Idris programmer, it requires a different mind-set
 and approach to a more traditional functional language if you want to exploit
 the type system to its full potential and write more-correct code.

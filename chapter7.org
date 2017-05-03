@@ -1,10 +1,10 @@
 * Future Work
-There are many avenues that could be taken to expand upon the work done in this
-project. One thing that we would have liked to have achieved was a comparison of
-the same case studies implemented in other dependently-typed languages such as
-Agda, Coq or Lean. This would give a much more thorough understanding of what
-the landscape of current state-of-the-art dependently-typed programming
-languages looks like.
+There are many avenues that could be taken to expand upon the work accomplished
+in this project. One thing that we would have liked to have achieved was a
+comparison of the same case studies implemented in other dependently-typed
+languages such as Agda, Coq or Lean. This would give a much more thorough
+understanding of what the landscape of current state-of-the-art
+dependently-typed programming languages looks like.
 
 For the Hungarian algorithm it would be worth investigating further and
 providing a proven implementation of the remaining steps of the algorithm. The
@@ -14,9 +14,9 @@ implementation.
 
 As noted previously, the properties that we would like to prove about the
 run-length encoding case study were beyond the scope of this project. It is
-possible that proving these properties on an algorithm such as Liv-Zempel,
-run-length encoding or Huffman encoding would make for a good in-depth look at
-proving in a dependently-typed setting. This is a particularly exciting avenue
+possible that proving these properties on an algorithm such as run-length
+encoding, Huffman encoding or Liv-Zempel would make for a strong in-depth look
+at proof in a dependently-typed setting. This is a particularly exciting avenue
 to explore in its own right as its own final year project.
 
 We feel that the real test of the practicality of dependent types will come when

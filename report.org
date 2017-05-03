@@ -31,5 +31,5 @@
 
 \emergencystretch=1em
 \printbibliography[heading=bibintoc, title=References]
-@@latex:\addtocontents{toc}{\noindent\textbf{Source Code CD}}@@
+@@latex:\addtocontents{toc}{\noindent\textbf{Source Code DVD}}@@
 \appendix
